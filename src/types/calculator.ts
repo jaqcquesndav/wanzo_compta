@@ -13,4 +13,6 @@ export interface CalculatorState {
   pendingOperator: string | null;
   waitingForOperand: boolean;
   accumulator: number;
+  hasParenthesis: boolean;
+  parenthesisCount: number;
 }

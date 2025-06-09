@@ -51,12 +51,10 @@ export function Calculator() {
 
     document.addEventListener('mousemove', handleDrag);
     document.addEventListener('mouseup', handleDragEnd);
-  };
-
-  return (
+  };  return (
     <div
       className={`fixed z-50 bg-white dark:bg-dark-secondary rounded-lg shadow-xl transition-all duration-200 
-        ${isMinimized ? 'w-12 h-12' : 'w-[340px]'}`}
+        ${isMinimized ? 'w-12 h-12' : showHistory ? 'w-[560px]' : 'w-[340px]'}`}
       style={{ left: position.x, top: position.y }}
     >
       <div 
@@ -71,10 +69,10 @@ export function Calculator() {
           {!isMinimized && (
             <button
               onClick={() => setShowHistory(!showHistory)}
-              className="p-1.5 hover:bg-gray-100 dark:hover:bg-dark-hover rounded-full"
+              className={`p-1.5 rounded-full ${showHistory ? 'bg-primary/10 text-primary' : 'hover:bg-gray-100 dark:hover:bg-dark-hover text-gray-500 dark:text-gray-400'}`}
               title="Historique"
             >
-              <History className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <History className="h-4 w-4" />
             </button>
           )}
           <button
@@ -95,8 +93,18 @@ export function Calculator() {
       </div>
 
       {!isMinimized && (
-        <>
-          <div className="p-4 space-y-4">
+        <div className="flex">
+          {showHistory && (
+            <div className="w-[220px] border-r dark:border-dark-DEFAULT">
+              <CalculatorHistory
+                operations={history}
+                onClear={clearHistory}
+                onSelect={selectFromHistory}
+              />
+            </div>
+          )}
+          
+          <div className="p-4 space-y-4 flex-1">
             <CalculatorDisplay 
               value={display} 
               expression={expression}
@@ -104,15 +112,7 @@ export function Calculator() {
             />
             <CalculatorKeypad onKeyPress={handleKeyPress} />
           </div>
-
-          {showHistory && (
-            <CalculatorHistory
-              operations={history}
-              onClear={clearHistory}
-              onSelect={selectFromHistory}
-            />
-          )}
-        </>
+        </div>
       )}
     </div>
   );

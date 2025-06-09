@@ -7,12 +7,13 @@ interface CalculatorKeypadProps {
 export function CalculatorKeypad({ onKeyPress }: CalculatorKeypadProps) {
   const keys = [
     ['MC', 'MR', 'M+', 'M-'],
-    ['%', 'CE', 'C', '⌫'],
-    ['1/x', 'x²', '√', '÷'],
+    ['(', ')', '%', 'CE'],
+    ['C', '⌫', '1/x', '÷'],
     ['7', '8', '9', '×'],
     ['4', '5', '6', '-'],
     ['1', '2', '3', '+'],
-    ['±', '0', '.', '=']
+    ['±', '0', '.', '='],
+    ['x²', '√', '', '']
   ];
 
   const getKeyStyle = (key: string) => {

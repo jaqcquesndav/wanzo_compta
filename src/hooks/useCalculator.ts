@@ -10,7 +10,9 @@ export function useCalculator() {
     history: calculatorStorage.loadHistory(),
     pendingOperator: null,
     waitingForOperand: true,
-    accumulator: 0
+    accumulator: 0,
+    hasParenthesis: false,
+    parenthesisCount: 0
   });
 
   useEffect(() => {
@@ -81,6 +83,148 @@ export function useCalculator() {
       display: (-parseFloat(prev.display)).toString(),
       waitingForOperand: false
     }));
+  };
+
+  const calculatePercentage = () => {
+    setState(prev => {
+      if (prev.pendingOperator && !prev.waitingForOperand) {
+        const currentValue = parseFloat(prev.display);
+        let percentValue = 0;
+        
+        switch (prev.pendingOperator) {
+          case '+': 
+          case '-': 
+            percentValue = (prev.accumulator * currentValue) / 100;
+            break;
+          case '×':
+          case '÷':
+            percentValue = currentValue / 100;
+            break;
+          default:
+            percentValue = currentValue / 100;
+        }
+        
+        return {
+          ...prev,
+          display: percentValue.toString(),
+          waitingForOperand: true
+        };
+      }
+      
+      return {
+        ...prev,
+        display: (parseFloat(prev.display) / 100).toString(),
+        waitingForOperand: true
+      };
+    });
+  };
+
+  const calculateSquare = () => {
+    setState(prev => {
+      const value = parseFloat(prev.display);
+      const result = value * value;
+      return {
+        ...prev,
+        display: result.toString(),
+        waitingForOperand: true
+      };
+    });
+  };
+
+  const calculateSquareRoot = () => {
+    setState(prev => {
+      const value = parseFloat(prev.display);
+      if (value < 0) {
+        return {
+          ...prev,
+          display: 'Error',
+          waitingForOperand: true
+        };
+      }
+      const result = Math.sqrt(value);
+      return {
+        ...prev,
+        display: result.toString(),
+        waitingForOperand: true
+      };
+    });
+  };
+
+  const calculateInverse = () => {
+    setState(prev => {
+      const value = parseFloat(prev.display);
+      if (value === 0) {
+        return {
+          ...prev,
+          display: 'Error',
+          waitingForOperand: true
+        };
+      }
+      const result = 1 / value;
+      return {
+        ...prev,
+        display: result.toString(),
+        waitingForOperand: true
+      };
+    });
+  };
+
+  const handleMemory = (operation: 'MC' | 'MR' | 'M+' | 'M-') => {
+    setState(prev => {
+      const currentValue = parseFloat(prev.display);
+      
+      switch (operation) {
+        case 'MC':
+          return {
+            ...prev,
+            memory: null
+          };
+        case 'MR':
+          if (prev.memory === null) return prev;
+          return {
+            ...prev,
+            display: prev.memory.toString(),
+            waitingForOperand: true
+          };
+        case 'M+':
+          return {
+            ...prev,
+            memory: (prev.memory || 0) + currentValue,
+            waitingForOperand: true
+          };
+        case 'M-':
+          return {
+            ...prev,
+            memory: (prev.memory || 0) - currentValue,
+            waitingForOperand: true
+          };
+        default:
+          return prev;
+      }
+    });
+  };
+
+  const handleParenthesis = (type: '(' | ')') => {
+    setState(prev => {
+      if (type === '(') {
+        return {
+          ...prev,
+          currentExpression: `${prev.currentExpression} (`,
+          parenthesisCount: prev.parenthesisCount + 1,
+          hasParenthesis: true,
+          waitingForOperand: true
+        };
+      } else if (type === ')' && prev.parenthesisCount > 0) {
+        return {
+          ...prev,
+          currentExpression: `${prev.currentExpression} ${prev.display} )`,
+          parenthesisCount: prev.parenthesisCount - 1,
+          hasParenthesis: prev.parenthesisCount > 1,
+          waitingForOperand: true
+        };
+      }
+      return prev;
+    });
   };
 
   const calculateResult = () => {
@@ -156,6 +300,16 @@ export function useCalculator() {
       case '.': addDecimalPoint(); break;
       case '±': changeSign(); break;
       case '=': calculateResult(); break;
+      case '%': calculatePercentage(); break;
+      case 'x²': calculateSquare(); break;
+      case '√': calculateSquareRoot(); break;
+      case '1/x': calculateInverse(); break;
+      case 'MC': handleMemory('MC'); break;
+      case 'MR': handleMemory('MR'); break;
+      case 'M+': handleMemory('M+'); break;
+      case 'M-': handleMemory('M-'); break;
+      case '(': handleParenthesis('('); break;
+      case ')': handleParenthesis(')'); break;
       case '+':
       case '-':
       case '×':
