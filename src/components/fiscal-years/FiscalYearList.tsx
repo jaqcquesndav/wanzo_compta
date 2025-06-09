@@ -1,0 +1,147 @@
+import React from 'react';
+import { Table } from '../ui/Table';
+import { Button } from '../ui/Button';
+import { Calendar, Lock, Unlock, AlertCircle, CheckCircle } from 'lucide-react';
+import type { FiscalYear } from '../../types/fiscal-year';
+
+interface FiscalYearListProps {
+  fiscalYears: FiscalYear[];
+  onClose: (fiscalYear: FiscalYear) => void;
+  onReopen: (fiscalYear: FiscalYear) => void;
+  onAudit?: (fiscalYear: FiscalYear) => void;
+  selectedFiscalYear?: FiscalYear | null;
+  loading?: boolean;
+}
+
+export function FiscalYearList({ 
+  fiscalYears, 
+  onClose, 
+  onReopen,
+  onAudit,
+  selectedFiscalYear,
+  loading 
+}: FiscalYearListProps) {
+  const columns = [
+    {
+      header: 'Code',
+      accessor: 'code'
+    },
+    {
+      header: 'Période',
+      accessor: (fiscalYear: FiscalYear) => {
+        const start = new Date(fiscalYear.startDate);
+        const end = new Date(fiscalYear.endDate);
+        return `${start.toLocaleDateString('fr-FR')} - ${end.toLocaleDateString('fr-FR')}`;
+      }
+    },
+    {
+      header: 'Statut',
+      accessor: (fiscalYear: FiscalYear) => (
+        <div className="space-y-1">
+          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+            fiscalYear.status === 'open' 
+              ? 'bg-green-100 text-green-800'
+              : 'bg-gray-100 text-gray-800'
+          }`}>
+            {fiscalYear.status === 'open' ? 'Ouvert' : 'Clôturé'}
+          </span>
+          {fiscalYear.auditStatus?.isAudited && (
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+              <CheckCircle className="h-3 w-3 mr-1" />
+              Audité
+            </span>
+          )}
+        </div>
+      )
+    },
+    {
+      header: 'Audit',
+      accessor: (fiscalYear: FiscalYear) => {
+        if (fiscalYear.auditStatus?.isAudited) {
+          return (
+            <div className="text-sm">
+              <p className="font-medium">
+                {fiscalYear.auditStatus.auditor.name}
+              </p>
+              <p className="text-gray-500">
+                {new Date(fiscalYear.auditStatus.auditedAt).toLocaleDateString('fr-FR')}
+              </p>
+            </div>
+          );
+        }
+        return '-';
+      }
+    },
+    {
+      header: 'Actions',
+      accessor: (fiscalYear: FiscalYear) => (
+        <div className="flex space-x-2">
+          {fiscalYear.status === 'open' ? (
+            <Button
+              variant="warning"
+              size="sm"
+              icon={Lock}
+              onClick={() => onClose(fiscalYear)}
+            >
+              Clôturer
+            </Button>
+          ) : (
+            <Button
+              variant="secondary"
+              size="sm"
+              icon={Unlock}
+              onClick={() => onReopen(fiscalYear)}
+            >
+              Réouvrir
+            </Button>
+          )}
+          {onAudit && !fiscalYear.auditStatus?.isAudited && (
+            <Button
+              variant="primary"
+              size="sm"
+              icon={CheckCircle}
+              onClick={() => onAudit(fiscalYear)}
+            >
+              Auditer
+            </Button>
+          )}
+        </div>
+      )
+    }
+  ];
+
+  return (
+    <div className="space-y-4">
+      <div className="bg-primary/5 rounded-lg p-4">
+        <div className="flex items-center text-primary">
+          <Calendar className="h-5 w-5 mr-2" />
+          <div>
+            <h3 className="text-sm font-medium">Exercices comptables</h3>
+            <p className="text-sm text-gray-600">
+              Gérez vos exercices comptables et leur statut
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {fiscalYears.some(fy => fy.status === 'open') && (
+        <div className="bg-warning/10 rounded-lg p-4">
+          <div className="flex items-center text-warning">
+            <AlertCircle className="h-5 w-5 mr-2" />
+            <p className="text-sm">
+              Vous avez des exercices ouverts. Assurez-vous de clôturer les exercices dans l'ordre chronologique.
+            </p>
+          </div>
+        </div>
+      )}
+
+      <Table
+        columns={columns}
+        data={fiscalYears}
+        loading={loading}
+        emptyMessage="Aucun exercice trouvé"
+        selectedRow={selectedFiscalYear?.id}
+      />
+    </div>
+  );
+}

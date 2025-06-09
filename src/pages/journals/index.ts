@@ -1,0 +1,1 @@
+export { JournalsPage } from './JournalsPage';

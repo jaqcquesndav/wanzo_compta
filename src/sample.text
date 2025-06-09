@@ -1,0 +1,27 @@
+Dans Auth0, vous pouvez définir des rôles et leurs descriptions via l'interface utilisateur ou l'API. Voici une suggestion pour les rôles et leurs descriptions :
+
+superadmin
+
+Description : A le contrôle total sur l'application, y compris la gestion des utilisateurs, des rôles et des paramètres critiques.
+admin
+
+Description : Gère les utilisateurs et les paramètres de l'application, mais avec des permissions limitées par rapport au superadmin.
+user
+
+Description : Utilisateur standard avec accès aux fonctionnalités de base de l'application.
+superadmin.
+user
+
+Description : Utilisateur standard avec accès aux fonctionnalités de base de l'application.
+auditor
+
+Description : Peut consulter les données et les rapports, mais ne peut pas effectuer de modifications.
+comptable
+
+Description : Responsable de la gestion des finances et des comptes dans l'application.
+gérant
+
+Description : Supervise les opérations et les équipes, avec des permissions spécifiques à la gestion.
+portfoliomanager
+
+Description : Gère les portefeuilles d'investissement et les actifs financiers.
