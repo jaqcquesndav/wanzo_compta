@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
-import { Menu, User, MessageSquare, Calculator } from 'lucide-react';
+import { useState } from 'react';
+import { Menu } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
-import { UserMenu } from '../ui/UserMenu';
 import { ChatWindow } from '../chat/ChatWindow';
-import { NotificationCenter } from '../notifications/NotificationCenter';
-import { ThemeToggle } from '../ui/ThemeToggle';
 import { useCalculatorStore } from '../../hooks/useCalculatorStore';
 import { HeaderActions } from './HeaderActions';
 
@@ -31,7 +28,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
           
           <div className="flex items-center gap-2">
             <span className="text-xl font-semibold text-primary hidden md:block dark:text-primary">
-              Kiota Suit Comptabilité
+              Wanzo Comptabilité
             </span>
           </div>
         </div>

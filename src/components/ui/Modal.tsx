@@ -10,7 +10,7 @@ interface ModalProps {
   containerClassName?: string;
 }
 
-export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, size = 'md', containerClassName }: ModalProps) {
   // Empêcher le scroll du body quand la modale est ouverte
   useEffect(() => {
     if (isOpen) {
@@ -36,9 +36,9 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
     <div className="fixed inset-0 z-50">
       <div className="fixed inset-0 bg-black/50" onClick={onClose} />
       
-      <div className="fixed inset-0 overflow-y-auto">
+      <div className="fixed inset-0 overflow-hidden">
         <div className="flex min-h-full items-center justify-center p-4">
-          <div className={`relative ${sizeClasses} w-full bg-white rounded-lg shadow-xl`}>
+          <div className={`relative ${sizeClasses} w-full bg-white rounded-lg shadow-xl ${containerClassName || ''}`}>
             <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
               <button
@@ -49,9 +49,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
               </button>
             </div>
             
-            <div className="p-6 max-h-[calc(100vh-16rem)] overflow-y-auto">
-              {children}
-            </div>
+            {children}
           </div>
         </div>
       </div>

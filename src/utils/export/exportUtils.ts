@@ -6,7 +6,7 @@ import type { JournalEntry } from '../../types/accounting';
 // Fonction utilitaire pour l'en-tête
 export function generateHeader(title: string, organization: any, user: any) {
   return `
-KIOTA SUIT COMPTABILITÉ
+WANZO COMPTABILITÉ - i-kiotahub
 ${organization?.name || ''}
 ${organization?.address || ''}, ${organization?.city || ''}, ${organization?.country || ''}
 RCCM: ${organization?.registrationNumber || ''} - NINEA: ${organization?.taxId || ''}

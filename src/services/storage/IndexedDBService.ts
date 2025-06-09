@@ -1,5 +1,5 @@
 export class IndexedDBService {
-  private static DB_NAME = 'kiota_accounting';
+  private static DB_NAME = 'wanzo_accounting';
   private static DB_VERSION = 4;
   private static db: IDBDatabase | null = null;
 

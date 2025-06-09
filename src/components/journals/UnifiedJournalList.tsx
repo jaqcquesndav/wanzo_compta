@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Table } from '../ui/Table';
 import { Button } from '../ui/Button';
-import { Check, Eye, Edit2, Trash2, CheckSquare, MoreVertical, FileText, FileSpreadsheet, Download, Plus } from 'lucide-react';
+import { Check, Eye, Edit2, Trash2, CheckSquare, MoreVertical, FileText, FileSpreadsheet, Download } from 'lucide-react';
 import { JOURNAL_TYPES } from '../../config/accounting';
 import type { JournalEntry } from '../../types/accounting';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/Popover';

@@ -1,6 +1,6 @@
 import { 
   Home, BookOpen, Calculator, FileText, 
-  BarChart2, FileSpreadsheet,
+  FileSpreadsheet,
   Users, Building, Calendar, Settings
 } from 'lucide-react';
 
@@ -27,12 +27,6 @@ export const navigation = [
     name: 'États Financiers', 
     icon: FileText, 
     path: '/reports',
-    badge: null
-  },
-  { 
-    name: 'Analytique', 
-    icon: BarChart2, 
-    path: '/analytics',
     badge: null
   },
   { 

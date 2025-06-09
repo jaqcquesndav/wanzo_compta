@@ -66,7 +66,7 @@ export function PrintableReport({ data, type }: PrintableReportProps) {
 
       <div className="mt-8 text-sm text-gray-500 text-center">
         <p>Document généré le {new Date().toLocaleDateString('fr-FR')}</p>
-        <p>Kiota Suit Comptabilité</p>
+        <p>Wanzo Comptabilité - i-kiotahub</p>
       </div>
     </div>
   );

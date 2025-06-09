@@ -21,9 +21,9 @@ export function NewJournalEntryModal({
       onClose={onClose}
       title="Nouvelle Écriture Comptable"
       size="xl"
-      containerClassName="max-h-[90vh]"
+      containerClassName="max-h-[90vh] flex flex-col"
     >
-      <div className="max-h-[calc(90vh-8rem)] overflow-y-auto">
+      <div className="p-6 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
         <NewJournalEntryForm
           onClose={onClose}
           onSubmit={onSubmit}

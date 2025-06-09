@@ -3,7 +3,7 @@ import type { NotesData } from '../types/reports';
 export const mockNotes: NotesData = {
   generalInformation: {
     identification: {
-      name: 'KIOTA SUIT COMPTABILITÉ',
+      name: 'WANZO COMPTABILITÉ - i-kiotahub',
       legalForm: 'SARL',
       address: 'Kinshasa, RD Congo',
       registrationNumber: 'CD/KIN/RCCM/22-B-01234',

@@ -80,7 +80,7 @@ export function LoginPage() {
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
-          Kiota Suit Comptabilité
+          Wanzo Comptabilité
         </h2>
         <p className="mt-2 text-center text-sm text-blue-100">
           Connectez-vous à votre espace de travail

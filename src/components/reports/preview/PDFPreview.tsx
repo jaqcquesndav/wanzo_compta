@@ -62,7 +62,7 @@ export function PDFPreview({ data }: PDFPreviewProps) {
 
         {/* Pied de page */}
         <div className="text-sm text-gray-500 text-center pt-4 border-t">
-          <p>Document généré automatiquement par Kiota Suit Comptabilité</p>
+          <p>Document généré automatiquement par Wanzo Comptabilité - i-kiotahub</p>
         </div>
       </div>
     </div>
