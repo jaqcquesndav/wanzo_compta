@@ -29,7 +29,7 @@ export function useFinancialExport() {
       }
 
       if (!options.organization?.name || !options.organization?.registrationNumber) {
-        throw new Error('Les informations de l\'organisation sont incomplètes');
+        throw new Error('Les informations de l\'entreprise sont incomplètes');
       }
 
       if (options.format === 'pdf') {

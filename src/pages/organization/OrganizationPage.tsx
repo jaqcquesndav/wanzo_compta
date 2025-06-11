@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Building2, Plus } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -35,7 +35,7 @@ export function OrganizationPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <OrganizationSummary organization={organization} />
+          <OrganizationSummary organization={organization!} />
         </div>
 
         <div className="space-y-6">
@@ -51,8 +51,10 @@ export function OrganizationPage() {
       <OrganizationFormModal
         isOpen={showFormModal}
         onClose={() => setShowFormModal(false)}
-        organization={organization}
-        onSubmit={updateOrganization}
+        organization={organization || undefined}
+        onSubmit={async (data) => {
+          await updateOrganization(data);
+        }}
       />
     </div>
   );

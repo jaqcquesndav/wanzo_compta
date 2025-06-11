@@ -7,8 +7,7 @@ interface ExchangeRate {
   rate: number;
 }
 
-interface CurrencyState {
-  // Devise de base (généralement celle de l'organisation)
+interface CurrencyState {  // Devise de base (généralement celle de l'entreprise)
   baseCurrency: CurrencyCode;
   // Devise active pour l'affichage
   displayCurrency: CurrencyCode;

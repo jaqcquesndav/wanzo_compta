@@ -25,7 +25,7 @@ export function useOrganization() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simuler le chargement des données de l'organisation
+    // Simuler le chargement des données de l'entreprise
     const mockOrganization: Organization = {
       id: '1',
       name: 'Kiota SARL',

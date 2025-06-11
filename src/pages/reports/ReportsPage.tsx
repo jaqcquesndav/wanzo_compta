@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FileText, Download, Printer, Settings, Eye } from 'lucide-react';
+import { useState } from 'react';
+import { Download, Printer, Settings } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { ReportConfigModal } from '../../components/reports/ReportConfigModal';
@@ -38,7 +38,7 @@ export function ReportsPage() {
   const { data, loading, error, generateReport } = useReports();
   const { loading: exportLoading, handleExport } = useFinancialExport();
 
-  // Informations de l'organisation
+  // Informations de l'entreprise
   const organization = {
     name: 'ENTREPRISE ABC SARL',
     address: 'Kinshasa, RD Congo',
@@ -132,7 +132,7 @@ export function ReportsPage() {
       </div>
 
       {/* Contenu principal */}
-      <Card>
+      <Card title="Aperçu du rapport">
         <div className="space-y-6">
           {/* En-tête du rapport */}
           {data && user && (
