@@ -1,10 +1,10 @@
-import React from 'react';
 import { StatementSection } from './StatementSection';
 import type { BalanceSheetData } from '../../../types/reports';
+import { CurrencyCode } from '../../../config/currency';
 
 interface BalanceSheetProps {
   data: BalanceSheetData;
-  currency: string;
+  currency?: CurrencyCode;
 }
 
 export function BalanceSheet({ data, currency }: BalanceSheetProps) {
@@ -22,17 +22,32 @@ export function BalanceSheet({ data, currency }: BalanceSheetProps) {
         sections={[
           {
             title: 'ACTIF IMMOBILISÉ',
-            items: data.fixedAssets,
+            items: [
+              ...data.fixedAssets.intangibleAssets,
+              ...data.fixedAssets.tangibleAssets,
+              ...data.fixedAssets.financialAssets,
+              data.fixedAssets.total
+            ],
             showSubtotal: true
           },
           {
             title: 'ACTIF CIRCULANT',
-            items: data.currentAssets,
+            items: [
+              ...data.currentAssets.inventory,
+              ...data.currentAssets.receivables,
+              ...data.currentAssets.other,
+              data.currentAssets.total
+            ],
             showSubtotal: true
           },
           {
             title: 'TRÉSORERIE-ACTIF',
-            items: data.cashAssets,
+            items: [
+              ...data.treasuryAssets.investments,
+              ...data.treasuryAssets.banks,
+              ...data.treasuryAssets.cashOnHand,
+              data.treasuryAssets.total
+            ],
             showSubtotal: true
           }
         ]}
@@ -49,22 +64,43 @@ export function BalanceSheet({ data, currency }: BalanceSheetProps) {
         sections={[
           {
             title: 'CAPITAUX PROPRES ET RESSOURCES ASSIMILÉES',
-            items: data.equity,
+            items: [
+              ...data.equity.capital,
+              ...data.equity.reserves,
+              ...data.equity.result,
+              ...data.equity.other,
+              data.equity.total
+            ],
             showSubtotal: true
           },
           {
             title: 'DETTES FINANCIÈRES ET RESSOURCES ASSIMILÉES',
-            items: data.longTermDebt,
+            items: [
+              ...data.financialDebts.loans,
+              ...data.financialDebts.leasing,
+              ...data.financialDebts.other,
+              data.financialDebts.total
+            ],
             showSubtotal: true
           },
           {
             title: 'PASSIF CIRCULANT',
-            items: data.currentLiabilities,
+            items: [
+              ...data.currentLiabilities.suppliers,
+              ...data.currentLiabilities.fiscal,
+              ...data.currentLiabilities.social,
+              ...data.currentLiabilities.other,
+              data.currentLiabilities.total
+            ],
             showSubtotal: true
           },
           {
             title: 'TRÉSORERIE-PASSIF',
-            items: data.cashLiabilities,
+            items: [
+              ...data.treasuryLiabilities.banks,
+              ...data.treasuryLiabilities.other,
+              data.treasuryLiabilities.total
+            ],
             showSubtotal: true
           }
         ]}

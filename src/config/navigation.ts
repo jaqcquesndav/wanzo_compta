@@ -40,6 +40,6 @@ export const navigation = [
 export const secondaryNavigation = [
   { name: 'Exercices', icon: Calendar, path: '/fiscal-years' },
   { name: 'Utilisateurs', icon: Users, path: '/users' },
-  { name: 'Organisation', icon: Building, path: '/organization' },
+  { name: 'Entreprise', icon: Building, path: '/organization' },
   { name: 'Paramètres', icon: Settings, path: '/settings' },
 ] as const;

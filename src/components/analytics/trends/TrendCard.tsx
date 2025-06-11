@@ -1,7 +1,6 @@
-import React from 'react';
 import { Card } from '../../ui/Card';
 import { TrendingUp, TrendingDown, type LucideIcon } from 'lucide-react';
-import { formatCurrency } from '../../../utils/currency';
+import { useCurrency } from '../../../hooks/useCurrency';
 
 interface TrendCardProps {
   title: string;
@@ -18,6 +17,7 @@ export function TrendCard({
   icon: Icon,
   period
 }: TrendCardProps) {
+  const { formatConverted } = useCurrency();
   const variation = ((currentValue - previousValue) / previousValue) * 100;
   const isPositive = variation >= 0;
 
@@ -26,7 +26,7 @@ export function TrendCard({
       <div className="space-y-4">
         <div>
           <p className="text-2xl font-bold text-gray-900">
-            {formatCurrency(currentValue, 'XOF')}
+            {formatConverted(currentValue)}
           </p>
           <div className="flex items-center mt-1">
             {isPositive ? (
@@ -47,13 +47,13 @@ export function TrendCard({
           <div className="flex justify-between items-center">
             <span>Période actuelle</span>
             <span className="font-medium text-gray-900">
-              {formatCurrency(currentValue, 'XOF')}
+              {formatConverted(currentValue)}
             </span>
           </div>
           <div className="flex justify-between items-center mt-1">
             <span>Période précédente</span>
             <span className="font-medium text-gray-900">
-              {formatCurrency(previousValue, 'XOF')}
+              {formatConverted(previousValue)}
             </span>
           </div>
         </div>

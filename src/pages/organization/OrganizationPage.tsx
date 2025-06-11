@@ -23,13 +23,13 @@ export function OrganizationPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Organisation</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Entreprise</h1>
         <Button
           variant="primary"
           icon={Plus}
           onClick={() => setShowFormModal(true)}
         >
-          {organization ? 'Modifier' : 'Nouvelle Organisation'}
+          {organization ? 'Modifier' : 'Nouvelle Entreprise'}
         </Button>
       </div>
 

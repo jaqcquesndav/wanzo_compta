@@ -4,7 +4,7 @@ import type { AccountingLevelSettings, AccountingUnit } from '../../types/accoun
 const DEFAULT_SETTINGS: AccountingLevelSettings = {
   type: 'single',
   consolidation: false,
-  mainCurrency: 'XOF',
+  mainCurrency: 'CDF',
   units: [],
   consolidationRules: {
     eliminateIntercompany: true,

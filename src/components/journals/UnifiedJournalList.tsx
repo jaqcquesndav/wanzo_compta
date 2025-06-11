@@ -6,6 +6,7 @@ import { JOURNAL_TYPES } from '../../config/accounting';
 import type { JournalEntry } from '../../types/accounting';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/Popover';
 import { Switch } from '../ui/Switch';
+import { useCurrency } from '../../hooks/useCurrency';
 
 interface UnifiedJournalListProps {
   entries: JournalEntry[];
@@ -41,16 +42,9 @@ export function UnifiedJournalList({
   if (showAgentEntries) {
     allEntries.push(...agentEntries);
   }
-
   const isAllSelected = agentEntries.length > 0 && selectedEntries.length === agentEntries.length;
-
-  const formatAmount = (amount: number) => {
-    return amount.toLocaleString('fr-FR', {
-      style: 'currency',
-      currency: 'XOF'
-    });
-  };
-
+  const { formatConverted } = useCurrency();
+  
   const toggleSelectAll = () => {
     if (isAllSelected) {
       setSelectedEntries([]);
@@ -120,15 +114,14 @@ export function UnifiedJournalList({
           {entry.description}
         </div>
       )
-    },
-    {
+    },    {
       header: 'Débit',
-      accessor: (entry: JournalEntry) => formatAmount(entry.totalDebit),
+      accessor: (entry: JournalEntry) => formatConverted(entry.totalDebit),
       className: 'text-right'
     },
     {
       header: 'Crédit',
-      accessor: (entry: JournalEntry) => formatAmount(entry.totalCredit),
+      accessor: (entry: JournalEntry) => formatConverted(entry.totalCredit),
       className: 'text-right'
     },
     {

@@ -1,5 +1,5 @@
-import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { useCurrency } from '../../hooks/useCurrency';
 
 interface ExpensesPieChartProps {
   data: Array<{
@@ -10,6 +10,8 @@ interface ExpensesPieChartProps {
 }
 
 export function ExpensesPieChart({ data }: ExpensesPieChartProps) {
+  const { currentCurrency } = useCurrency();
+  
   return (
     <ResponsiveContainer width="100%" height={300}>
       <PieChart>
@@ -29,9 +31,9 @@ export function ExpensesPieChart({ data }: ExpensesPieChartProps) {
           ))}
         </Pie>
         <Tooltip 
-          formatter={(value: number) => new Intl.NumberFormat('fr-FR', { 
+          formatter={(value: number) => new Intl.NumberFormat('fr-CD', { 
             style: 'currency', 
-            currency: 'XOF',
+            currency: currentCurrency,
             maximumFractionDigits: 0
           }).format(value)}
         />

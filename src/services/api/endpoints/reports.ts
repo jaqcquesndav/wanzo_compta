@@ -7,12 +7,13 @@ import type {
   NotesData,
   FinancialStatementType
 } from '../../../types/reports';
+import { CurrencyCode } from '../../../config/currency';
 
 export const reportsApi = {
   getBalanceSheet: (params: { 
     date: string;
     comparative?: boolean;
-    currency?: string;
+    currency?: CurrencyCode;
   }) => 
     ApiService.get<BalanceSheetData>('/reports/balance-sheet', params),
 
@@ -20,7 +21,7 @@ export const reportsApi = {
     startDate: string;
     endDate: string;
     comparative?: boolean;
-    currency?: string;
+    currency?: CurrencyCode;
   }) => 
     ApiService.get<IncomeStatementData>('/reports/income-statement', params),
 
@@ -28,14 +29,14 @@ export const reportsApi = {
     startDate: string;
     endDate: string;
     comparative?: boolean;
-    currency?: string;
+    currency?: CurrencyCode;
   }) => 
     ApiService.get<CashFlowStatementData>('/reports/cash-flow', params),
 
   getEquityChanges: (params: {
     startDate: string;
     endDate: string;
-    currency?: string;
+    currency?: CurrencyCode;
   }) =>
     ApiService.get<EquityChangesData>('/reports/equity-changes', params),
 
@@ -52,7 +53,7 @@ export const reportsApi = {
     startDate?: string;
     endDate?: string;
     comparative?: boolean;
-    currency?: string;
+    currency?: CurrencyCode;
     includeNotes?: boolean;
   }) =>
     ApiService.post<Blob>('/reports/generate', params),

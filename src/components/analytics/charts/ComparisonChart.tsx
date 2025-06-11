@@ -1,5 +1,5 @@
-import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useCurrency } from '../../../hooks/useCurrency';
 
 interface ComparisonChartProps {
   data: Array<{
@@ -10,6 +10,8 @@ interface ComparisonChartProps {
 }
 
 export function ComparisonChart({ data, color = '#197ca8' }: ComparisonChartProps) {
+  const { currentCurrency } = useCurrency();
+  
   return (
     <ResponsiveContainer width="100%" height={300}>
       <LineChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
@@ -20,9 +22,9 @@ export function ComparisonChart({ data, color = '#197ca8' }: ComparisonChartProp
         />
         <Tooltip 
           formatter={(value: number) => [
-            new Intl.NumberFormat('fr-FR', { 
+            new Intl.NumberFormat('fr-CD', { 
               style: 'currency', 
-              currency: 'XOF',
+              currency: currentCurrency,
               maximumFractionDigits: 0
             }).format(value),
             'Montant'

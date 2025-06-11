@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { CurrencyCode } from '../config/currency';
 
 export interface Organization {
   id: string;
@@ -13,9 +14,10 @@ export interface Organization {
   website: string;
   legalForm: string;
   capital: string;
-  currency: string;
+  currency: CurrencyCode;
   logo?: string;
   industry?: string;
+  description?: string;
 }
 
 export function useOrganization() {
@@ -37,7 +39,7 @@ export function useOrganization() {
       website: 'www.kiota.com',
       legalForm: 'SARL',
       capital: '10000000',
-      currency: 'XOF',
+      currency: 'CDF',
       industry: 'Services'
     };
 

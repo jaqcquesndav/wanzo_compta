@@ -1,5 +1,6 @@
 import React from 'react';
-import { formatCurrency } from '../../../utils/currency';
+import { useCurrency } from '../../../hooks/useCurrency';
+import { CurrencyCode } from '../../../config/currency';
 
 interface Column {
   key: string;
@@ -24,10 +25,12 @@ interface StatementSectionProps {
   title: string;
   columns: Column[];
   sections: Section[];
-  currency: string;
+  currency?: CurrencyCode;
 }
 
 export function StatementSection({ title, columns, sections, currency }: StatementSectionProps) {
+  const { formatConverted } = useCurrency();
+  
   const calculateSubtotal = (items: Item[], key: string) => {
     return items.reduce((sum, item) => sum + (item[key] || 0), 0);
   };
@@ -78,8 +81,8 @@ export function StatementSection({ title, columns, sections, currency }: Stateme
                     </td>
                     {columns.map(column => (
                       <td key={column.key} className="px-4 py-2 text-sm text-right text-gray-900">
-                        {formatCurrency(
-                          section.isNegative ? -item[column.key] : item[column.key],
+                        {formatConverted(
+                          section.isNegative ? -item[column.key] : item[column.key], 
                           currency
                         )}
                       </td>
@@ -94,7 +97,7 @@ export function StatementSection({ title, columns, sections, currency }: Stateme
                     </td>
                     {columns.map(column => (
                       <td key={column.key} className="px-4 py-2 text-sm text-right text-gray-900">
-                        {formatCurrency(
+                        {formatConverted(
                           section.isNegative 
                             ? -calculateSubtotal(section.items, column.key)
                             : calculateSubtotal(section.items, column.key),

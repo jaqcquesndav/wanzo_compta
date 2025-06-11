@@ -24,6 +24,14 @@ export interface JournalEntry {
   }[];
 }
 
+export interface Account {
+  id: string;
+  code: string;
+  name: string;
+  type: 'asset' | 'liability' | 'equity' | 'revenue' | 'expense';
+  isAnalytic?: boolean;
+}
+
 export interface JournalLine {
   id: string;
   accountId: string;

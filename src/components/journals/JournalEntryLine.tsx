@@ -1,10 +1,11 @@
-import React from 'react';
 import { Trash2 } from 'lucide-react';
 import { Input } from '../ui/Form';
 import { AccountLookup } from './AccountLookup';
 import { VatCodeSelect } from './VatCodeSelect';
 import { VAT_CODES } from '../../config/accounting';
 import type { JournalLine } from '../../types/accounting';
+import { useCurrency } from '../../hooks/useCurrency';
+import { CurrencyCode } from '../../config/currency';
 
 interface JournalEntryLineProps {
   line: JournalLine;
@@ -21,13 +22,22 @@ export function JournalEntryLine({
   isRemoveDisabled,
   showVat = true
 }: JournalEntryLineProps) {
+  const useCurrencyValue = useCurrency();
+  
+  const formatConverted = (amount: number, fromCurrency?: CurrencyCode) => {
+    return useCurrencyValue.formatConverted(amount, fromCurrency);
+  };
+  
   const handleVatChange = (vatCode: string) => {
     const updates: Partial<JournalLine> = { vatCode };
     
     // Calculer la TVA si un montant existe déjà
     if (line.debit > 0 || line.credit > 0) {
       const amount = line.debit || line.credit;
-      const vatRate = vatCode ? VAT_CODES[vatCode]?.rate || 0 : 0;
+      // Vérifier si le code TVA existe dans VAT_CODES et récupérer le taux
+      const vatRate = vatCode && typeof VAT_CODES[vatCode as keyof typeof VAT_CODES] !== 'undefined' 
+        ? VAT_CODES[vatCode as keyof typeof VAT_CODES].rate 
+        : 0;
       const vatAmount = amount * (vatRate / 100);
       
       updates.vatAmount = vatAmount;
@@ -45,7 +55,10 @@ export function JournalEntryLine({
 
     // Recalculer la TVA si un code TVA est sélectionné
     if (line.vatCode) {
-      const vatRate = VAT_CODES[line.vatCode]?.rate || 0;
+      // Vérifier si le code TVA existe dans VAT_CODES et récupérer le taux
+      const vatRate = typeof VAT_CODES[line.vatCode as keyof typeof VAT_CODES] !== 'undefined'
+        ? VAT_CODES[line.vatCode as keyof typeof VAT_CODES].rate
+        : 0;
       updates.vatAmount = amount * (vatRate / 100);
     }
 
@@ -80,9 +93,9 @@ export function JournalEntryLine({
               value={line.vatCode || ''}
               onChange={handleVatChange}
             />
-            {line.vatAmount > 0 && (
+            {line.vatAmount !== undefined && line.vatAmount > 0 && (
               <div className="text-xs text-gray-500">
-                TVA: {line.vatAmount.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} XOF
+                TVA: {formatConverted(line.vatAmount)}
               </div>
             )}
           </div>

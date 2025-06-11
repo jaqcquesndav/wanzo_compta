@@ -1,8 +1,8 @@
-import React from 'react';
 import { FileText, Download, Eye } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { JOURNAL_TYPES } from '../../config/accounting';
 import type { JournalEntry } from '../../types/accounting';
+import { useCurrency } from '../../hooks/useCurrency';
 
 interface JournalEntryViewProps {
   entry: JournalEntry;
@@ -11,11 +11,10 @@ interface JournalEntryViewProps {
 }
 
 export function JournalEntryView({ entry, onDownloadAttachment, onViewAttachment }: JournalEntryViewProps) {
+  const { formatConverted } = useCurrency();
+  
   const formatAmount = (amount: number) => {
-    return amount.toLocaleString('fr-FR', { 
-      style: 'currency', 
-      currency: 'XOF' 
-    });
+    return formatConverted(amount);
   };
   
   const getJournalLabel = (type: string) => {

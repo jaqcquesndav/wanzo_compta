@@ -1,26 +1,25 @@
-import React from 'react';
-import type { FinancialStatementType } from '../../../types/reports';
+import { type FinancialStatementType } from '../../../types/reports';
+import { useCurrency } from '../../../hooks/useCurrency';
+import { CurrencyCode } from '../../../config/currency';
 
 interface FinancialStatementPreviewProps {
   type: FinancialStatementType;
   data: any;
-  currency?: 'USD' | 'CDF';
-}
-
-function formatAmount(amount: number | undefined, currency: 'USD' | 'CDF' = 'CDF'): string {
-  if (amount === undefined) return '-';
-  return new Intl.NumberFormat('fr-CD', {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 0
-  }).format(amount);
+  currency?: CurrencyCode;
 }
 
 export function FinancialStatementPreview({ type, data, currency = 'CDF' }: FinancialStatementPreviewProps) {
+  const { formatConverted, currentCurrency } = useCurrency();
+  
+  const formatAmount = (amount: number | undefined, fromCurrency?: CurrencyCode): string => {
+    if (amount === undefined) return '-';
+    return formatConverted(amount, fromCurrency || currency || currentCurrency);
+  };
+
   if (!data) return null;
 
   const renderBalanceSheet = () => {
-    const { fixedAssets, currentAssets, treasuryAssets, equity, financialDebts, currentLiabilities } = data;
+    const { fixedAssets, currentAssets, equity } = data;
 
     return (
       <div className="space-y-8">

@@ -1,9 +1,9 @@
-import React from 'react';
 import { Table } from '../ui/Table';
 import { Button } from '../ui/Button';
 import { Eye, Edit2, Trash2, Download, FileText, FileSpreadsheet } from 'lucide-react';
 import { JOURNAL_TYPES } from '../../config/accounting';
 import type { JournalEntry } from '../../types/accounting';
+import { useCurrency } from '../../hooks/useCurrency';
 
 interface JournalListProps {
   entries: JournalEntry[];
@@ -28,13 +28,8 @@ export function JournalList({
   totalPages,
   onPageChange
 }: JournalListProps) {
-  const formatAmount = (amount: number) => {
-    return amount.toLocaleString('fr-FR', { 
-      style: 'currency', 
-      currency: 'XOF' 
-    });
-  };
-
+  const { formatConverted } = useCurrency();
+  
   const columns = [
     {
       header: 'Date',
@@ -42,24 +37,35 @@ export function JournalList({
     },
     {
       header: 'N° Pièce',
-      accessor: 'reference'
+      accessor: (entry: JournalEntry) => entry.reference
     },
     {
       header: 'Journal',
-      accessor: (entry: JournalEntry) => JOURNAL_TYPES[entry.journalType]?.label
+      accessor: (entry: JournalEntry) => {
+        const journalTypeMapping: Record<string, keyof typeof JOURNAL_TYPES> = {
+          'sales': 'SALES',
+          'purchases': 'PURCHASE',
+          'bank': 'BANK',
+          'cash': 'CASH',
+          'general': 'GENERAL'
+        };
+        
+        const mappedType = journalTypeMapping[entry.journalType];
+        return mappedType ? JOURNAL_TYPES[mappedType].label : entry.journalType;
+      }
     },
     {
       header: 'Libellé',
-      accessor: 'description'
+      accessor: (entry: JournalEntry) => entry.description
     },
     {
       header: 'Débit',
-      accessor: (entry: JournalEntry) => formatAmount(entry.totalDebit),
+      accessor: (entry: JournalEntry) => formatConverted(entry.totalDebit),
       className: 'text-right'
     },
     {
       header: 'Crédit',
-      accessor: (entry: JournalEntry) => formatAmount(entry.totalCredit),
+      accessor: (entry: JournalEntry) => formatConverted(entry.totalCredit),
       className: 'text-right'
     },
     {

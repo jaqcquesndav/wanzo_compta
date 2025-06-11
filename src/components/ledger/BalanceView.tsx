@@ -1,6 +1,6 @@
-import React from 'react';
 import { Table } from '../ui/Table';
 import { useAccountingStore } from '../../stores/accountingStore';
+import { useCurrency } from '../../hooks/useCurrency';
 import type { Account } from '../../types/accounting';
 
 interface BalanceViewProps {
@@ -15,12 +15,11 @@ interface BalanceViewProps {
 
 export function BalanceView({ accounts, loading }: BalanceViewProps) {
   const { mode } = useAccountingStore();
+  const { currentCurrency, baseCurrency, formatConverted } = useCurrency();
 
+  // Utilise le formatage avec conversion de devise
   const formatAmount = (amount: number) => {
-    return amount.toLocaleString('fr-FR', {
-      style: 'currency',
-      currency: 'XOF'
-    });
+    return formatConverted(amount);
   };
 
   const columns = [
@@ -35,13 +34,16 @@ export function BalanceView({ accounts, loading }: BalanceViewProps) {
     },
     {
       header: 'Type',
-      accessor: (item: typeof accounts[0]) => ({
-        asset: 'Actif',
-        liability: 'Passif',
-        equity: 'Capitaux propres',
-        revenue: 'Produits',
-        expense: 'Charges'
-      }[item.account.type])
+      accessor: (item: typeof accounts[0]) => {
+        const typeLabels: Record<string, string> = {
+          asset: 'Actif',
+          liability: 'Passif',
+          equity: 'Capitaux propres',
+          revenue: 'Produits',
+          expense: 'Charges'
+        };
+        return typeLabels[item.account.type] || item.account.type;
+      }
     },
     {
       header: 'Débit',
@@ -82,12 +84,20 @@ export function BalanceView({ accounts, loading }: BalanceViewProps) {
             ? 'Balance selon le Système Comptable OHADA Révisé'
             : 'Balance selon les normes IFRS'
           }
+          {currentCurrency !== baseCurrency && (
+            <span className="ml-2 text-xs font-medium text-primary">
+              (Montants affichés en {currentCurrency})
+            </span>
+          )}
         </p>
       </div>
 
       <Table
         columns={columns}
-        data={accounts}
+        data={accounts.map(item => ({
+          ...item,
+          id: item.account.id
+        }))}
         loading={loading}
         emptyMessage="Aucun compte trouvé"
       />

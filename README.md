@@ -4,6 +4,18 @@
 
 Cette documentation vise à guider les développeurs backend sur l'intégration API avec le frontend Wanzo Comptabilité. Le projet est une application de comptabilité moderne qui offre une gestion complète des opérations comptables, avec une architecture frontend React/TypeScript et un backend à développer en NestJS/TypeORM.
 
+### Systèmes comptables pris en charge
+
+L'application prend en charge deux systèmes comptables :
+- **SYSCOHADA** (par défaut) : Système Comptable OHADA Révisé, utilisé dans les pays membres de l'Organisation pour l'Harmonisation en Afrique du Droit des Affaires.
+- **IFRS** : International Financial Reporting Standards, pour les entreprises souhaitant se conformer aux normes internationales.
+
+Le choix du système comptable affecte la structure du plan comptable, les règles de comptabilisation et la présentation des états financiers. Les API doivent donc permettre de spécifier le système comptable utilisé pour certaines opérations, notamment dans les endpoints de grand livre et de rapports.
+
+### Gestion des devises
+
+L'application supporte différentes devises, avec le Franc Congolais (CDF) comme devise par défaut. Les API doivent permettre de spécifier la devise pour les opérations financières et pour la génération des états financiers. Les montants sont stockés dans la devise de base de l'entreprise, mais peuvent être convertis pour l'affichage.
+
 ## Architecture technique
 
 ### Frontend
@@ -170,6 +182,7 @@ Le schéma de synchronisation suit ce format:
     "legalForm": "SARL",
     "capital": "10000000",
     "currency": "CDF",
+    "accountingMode": "SYSCOHADA",
     "logo": "https://storage.example.com/logos/entreprisexyz.png",
     "industry": "Commerce",
     "description": "Entreprise de commerce général",
@@ -254,6 +267,7 @@ Le schéma de synchronisation suit ce format:
     "legalForm": "SARL",
     "capital": "10000000",
     "currency": "CDF",
+    "accountingMode": "SYSCOHADA",
     "logo": "https://storage.example.com/logos/entreprisexyz.png",
     "industry": "Commerce",
     "description": "Entreprise de commerce général",
@@ -684,7 +698,10 @@ Le schéma de synchronisation suit ce format:
 
 **Endpoint**: `/ledger/trial-balance`  
 **Méthode**: GET  
-**Paramètres**: `?date=2023-06-30&mode=SYSCOHADA`  
+**Paramètres**: 
+- `date`: Date à laquelle générer la balance (format YYYY-MM-DD)
+- `mode`: Système comptable utilisé (`SYSCOHADA` ou `IFRS`), par défaut `SYSCOHADA`
+- `currency`: Code de la devise (par défaut la devise de l'organisation)
 **Headers**: `Authorization: Bearer jwt-token-here`  
 **Réponse**:
 ```json
@@ -907,7 +924,11 @@ Le schéma de synchronisation suit ce format:
 
 **Endpoint**: `/reports/balance-sheet`  
 **Méthode**: GET  
-**Paramètres**: `?date=2023-06-30&comparative=true&currency=CDF`  
+**Paramètres**: 
+- `date`: Date du bilan (format YYYY-MM-DD)
+- `comparative`: Booléen indiquant si le rapport doit inclure des données comparatives (période précédente)
+- `currency`: Code de la devise pour le rapport (ex: `CDF`, `USD`)
+- `mode`: Système comptable utilisé (`SYSCOHADA` ou `IFRS`), par défaut `SYSCOHADA`
 **Headers**: `Authorization: Bearer jwt-token-here`  
 **Réponse**:
 ```json
@@ -916,6 +937,7 @@ Le schéma de synchronisation suit ce format:
   "data": {
     "asOf": "2023-06-30",
     "currency": "CDF",
+    "mode": "SYSCOHADA",
     "comparative": true,
     "assets": {
       "current": {
@@ -991,6 +1013,7 @@ Le schéma de synchronisation suit ce format:
   "date": "2023-06-30",
   "comparative": true,
   "currency": "CDF",
+  "mode": "SYSCOHADA",
   "includeNotes": true
 }
 ```
@@ -1097,3 +1120,198 @@ Le backend doit fournir des mécanismes de synchronisation efficaces qui respect
 Cette documentation fournit les informations essentielles pour développer un backend NestJS/TypeORM compatible avec le frontend Wanzo Comptabilité. En suivant ces directives, vous pourrez créer une API robuste et conforme aux besoins de l'application, tout en respectant les bonnes pratiques de développement, les principes comptables et en optimisant la synchronisation avec IndexedDB.
 
 Pour toute question ou clarification, n'hésitez pas à contacter l'équipe de développement frontend.
+
+## Paramètres utilisateur et configuration
+
+### Configuration du système comptable
+
+**Endpoint**: `/settings/accounting`  
+**Méthode**: GET  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": {
+    "accountingMode": "SYSCOHADA",
+    "defaultCurrency": "CDF",
+    "defaultDepreciationMethod": "linear",
+    "defaultVatRate": "18",
+    "journalEntryValidation": "auto"
+  }
+}
+```
+
+**Endpoint**: `/settings/accounting`  
+**Méthode**: PUT  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Requête**:
+```json
+{
+  "accountingMode": "IFRS",
+  "defaultCurrency": "USD",
+  "defaultDepreciationMethod": "degressive",
+  "defaultVatRate": "16",
+  "journalEntryValidation": "manual"
+}
+```
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": {
+    "accountingMode": "IFRS",
+    "defaultCurrency": "USD",
+    "defaultDepreciationMethod": "degressive",
+    "defaultVatRate": "16",
+    "journalEntryValidation": "manual"
+  }
+}
+```
+
+### Devises supportées
+
+**Endpoint**: `/settings/currencies`  
+**Méthode**: GET  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "code": "CDF",
+      "name": "Franc Congolais",
+      "symbol": "FC",
+      "isDefault": true,
+      "exchangeRate": 1
+    },
+    {
+      "code": "USD",
+      "name": "Dollar américain",
+      "symbol": "$",
+      "isDefault": false,
+      "exchangeRate": 0.0005
+    },
+    {
+      "code": "EUR",
+      "name": "Euro",
+      "symbol": "€",
+      "isDefault": false,
+      "exchangeRate": 0.00045
+    }
+  ]
+}
+```
+
+**Endpoint**: `/settings/currencies/default`  
+**Méthode**: PUT  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Requête**:
+```json
+{
+  "currencyCode": "USD"
+}
+```
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": {
+    "code": "USD",
+    "name": "Dollar américain",
+    "symbol": "$",
+    "isDefault": true,
+    "exchangeRate": 0.0005
+  }
+}
+```
+
+**Endpoint**: `/settings/currencies/exchange-rates`  
+**Méthode**: PUT  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Requête**:
+```json
+{
+  "rates": [
+    {
+      "currencyCode": "USD",
+      "exchangeRate": 0.00048
+    },
+    {
+      "currencyCode": "EUR",
+      "exchangeRate": 0.00042
+    }
+  ]
+}
+```
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "code": "USD",
+      "name": "Dollar américain",
+      "symbol": "$",
+      "isDefault": true,
+      "exchangeRate": 0.00048
+    },
+    {
+      "code": "EUR",
+      "name": "Euro",
+      "symbol": "€",
+      "isDefault": false,
+      "exchangeRate": 0.00042
+    }
+  ]
+}
+```
+
+## Types et constantes
+
+### Types de systèmes comptables
+
+```typescript
+type AccountingMode = 'SYSCOHADA' | 'IFRS';
+```
+
+### Devises supportées
+
+```typescript
+export const CURRENCIES = {
+  CDF: {
+    code: 'CDF',
+    name: 'Franc Congolais',
+    symbol: 'FC',
+    default: true
+  },
+  USD: {
+    code: 'USD',
+    name: 'Dollar américain',
+    symbol: '$',
+    default: false
+  }
+};
+
+export type CurrencyCode = keyof typeof CURRENCIES;
+```
+
+### Formatage des devises
+
+```typescript
+// Formatage standard
+function formatCurrency(amount: number, currency: CurrencyCode = 'CDF'): string {
+  return new Intl.NumberFormat('fr-CD', {
+    style: 'currency',
+    currency,
+    maximumFractionDigits: 0
+  }).format(amount);
+}
+
+// Formatage compact (ex: 1.5M FC)
+function formatCompactCurrency(amount: number, currency: CurrencyCode = 'CDF'): string {
+  const millions = amount / 1000000;
+  return `${millions.toFixed(1)}M ${CURRENCIES[currency].symbol}`;
+}
+```

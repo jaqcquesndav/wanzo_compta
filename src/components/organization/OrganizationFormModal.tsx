@@ -25,8 +25,9 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
     email: '',
     website: '',
     capital: '',
-    currency: 'XOF',
-    industry: ''
+    currency: 'CDF',
+    industry: '',
+    description: ''
   });
   const [loading, setLoading] = useState(false);
 
@@ -45,7 +46,7 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={organization ? "Modifier l'organisation" : "Nouvelle organisation"}
+      title={organization ? "Modifier l'entreprise" : "Nouvelle entreprise"}
       size="xl"
     >
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -185,7 +186,7 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
             type="submit"
             isLoading={loading}
           >
-            {organization ? 'Enregistrer les modifications' : 'Créer l\'organisation'}
+            {organization ? 'Enregistrer les modifications' : 'Créer l\'entreprise'}
           </Button>
         </div>
       </form>

@@ -1,10 +1,10 @@
-import React from 'react';
 import { StatementSection } from './StatementSection';
 import type { CashFlowStatementData } from '../../../types/reports';
+import { CurrencyCode } from '../../../config/currency';
 
 interface CashFlowStatementProps {
   data: CashFlowStatementData;
-  currency: string;
+  currency?: CurrencyCode;
 }
 
 export function CashFlowStatement({ data, currency }: CashFlowStatementProps) {
@@ -20,17 +20,32 @@ export function CashFlowStatement({ data, currency }: CashFlowStatementProps) {
         sections={[
           {
             title: 'FLUX DE TRÉSORERIE PROVENANT DES ACTIVITÉS OPÉRATIONNELLES',
-            items: data.operatingActivities,
+            items: [
+              data.operatingActivities.netResult,
+              ...data.operatingActivities.adjustments,
+              ...data.operatingActivities.workingCapital,
+              data.operatingActivities.total
+            ],
             showSubtotal: true
           },
           {
             title: 'FLUX DE TRÉSORERIE PROVENANT DES ACTIVITÉS D\'INVESTISSEMENT',
-            items: data.investingActivities,
+            items: [
+              ...data.investingActivities.acquisitions,
+              ...data.investingActivities.disposals,
+              data.investingActivities.total
+            ],
             showSubtotal: true
           },
           {
             title: 'FLUX DE TRÉSORERIE PROVENANT DU FINANCEMENT',
-            items: data.financingActivities,
+            items: [
+              ...data.financingActivities.capital,
+              ...data.financingActivities.loans,
+              ...data.financingActivities.repayments,
+              ...data.financingActivities.dividends,
+              data.financingActivities.total
+            ],
             showSubtotal: true
           },
           {

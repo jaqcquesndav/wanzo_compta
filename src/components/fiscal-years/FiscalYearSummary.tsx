@@ -1,7 +1,7 @@
-import React from 'react';
 import { Card } from '../ui/Card';
 import { Calendar, TrendingUp, DollarSign } from 'lucide-react';
-import type { FiscalYear } from '../../hooks/useFiscalYear';
+import type { FiscalYear } from '../../types/fiscal-year';
+import { useCurrency } from '../../hooks/useCurrency';
 
 interface FiscalYearSummaryProps {
   fiscalYear: FiscalYear;
@@ -13,12 +13,7 @@ interface FiscalYearSummaryProps {
 }
 
 export function FiscalYearSummary({ fiscalYear, metrics }: FiscalYearSummaryProps) {
-  const formatAmount = (amount: number) => {
-    return amount.toLocaleString('fr-FR', {
-      style: 'currency',
-      currency: 'XOF'
-    });
-  };
+  const { formatConverted } = useCurrency();
 
   return (
     <Card title={`Résumé de l'exercice ${fiscalYear.code}`} icon={Calendar}>
@@ -30,7 +25,7 @@ export function FiscalYearSummary({ fiscalYear, metrics }: FiscalYearSummaryProp
               <span className="text-sm font-medium">Chiffre d'affaires</span>
             </div>
             <p className="mt-1 text-2xl font-bold">
-              {formatAmount(metrics.revenue)}
+              {formatConverted(metrics.revenue)}
             </p>
           </div>
 
@@ -40,7 +35,7 @@ export function FiscalYearSummary({ fiscalYear, metrics }: FiscalYearSummaryProp
               <span className="text-sm font-medium">Charges</span>
             </div>
             <p className="mt-1 text-2xl font-bold">
-              {formatAmount(metrics.expenses)}
+              {formatConverted(metrics.expenses)}
             </p>
           </div>
 
@@ -50,7 +45,7 @@ export function FiscalYearSummary({ fiscalYear, metrics }: FiscalYearSummaryProp
               <span className="text-sm font-medium">Résultat</span>
             </div>
             <p className="mt-1 text-2xl font-bold">
-              {formatAmount(metrics.result)}
+              {formatConverted(metrics.result)}
             </p>
           </div>
         </div>

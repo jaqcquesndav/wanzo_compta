@@ -4,6 +4,7 @@ import { Button } from '../ui/Button';
 import { Check, Eye, Edit2, Trash2, CheckSquare } from 'lucide-react';
 import { JOURNAL_TYPES } from '../../config/accounting';
 import type { JournalEntry } from '../../types/accounting';
+import { useCurrency } from '../../hooks/useCurrency';
 
 interface AgentEntryListProps {
   entries: JournalEntry[];
@@ -29,17 +30,10 @@ export function AgentEntryList({
   page,
   totalPages,
   onPageChange
-}: AgentEntryListProps) {
-  const [selectedEntries, setSelectedEntries] = useState<JournalEntry[]>([]);
+}: AgentEntryListProps) {  const [selectedEntries, setSelectedEntries] = useState<JournalEntry[]>([]);
   const isAllSelected = entries.length > 0 && selectedEntries.length === entries.length;
-
-  const formatAmount = (amount: number) => {
-    return amount.toLocaleString('fr-FR', {
-      style: 'currency',
-      currency: 'XOF'
-    });
-  };
-
+  const { formatConverted } = useCurrency();
+  
   const toggleSelectAll = () => {
     if (isAllSelected) {
       setSelectedEntries([]);
@@ -94,15 +88,14 @@ export function AgentEntryList({
     },    {
       header: 'Libellé',
       accessor: (entry: JournalEntry) => entry.description
-    },
-    {
+    },    {
       header: 'Débit',
-      accessor: (entry: JournalEntry) => formatAmount(entry.totalDebit),
+      accessor: (entry: JournalEntry) => formatConverted(entry.totalDebit),
       className: 'text-right'
     },
     {
       header: 'Crédit',
-      accessor: (entry: JournalEntry) => formatAmount(entry.totalCredit),
+      accessor: (entry: JournalEntry) => formatConverted(entry.totalCredit),
       className: 'text-right'
     },
     {

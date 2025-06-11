@@ -1,8 +1,8 @@
-import React from 'react';
 import { User, MessageSquare, Calculator } from 'lucide-react';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import { NotificationCenter } from '../notifications/NotificationCenter';
 import { UserMenu } from '../ui/UserMenu';
+import { CurrencyIndicator } from '../ui/CurrencyIndicator';
 import type { User as UserType } from '../../types/auth';
 
 interface HeaderActionsProps {
@@ -24,6 +24,8 @@ export function HeaderActions({
 }: HeaderActionsProps) {
   return (
     <div className="flex items-center gap-4">
+      <CurrencyIndicator className="hidden md:flex" />
+      
       <ThemeToggle />
       
       <button 

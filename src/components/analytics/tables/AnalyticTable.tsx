@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Table } from '../../ui/Table';
 import { FormField, Input, Select } from '../../ui/Form';
 import { Button } from '../../ui/Button';
 import { Download, Search } from 'lucide-react';
 import type { AnalyticData } from '../../../types/analytics';
 import { useReportActions } from '../../../hooks/useReportActions';
+import { useCurrency } from '../../../hooks/useCurrency';
 
 interface AnalyticTableProps {
   data: AnalyticData[];
   title: string;
-  type: 'sales' | 'expenses';
 }
 
-export function AnalyticTable({ data, title, type }: AnalyticTableProps) {
+export function AnalyticTable({ data, title }: AnalyticTableProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const { handleDownload } = useReportActions();
+  const { formatConverted } = useCurrency();
 
   const categories = Array.from(new Set(data.map(item => item.category)));
   
@@ -34,26 +35,23 @@ export function AnalyticTable({ data, title, type }: AnalyticTableProps) {
     },
     {
       header: 'Référence',
-      accessor: 'reference'
+      accessor: (item: AnalyticData) => item.reference
     },
     {
       header: 'Catégorie',
-      accessor: 'category'
+      accessor: (item: AnalyticData) => item.category
     },
     {
       header: 'Sous-catégorie',
-      accessor: 'subcategory'
+      accessor: (item: AnalyticData) => item.subcategory
     },
     {
       header: 'Description',
-      accessor: 'description'
+      accessor: (item: AnalyticData) => item.description
     },
     {
       header: 'Montant',
-      accessor: (item: AnalyticData) => item.amount.toLocaleString('fr-FR', {
-        style: 'currency',
-        currency: 'XOF'
-      }),
+      accessor: (item: AnalyticData) => formatConverted(item.amount),
       className: 'text-right'
     }
   ];

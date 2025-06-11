@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import type { TreasuryAccount, TreasuryBalance, Transaction } from '../types/treasury';
+import type { TreasuryAccount, TreasuryBalance } from '../types/treasury';
+import { type CurrencyCode } from '../config/currency';
 
 export function useTreasury() {
   const [accounts, setAccounts] = useState<TreasuryAccount[]>([]);
@@ -15,7 +16,7 @@ export function useTreasury() {
         bankName: 'BICIS',
         accountNumber: 'SN012 00001 00000000000001',
         balance: 15000000,
-        currency: 'XOF',
+        currency: 'CDF',
         status: 'active',
         lastReconciliation: '2024-03-01'
       },
@@ -26,7 +27,7 @@ export function useTreasury() {
         bankName: 'SMICO Microfinance',
         accountNumber: 'MF001-0001-00001',
         balance: 5000000,
-        currency: 'XOF',
+        currency: 'CDF',
         status: 'active'
       },
       {
@@ -36,7 +37,7 @@ export function useTreasury() {
         bankName: 'COOPEC Bonne Moisson',
         accountNumber: 'COOP-2024-001',
         balance: 3000000,
-        currency: 'XOF',
+        currency: 'CDF',
         status: 'active'
       },
       {
@@ -46,7 +47,7 @@ export function useTreasury() {
         bankName: 'AVEC Solidarité',
         accountNumber: 'AVEC-2024-001',
         balance: 1000000,
-        currency: 'XOF',
+        currency: 'CDF',
         status: 'active'
       }
     ];
@@ -66,7 +67,7 @@ export function useTreasury() {
       opening: total * 0.9, // Simuler le solde d'ouverture
       current: total,
       projected: total * 1.1, // Simuler le solde prévisionnel
-      currency: 'XOF'
+      currency: 'CDF' as CurrencyCode
     };
   };
 

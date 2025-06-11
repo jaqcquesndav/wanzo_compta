@@ -1,7 +1,7 @@
-import React from 'react';
 import { Table } from '../ui/Table';
 import { Card } from '../ui/Card';
 import type { JournalEntry } from '../../types/accounting';
+import { useCurrency } from '../../hooks/useCurrency';
 
 interface LedgerViewProps {
   accountId: string;
@@ -10,35 +10,39 @@ interface LedgerViewProps {
 }
 
 export function LedgerView({ accountId, entries, loading }: LedgerViewProps) {
+  const { formatConverted } = useCurrency();
+  
   const columns = [
     {
       header: 'Date',
-      accessor: 'date',
+      accessor: (entry: JournalEntry) => entry.date,
     },
     {
       header: 'N° Pièce',
-      accessor: 'reference',
+      accessor: (entry: JournalEntry) => entry.reference,
     },
     {
       header: 'Libellé',
-      accessor: 'description',
+      accessor: (entry: JournalEntry) => entry.description,
     },
     {
       header: 'Débit',
-      accessor: (entry: JournalEntry) => 
-        entry.lines
+      accessor: (entry: JournalEntry) => {
+        const amount = entry.lines
           .filter(line => line.accountId === accountId && line.debit > 0)
-          .reduce((sum, line) => sum + line.debit, 0)
-          .toFixed(2),
+          .reduce((sum, line) => sum + line.debit, 0);
+        return formatConverted(amount);
+      },
       className: 'text-right'
     },
     {
       header: 'Crédit',
-      accessor: (entry: JournalEntry) => 
-        entry.lines
+      accessor: (entry: JournalEntry) => {
+        const amount = entry.lines
           .filter(line => line.accountId === accountId && line.credit > 0)
-          .reduce((sum, line) => sum + line.credit, 0)
-          .toFixed(2),
+          .reduce((sum, line) => sum + line.credit, 0);
+        return formatConverted(amount);
+      },
       className: 'text-right'
     },
     {
@@ -52,7 +56,7 @@ export function LedgerView({ accountId, entries, loading }: LedgerViewProps) {
           .filter(line => line.accountId === accountId && line.credit > 0)
           .reduce((sum, line) => sum + line.credit, 0);
         
-        return (debit - credit).toFixed(2);
+        return formatConverted(debit - credit);
       },
       className: 'text-right font-medium'
     }

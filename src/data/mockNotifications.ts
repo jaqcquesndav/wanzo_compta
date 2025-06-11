@@ -21,7 +21,7 @@ export const mockNotifications: Notification[] = [
     id: '3',
     type: 'error',
     title: 'Erreur de validation',
-    message: 'L\'écriture comptable #FAC2024-001 présente un déséquilibre de 1000 XOF.',
+    message: 'L\'écriture comptable #FAC2024-001 présente un déséquilibre de 1000 CDF.',
     timestamp: '2024-03-01T11:15:00.000Z',
     read: true
   },
@@ -46,7 +46,7 @@ export const mockNotifications: Notification[] = [
 ];
 
 // Fonction utilitaire pour ajouter des notifications de test
-export function addMockNotification(notifications: Notification[]): Notification {
+export function addMockNotification(): Notification {
   const types: Notification['type'][] = ['info', 'success', 'warning', 'error'];
   const type = types[Math.floor(Math.random() * types.length)];
   
