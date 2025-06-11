@@ -8,9 +8,10 @@ interface ModalProps {
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   containerClassName?: string;
+  noPadding?: boolean; // Permet de désactiver le padding par défaut
 }
 
-export function Modal({ isOpen, onClose, title, children, size = 'md', containerClassName }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, size = 'md', containerClassName, noPadding = false }: ModalProps) {
   // Empêcher le scroll du body quand la modale est ouverte
   useEffect(() => {
     if (isOpen) {
@@ -49,7 +50,9 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', container
               </button>
             </div>
             
-            {children}
+            <div className={noPadding ? '' : 'p-6'}>
+              {children}
+            </div>
           </div>
         </div>
       </div>

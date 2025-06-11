@@ -77,6 +77,11 @@ export class IndexedDBService {
           chatStore.createIndex('timestamp', 'timestamp');
           chatStore.createIndex('conversationId', 'conversationId');
         }
+        
+        if (!db.objectStoreNames.contains('dashboard_data')) {
+          const dashboardStore = db.createObjectStore('dashboard_data', { keyPath: 'id' });
+          dashboardStore.createIndex('timestamp', 'timestamp');
+        }
       };
     });
   }

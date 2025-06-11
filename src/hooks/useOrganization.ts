@@ -4,19 +4,26 @@ import { CurrencyCode } from '../config/currency';
 export interface Organization {
   id: string;
   name: string;
-  registrationNumber: string;
-  taxId: string;
+  entrepreneurName: string;     // Nom de l'entrepreneur
+  associates?: string;          // Autres associés
+  registrationNumber: string;   // RCCM
+  taxId: string;                // Numéro impôt
+  cnssNumber?: string;          // Numéro affiliation CNSS
+  inppNumber?: string;          // Numéro affiliation INPP
+  onemNumber?: string;          // Numéro affiliation ONEM
   address: string;
   city: string;
   country: string;
-  phone: string;
-  email: string;
+  phone: string;                // Téléphone entreprise
+  entrepreneurPhone?: string;   // Téléphone entrepreneur
+  email: string;                // Email entreprise
+  entrepreneurEmail?: string;   // Email entrepreneur
   website: string;
   legalForm: string;
   capital: string;
   currency: CurrencyCode;
   logo?: string;
-  industry?: string;
+  industry?: string;            // Secteur d'activité
   description?: string;
 }
 
@@ -28,19 +35,26 @@ export function useOrganization() {
     // Simuler le chargement des données de l'entreprise
     const mockOrganization: Organization = {
       id: '1',
-      name: 'Kiota SARL',
-      registrationNumber: 'SN-DKR-2024-B-1234',
-      taxId: 'SN012345678',
-      address: '123 Avenue Cheikh Anta Diop',
-      city: 'Dakar',
-      country: 'Sénégal',
-      phone: '+221 33 000 00 00',
-      email: 'contact@kiota.com',
-      website: 'www.kiota.com',
+      name: 'ZERO PANNE',
+      entrepreneurName: 'KAKULE NDAVARO Jacques',
+      associates: 'Nick AZARIA MICHAEL, MWANABUTE SHAULA Christian, KATEMBO KANIKI Joseph, Prosper LOBOBO OMEKANDA',
+      registrationNumber: 'CD/GOM/RCCM/22-B-00008',
+      taxId: '4876',
+      cnssNumber: '',
+      inppNumber: '',
+      onemNumber: '',
+      address: '',
+      city: 'GOMA',
+      country: 'RD Congo',
+      phone: '',
+      entrepreneurPhone: '243-972-252-499',
+      email: '',
+      entrepreneurEmail: 'jacquesdav@gmail.com',
+      website: '',
       legalForm: 'SARL',
       capital: '10000000',
       currency: 'CDF',
-      industry: 'Services'
+      industry: 'Maintenance automobile et industrielle'
     };
 
     setOrganization(mockOrganization);

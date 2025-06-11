@@ -68,18 +68,17 @@ export const useCurrencyStore = create<CurrencyState>()(
           console.error('Taux de change invalides');
           return amount;
         }
-        
-        // Convertir en devise de base, puis dans la devise cible
+          // Convertir en devise de base, puis dans la devise cible
         if (fromCurrency === state.baseCurrency) {
           // De la devise de base vers une autre devise
-          return amount / toRate;
+          return amount * toRate;
         } else if (toCurrency === state.baseCurrency) {
           // D'une devise vers la devise de base
-          return amount * fromRate;
+          return amount / fromRate;
         } else {
           // Entre deux devises qui ne sont pas la devise de base
           // Convertir d'abord en devise de base, puis en devise cible
-          return (amount * fromRate) / toRate;
+          return (amount / fromRate) * toRate;
         }
       }
     }),
