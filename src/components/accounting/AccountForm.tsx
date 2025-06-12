@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormField, Input, Select } from '../ui/Form';
 import { Button } from '../ui/Button';
-import { ACCOUNT_TYPES, ACCOUNT_TYPE_LABELS } from '../../config/accounting';
+import { ACCOUNT_TYPE_LABELS } from '../../config/accounting';
 import type { Account } from '../../types/accounting';
 
 interface AccountFormProps {
@@ -28,33 +28,33 @@ export function AccountForm({ account, onSubmit, onCancel }: AccountFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
-        <FormField label="Code" required>
+        <FormField label="Code" labelClassName="flex items-center">
+          <span className="text-destructive ml-1">*</span>
           <Input
             name="code"
             defaultValue={account?.code}
-            required
             placeholder="411"
           />
         </FormField>
 
-        <FormField label="Type" required>
+        <FormField label="Type" labelClassName="flex items-center">
+          <span className="text-destructive ml-1">*</span>
           <Select
             name="type"
             defaultValue={account?.type}
-            required
-            options={Object.entries(ACCOUNT_TYPE_LABELS).map(([value, label]) => ({
-              value,
-              label
-            }))}
-          />
+          >
+            {Object.entries(ACCOUNT_TYPE_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </Select>
         </FormField>
       </div>
 
-      <FormField label="Nom" required>
+      <FormField label="Nom" labelClassName="flex items-center">
+        <span className="text-destructive ml-1">*</span>
         <Input
           name="name"
           defaultValue={account?.name}
-          required
           placeholder="Clients"
         />
       </FormField>
@@ -65,9 +65,9 @@ export function AccountForm({ account, onSubmit, onCancel }: AccountFormProps) {
           id="isAnalytic"
           name="isAnalytic"
           defaultChecked={account?.isAnalytic}
-          className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+          className="h-4 w-4 text-primary focus:ring-primary border-secondary rounded"
         />
-        <label htmlFor="isAnalytic" className="ml-2 block text-sm text-gray-700">
+        <label htmlFor="isAnalytic" className="ml-2 block text-sm text-text-secondary">
           Compte analytique
         </label>
       </div>

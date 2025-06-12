@@ -8,7 +8,7 @@ import type { Account } from '../../types/accounting';
 interface AccountEditModalProps {
   isOpen: boolean;
   onClose: () => void;
-  account?: Account;
+  account?: Account | null;
   onSave: (data: Partial<Account>) => Promise<void>;
 }
 
@@ -42,7 +42,8 @@ export function AccountEditModal({ isOpen, onClose, account, onSave }: AccountEd
     >
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
-          <FormField label="Code" required>
+          <FormField label="Code" labelClassName="flex items-center">
+            <span className="text-destructive ml-1">*</span>
             <Input
               value={formData.code}
               onChange={(e) => setFormData(prev => ({ ...prev, code: e.target.value }))}
@@ -51,23 +52,23 @@ export function AccountEditModal({ isOpen, onClose, account, onSave }: AccountEd
             />
           </FormField>
 
-          <FormField label="Type" required>
+          <FormField label="Type" labelClassName="flex items-center">
+            <span className="text-destructive ml-1">*</span>
             <Select
               value={formData.type}
               onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as Account['type'] }))}
-              options={[
-                { value: 'asset', label: 'Actif' },
-                { value: 'liability', label: 'Passif' },
-                { value: 'equity', label: 'Capitaux propres' },
-                { value: 'revenue', label: 'Produits' },
-                { value: 'expense', label: 'Charges' }
-              ]}
-              required
-            />
+            >
+              <option value="asset">Actif</option>
+              <option value="liability">Passif</option>
+              <option value="equity">Capitaux propres</option>
+              <option value="revenue">Produits</option>
+              <option value="expense">Charges</option>
+            </Select>
           </FormField>
         </div>
 
-        <FormField label="Libellé" required>
+        <FormField label="Libellé" labelClassName="flex items-center">
+          <span className="text-destructive ml-1">*</span>
           <Input
             value={formData.name}
             onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}

@@ -1,17 +1,17 @@
-import React from 'react';
 import { Table } from '../ui/Table';
 import { Button } from '../ui/Button';
-import { Edit2, UserX, UserCheck } from 'lucide-react';
+import { Edit2, UserX, UserCheck, Eye } from 'lucide-react';
 import type { UserWithDetails } from '../../hooks/useUsers';
 
 interface UserListProps {
   users: UserWithDetails[];
   onEdit: (user: UserWithDetails) => void;
   onToggleStatus: (user: UserWithDetails) => void;
+  onViewSessions: (user: UserWithDetails) => void;
   loading?: boolean;
 }
 
-export function UserList({ users, onEdit, onToggleStatus, loading }: UserListProps) {
+export function UserList({ users, onEdit, onToggleStatus, onViewSessions, loading }: UserListProps) {
   const columns = [
     {
       header: 'Utilisateur',
@@ -72,6 +72,14 @@ export function UserList({ users, onEdit, onToggleStatus, loading }: UserListPro
             onClick={() => onEdit(user)}
           >
             Modifier
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            icon={Eye}
+            onClick={() => onViewSessions(user)}
+          >
+            Sessions
           </Button>
           <Button
             variant={user.status === 'active' ? 'warning' : 'success'}

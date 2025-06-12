@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Plus, FileText } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -7,7 +7,6 @@ import { LedgerView } from '../../components/accounting/LedgerView';
 import { BalanceView } from '../../components/ledger/BalanceView';
 import { AccountEditModal } from '../../components/ledger/AccountEditModal';
 import { LedgerFilters, type LedgerFilters as Filters } from '../../components/accounting/LedgerFilters';
-import { Modal } from '../../components/ui/Modal';
 import { useLedger } from '../../hooks/useLedger';
 import { useAccountAccess } from '../../hooks/useAccountAccess';
 import { useAccountingStore } from '../../stores/accountingStore';
@@ -106,7 +105,7 @@ export function LedgerPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Grand Livre</h1>
+        <h1 className="text-2xl font-bold text-text-primary">Grand Livre</h1>
         <div className="flex space-x-3">
           {canViewBalance && (
             <Button
@@ -162,7 +161,7 @@ export function LedgerPage() {
                 loading={loading}
               />
             ) : (
-              <div className="h-full flex items-center justify-center text-gray-500">
+              <div className="h-full flex items-center justify-center text-text-tertiary">
                 <p>Sélectionnez un compte pour voir ses mouvements</p>
               </div>
             )}

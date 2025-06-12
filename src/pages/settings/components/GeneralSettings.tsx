@@ -53,40 +53,36 @@ export function GeneralSettings() {
         <form className="space-y-6" onSubmit={handleSavePreferences}>
           <div className="grid grid-cols-2 gap-6">
             <FormField label="Langue par défaut">
-              <Select
-                options={[
-                  { value: 'fr', label: 'Français' },
-                  { value: 'en', label: 'English' }
-                ]}
-              />
+              <Select>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+              </Select>
             </FormField>
 
             <FormField label="Fuseau horaire">
-              <Select
-                options={[
-                  { value: 'CAT', label: 'CAT (UTC+2)' }
-                ]}
-              />
+              <Select>
+                <option value="CAT">CAT (UTC+2)</option>
+              </Select>
             </FormField>
 
             <FormField label="Format de date">
-              <Select
-                options={[
-                  { value: 'DD/MM/YYYY', label: 'JJ/MM/AAAA' },
-                  { value: 'YYYY-MM-DD', label: 'AAAA-MM-JJ' }
-                ]}
-              />
+              <Select>
+                <option value="DD/MM/YYYY">JJ/MM/AAAA</option>
+                <option value="YYYY-MM-DD">AAAA-MM-JJ</option>
+              </Select>
             </FormField>
 
             <FormField label="Devise par défaut">
               <Select
                 value={selectedCurrency}
                 onChange={handleCurrencyChange}
-                options={Object.values(CURRENCIES).map(currency => ({
-                  value: currency.code,
-                  label: `${currency.name} (${currency.symbol})`
-                }))}
-              />
+              >
+                {Object.values(CURRENCIES).map(currency => (
+                  <option key={currency.code} value={currency.code}>
+                    {currency.name} ({currency.symbol})
+                  </option>
+                ))}
+              </Select>
             </FormField>
             
             {selectedCurrency !== baseCurrency && (

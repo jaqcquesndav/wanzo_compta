@@ -1,4 +1,3 @@
-import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface PaginationProps {
@@ -31,9 +30,9 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
       
       <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-gray-700">
-            Page <span className="font-medium">{currentPage}</span> sur{' '}
-            <span className="font-medium">{totalPages}</span>
+          <p className="text-sm text-text-secondary">
+            Page <span className="font-medium text-text-primary">{currentPage}</span> sur{' '}
+            <span className="font-medium text-text-primary">{totalPages}</span>
           </p>
         </div>
         
@@ -54,8 +53,8 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
                 className={`
                   relative inline-flex items-center px-4 py-2 border text-sm font-medium
                   ${currentPage === page
-                    ? 'z-10 bg-primary text-white border-primary'
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
+                    ? 'z-10 bg-primary text-on-primary border-primary'
+                    : 'bg-background text-text-primary hover:bg-hover border-secondary'
                   }
                 `}
               >

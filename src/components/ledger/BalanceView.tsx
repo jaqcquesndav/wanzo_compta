@@ -60,7 +60,7 @@ export function BalanceView({ accounts, loading }: BalanceViewProps) {
       accessor: (item: typeof accounts[0]) => {
         const solde = item.balance;
         return (
-          <span className={solde >= 0 ? 'text-success' : 'text-red-600'}>
+          <span className={solde >= 0 ? 'text-success' : 'text-destructive'}>
             {formatAmount(Math.abs(solde))} {solde >= 0 ? 'D' : 'C'}
           </span>
         );
@@ -78,18 +78,20 @@ export function BalanceView({ accounts, loading }: BalanceViewProps) {
   return (
     <div className="space-y-4">
       <div className="bg-primary/5 p-4 rounded-lg">
-        <h3 className="font-medium">Balance {mode}</h3>
-        <p className="text-sm text-gray-600">
-          {mode === 'SYSCOHADA' 
-            ? 'Balance selon le Système Comptable OHADA Révisé'
-            : 'Balance selon les normes IFRS'
-          }
-          {currentCurrency !== baseCurrency && (
-            <span className="ml-2 text-xs font-medium text-primary">
-              (Montants affichés en {currentCurrency})
-            </span>
-          )}
-        </p>
+        <div className="flex flex-col">
+          <h3 className="font-medium">Balance {mode}</h3>
+          <p className="text-sm text-text-secondary">
+            {mode === 'SYSCOHADA' 
+              ? 'Balance selon le Système Comptable OHADA Révisé'
+              : 'Balance selon les normes IFRS'
+            }
+            {currentCurrency !== baseCurrency && (
+              <span className="ml-2 text-xs font-medium text-primary">
+                (Montants affichés en {currentCurrency})
+              </span>
+            )}
+          </p>
+        </div>
       </div>
 
       <Table
@@ -102,19 +104,19 @@ export function BalanceView({ accounts, loading }: BalanceViewProps) {
         emptyMessage="Aucun compte trouvé"
       />
 
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <div className="bg-tertiary p-4 rounded-lg">
         <div className="grid grid-cols-3 gap-4">
           <div>
-            <p className="text-sm text-gray-600">Total Débit</p>
-            <p className="text-lg font-medium">{formatAmount(totals.debit)}</p>
+            <p className="text-sm text-text-secondary">Total Débit</p>
+            <p className="text-lg font-medium text-text-primary">{formatAmount(totals.debit)}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-600">Total Crédit</p>
-            <p className="text-lg font-medium">{formatAmount(totals.credit)}</p>
+            <p className="text-sm text-text-secondary">Total Crédit</p>
+            <p className="text-lg font-medium text-text-primary">{formatAmount(totals.credit)}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-600">Solde</p>
-            <p className={`text-lg font-medium ${totals.balance >= 0 ? 'text-success' : 'text-red-600'}`}>
+            <p className="text-sm text-text-secondary">Solde</p>
+            <p className={`text-lg font-medium ${totals.balance >= 0 ? 'text-success' : 'text-destructive'}`}>
               {formatAmount(Math.abs(totals.balance))} {totals.balance >= 0 ? 'D' : 'C'}
             </p>
           </div>

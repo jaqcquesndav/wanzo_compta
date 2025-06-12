@@ -26,80 +26,80 @@ export function JournalEntryView({ entry, onDownloadAttachment, onViewAttachment
       {/* En-tête de l'écriture */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <p className="text-sm text-gray-500">Journal</p>
-          <p className="font-medium">{getJournalLabel(entry.journalType)}</p>
+          <p className="text-sm text-text-tertiary">Journal</p>
+          <p className="font-medium text-text-primary">{getJournalLabel(entry.journalType)}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-500">Date</p>
-          <p className="font-medium">{new Date(entry.date).toLocaleDateString('fr-FR')}</p>
+          <p className="text-sm text-text-tertiary">Date</p>
+          <p className="font-medium text-text-primary">{new Date(entry.date).toLocaleDateString('fr-FR')}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-500">N° Pièce</p>
-          <p className="font-medium">{entry.reference}</p>
+          <p className="text-sm text-text-tertiary">N° Pièce</p>
+          <p className="font-medium text-text-primary">{entry.reference}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-500">Statut</p>
-          <p className="font-medium capitalize">{entry.status}</p>
+          <p className="text-sm text-text-tertiary">Statut</p>
+          <p className="font-medium text-text-primary capitalize">{entry.status}</p>
         </div>
       </div>
 
       <div>
-        <p className="text-sm text-gray-500">Libellé</p>
-        <p className="font-medium">{entry.description}</p>
+        <p className="text-sm text-text-tertiary">Libellé</p>
+        <p className="font-medium text-text-primary">{entry.description}</p>
       </div>
 
       {/* Tableau des lignes d'écriture */}
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="table">
+          <thead>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Compte</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Libellé</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">TVA</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Débit</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Crédit</th>
+              <th className="text-left">Compte</th>
+              <th className="text-left">Libellé</th>
+              <th className="text-right">TVA</th>
+              <th className="text-right">Débit</th>
+              <th className="text-right">Crédit</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody>
             {entry.lines.map((line) => (
               <tr key={line.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <td className="whitespace-nowrap font-medium">
                   {line.accountCode}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
+                <td className="text-text-secondary">
                   {line.description}
                 </td>
-                <td className="px-6 py-4 text-sm text-right text-gray-900">
+                <td className="text-right">
                   {line.vatAmount ? (
                     <div>
                       <div>{line.vatCode}</div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-text-tertiary">
                         {formatAmount(line.vatAmount)}
                       </div>
                     </div>
                   ) : '-'}
                 </td>
-                <td className="px-6 py-4 text-sm text-right text-gray-900">
+                <td className="text-right">
                   {line.debit > 0 ? formatAmount(line.debit) : ''}
                 </td>
-                <td className="px-6 py-4 text-sm text-right text-gray-900">
+                <td className="text-right">
                   {line.credit > 0 ? formatAmount(line.credit) : ''}
                 </td>
               </tr>
             ))}
           </tbody>
-          <tfoot className="bg-gray-50">
+          <tfoot className="bg-tertiary">
             <tr>
-              <td colSpan={2} className="px-6 py-3 text-sm font-medium text-gray-900">
+              <td colSpan={2} className="text-sm font-medium">
                 Totaux
               </td>
-              <td className="px-6 py-3 text-sm text-right font-medium text-gray-900">
+              <td className="text-sm text-right font-medium">
                 {entry.totalVat > 0 && formatAmount(entry.totalVat)}
               </td>
-              <td className="px-6 py-3 text-sm text-right font-medium text-gray-900">
+              <td className="text-sm text-right font-medium">
                 {formatAmount(entry.totalDebit)}
               </td>
-              <td className="px-6 py-3 text-sm text-right font-medium text-gray-900">
+              <td className="text-sm text-right font-medium">
                 {formatAmount(entry.totalCredit)}
               </td>
             </tr>
@@ -109,21 +109,21 @@ export function JournalEntryView({ entry, onDownloadAttachment, onViewAttachment
 
       {/* Pièces justificatives */}
       {entry.attachments && entry.attachments.length > 0 && (
-        <div className="border-t pt-4">
-          <h3 className="text-sm font-medium text-gray-900 mb-3">Pièces justificatives</h3>
+        <div className="border-t border-primary pt-4">
+          <h3 className="text-sm font-medium text-text-primary mb-3">Pièces justificatives</h3>
           <div className="grid grid-cols-2 gap-4">
             {entry.attachments.map(attachment => (
               <div 
                 key={attachment.id}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                className="flex items-center justify-between p-3 bg-tertiary rounded-lg"
               >
                 <div className="flex items-center space-x-3">
-                  <FileText className="h-5 w-5 text-gray-400" />
+                  <FileText className="h-5 w-5 text-text-tertiary" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-sm font-medium text-text-primary truncate">
                       {attachment.name}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-text-tertiary">
                       {attachment.status === 'uploaded' ? 'Téléchargé' : attachment.status}
                     </p>
                   </div>

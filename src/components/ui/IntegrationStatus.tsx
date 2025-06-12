@@ -18,7 +18,7 @@ export function IntegrationStatus({ state, lastSync }: IntegrationStatusProps) {
     disconnected: {
       icon: XCircle,
       text: 'Non connecté',
-      color: 'text-gray-400'
+      color: 'text-text-tertiary'
     },
     pending: {
       icon: AlertCircle,
@@ -28,7 +28,7 @@ export function IntegrationStatus({ state, lastSync }: IntegrationStatusProps) {
     error: {
       icon: XCircle,
       text: 'Erreur de connexion',
-      color: 'text-red-500'
+      color: 'text-destructive'
     }
   };
 
@@ -41,7 +41,7 @@ export function IntegrationStatus({ state, lastSync }: IntegrationStatusProps) {
         <span className="text-sm font-medium">{text}</span>
       </div>
       {lastSync && (
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-text-tertiary">
           Dernière synchro: {new Date(lastSync).toLocaleString('fr-FR')}
         </span>
       )}

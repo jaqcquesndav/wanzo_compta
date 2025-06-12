@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Users, Plus } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -39,7 +39,7 @@ export function UsersPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Utilisateurs</h1>
+        <h1 className="text-2xl font-bold text-text-primary">Utilisateurs</h1>
         <Button
           variant="primary"
           icon={Plus}

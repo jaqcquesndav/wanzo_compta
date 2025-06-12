@@ -6,37 +6,52 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#197ca8',
-          hover: '#1e90c3',
-          dark: '#146690',
+          DEFAULT: 'var(--color-primary)',
+          hover: 'var(--color-primary-hover)', // Fixed: Added closing parenthesis
+          dark: 'var(--color-primary-dark)',
         },
+        interactive: 'var(--color-interactive)',
         success: {
-          DEFAULT: '#015730',
-          hover: '#014526',
+          DEFAULT: 'var(--color-success)',
+          hover: 'var(--color-success-hover)',
         },
         warning: {
-          DEFAULT: '#ee872b',
-          hover: '#e67816',
+          DEFAULT: 'var(--color-warning)',
+          hover: 'var(--color-warning-hover)',
         },
+        destructive: {
+          DEFAULT: 'var(--color-destructive)',
+          hover: 'var(--color-destructive-hover)',
+        },
+        "text-primary": 'var(--text-primary)',
+        "text-secondary": 'var(--text-secondary)',
+        "text-tertiary": 'var(--text-tertiary)',
+        "text-interactive": 'var(--text-interactive)',
+        "text-on-primary": 'var(--text-on-primary)',
       },
       backgroundColor: {
-        dark: {
-          primary: '#1a1a1a',
-          secondary: '#2d2d2d',
-          hover: '#3d3d3d'
-        }
-      },
-      textColor: {
-        dark: {
-          primary: '#ffffff',
-          secondary: '#a3a3a3'
-        }
+        primary: 'var(--bg-primary)',
+        secondary: 'var(--bg-secondary)',
+        tertiary: 'var(--bg-tertiary)',
+        hover: 'var(--bg-hover)',
+        'sidebar-light': 'var(--bg-sidebar-light)', // Added for light mode sidebar
       },
       borderColor: {
-        dark: {
-          DEFAULT: '#404040',
-          hover: '#525252'
-        }
+        primary: 'var(--border-primary)',
+        secondary: 'var(--border-secondary)',
+      },
+      ringColor: {
+        primary: 'var(--color-primary)',
+        success: 'var(--color-success)',
+        warning: 'var(--color-warning)',
+        destructive: 'var(--color-destructive)',
+      },
+      ringOffsetColor: {
+        primary: 'var(--bg-primary)',
+        secondary: 'var(--bg-secondary)',
+      },
+      placeholderColor: {
+        primary: 'var(--text-tertiary)',
       }
     },
   },

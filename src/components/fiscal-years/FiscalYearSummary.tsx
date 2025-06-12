@@ -50,19 +50,19 @@ export function FiscalYearSummary({ fiscalYear, metrics }: FiscalYearSummaryProp
           </div>
         </div>
 
-        <div className="border-t pt-4">
+        <div className="border-t border-primary pt-4">
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-gray-500">Période :</span>
-              <span className="ml-2 font-medium">
+              <span className="text-text-tertiary">Période :</span>
+              <span className="ml-2 font-medium text-text-primary">
                 {new Date(fiscalYear.startDate).toLocaleDateString('fr-FR')} au{' '}
                 {new Date(fiscalYear.endDate).toLocaleDateString('fr-FR')}
               </span>
             </div>
             <div>
-              <span className="text-gray-500">Statut :</span>
+              <span className="text-text-tertiary">Statut :</span>
               <span className={`ml-2 font-medium ${
-                fiscalYear.status === 'open' ? 'text-success' : 'text-gray-900'
+                fiscalYear.status === 'open' ? 'text-success' : 'text-text-primary'
               }`}>
                 {fiscalYear.status === 'open' ? 'Ouvert' : 'Clôturé'}
               </span>

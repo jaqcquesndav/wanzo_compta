@@ -21,26 +21,25 @@ export function CurrencySelector({ value, onChange, showRateInfo = true, classNa
   return (
     <div className={`flex flex-col ${className}`}>
       <div className="flex items-center gap-2">
-        <label className="text-sm font-medium text-gray-700">Devise:</label>
-        <Select
+        <label className="text-sm font-medium text-text-primary">Devise:</label>        <Select
           value={value}
           onChange={handleChange}
-          options={Object.values(CURRENCIES).map(currency => ({
-            value: currency.code,
-            label: `${currency.name} (${currency.symbol})`
-          }))}
           className="w-44"
-        />
+        >
+          {Object.values(CURRENCIES).map(currency => (
+            <option key={currency.code} value={currency.code}>{currency.name} ({currency.symbol})</option>
+          ))}
+        </Select>
       </div>
       
       {showRateInfo && value !== baseCurrency && (
         <div className="mt-1 text-xs">
           {isRateConfigured ? (
-            <span className="text-gray-600">
+            <span className="text-text-secondary">
               Taux: 1 {CURRENCIES[baseCurrency].symbol} = {exchangeRates[value]} {CURRENCIES[value].symbol}
             </span>
           ) : (
-            <span className="text-orange-500">
+            <span className="text-warning">
               Taux de conversion non configuré. Rendez-vous dans Paramètres &gt; Général.
             </span>
           )}

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Table } from '../ui/Table';
+import { Table, Column } from '../ui/Table';
 import { Button } from '../ui/Button';
 import { Calendar, Lock, Unlock, AlertCircle, CheckCircle } from 'lucide-react';
 import type { FiscalYear } from '../../types/fiscal-year';
@@ -21,14 +20,14 @@ export function FiscalYearList({
   selectedFiscalYear,
   loading 
 }: FiscalYearListProps) {
-  const columns = [
+  const columns: Column<FiscalYear>[] = [
     {
       header: 'Code',
       accessor: 'code'
     },
     {
       header: 'Période',
-      accessor: (fiscalYear: FiscalYear) => {
+      accessor: (fiscalYear: FiscalYear): string => {
         const start = new Date(fiscalYear.startDate);
         const end = new Date(fiscalYear.endDate);
         return `${start.toLocaleDateString('fr-FR')} - ${end.toLocaleDateString('fr-FR')}`;
@@ -36,17 +35,17 @@ export function FiscalYearList({
     },
     {
       header: 'Statut',
-      accessor: (fiscalYear: FiscalYear) => (
+      accessor: (fiscalYear: FiscalYear): React.ReactNode => (
         <div className="space-y-1">
           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-            fiscalYear.status === 'open' 
-              ? 'bg-green-100 text-green-800'
-              : 'bg-gray-100 text-gray-800'
+            fiscalYear.status === 'open'
+              ? 'bg-success-light text-success-dark'
+              : 'bg-tertiary-light text-tertiary-dark'
           }`}>
             {fiscalYear.status === 'open' ? 'Ouvert' : 'Clôturé'}
           </span>
           {fiscalYear.auditStatus?.isAudited && (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-primary-dark">
               <CheckCircle className="h-3 w-3 mr-1" />
               Audité
             </span>
@@ -56,14 +55,14 @@ export function FiscalYearList({
     },
     {
       header: 'Audit',
-      accessor: (fiscalYear: FiscalYear) => {
+      accessor: (fiscalYear: FiscalYear): React.ReactNode => {
         if (fiscalYear.auditStatus?.isAudited) {
           return (
             <div className="text-sm">
-              <p className="font-medium">
+              <p className="font-medium text-primary">
                 {fiscalYear.auditStatus.auditor.name}
               </p>
-              <p className="text-gray-500">
+              <p className="text-secondary">
                 {new Date(fiscalYear.auditStatus.auditedAt).toLocaleDateString('fr-FR')}
               </p>
             </div>
@@ -140,7 +139,11 @@ export function FiscalYearList({
         data={fiscalYears}
         loading={loading}
         emptyMessage="Aucun exercice trouvé"
-        selectedRow={selectedFiscalYear?.id}
+        rowClassName={(fiscalYear) => 
+          selectedFiscalYear?.id === fiscalYear.id 
+            ? 'bg-primary/5 cursor-pointer' 
+            : 'hover:bg-hover cursor-pointer'
+        }
       />
     </div>
   );

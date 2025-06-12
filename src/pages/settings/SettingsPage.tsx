@@ -1,4 +1,3 @@
-import React from 'react';
 import { Tabs } from '../../components/ui/Tabs';
 import { GeneralSettings } from './components/GeneralSettings';
 import { AccountingSettings } from './components/AccountingSettings';
@@ -27,8 +26,8 @@ export function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
-      <div className="bg-white rounded-lg shadow">
+      <h1 className="text-2xl font-bold text-text-primary">Paramètres</h1>
+      <div className="card">
         <Tabs tabs={tabs} />
       </div>
     </div>

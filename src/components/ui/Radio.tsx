@@ -12,15 +12,14 @@ export function Radio({ label, className = '', ...props }: RadioProps) {
           type="radio"
           {...props}
           className={`
-            w-4 h-4 text-primary border-gray-300 
+            w-4 h-4 text-primary border-secondary 
             focus:ring-primary focus:ring-offset-0
-            dark:border-dark-DEFAULT dark:bg-dark-secondary dark:checked:bg-primary
             ${className}
           `}
         />
         <div className="absolute w-4 h-4 pointer-events-none" />
       </div>
-      <span className="text-sm text-gray-700 dark:text-gray-300 select-none">{label}</span>
+      <span className="text-sm text-text-secondary select-none">{label}</span>
     </label>
   );
 }

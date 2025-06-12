@@ -18,10 +18,10 @@ export function Breadcrumb() {
   });
 
   return (
-    <nav className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+    <nav className="flex items-center space-x-2 text-sm text-text-secondary">
       <Link 
         to="/" 
-        className="flex items-center hover:text-gray-900 dark:hover:text-white"
+        className="flex items-center hover:text-text-primary"
       >
         <Home className="h-4 w-4" />
       </Link>
@@ -31,9 +31,9 @@ export function Breadcrumb() {
           <ChevronRight className="h-4 w-4" />
           <Link
             to={item.path}
-            className={`hover:text-gray-900 dark:hover:text-white ${
+            className={`hover:text-text-primary ${
               index === breadcrumbItems.length - 1 
-                ? 'font-medium text-gray-900 dark:text-white'
+                ? 'font-medium text-text-primary'
                 : ''
             }`}
           >

@@ -1,103 +1,121 @@
-import React from 'react';
-import { LucideIcon } from 'lucide-react';
+import React, { forwardRef, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes, InputHTMLAttributes } from 'react';
+import { LucideIcon, AlertTriangle, ChevronDown } from 'lucide-react';
 
 interface FormFieldProps {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-  required?: boolean;
-  icon?: LucideIcon;
+  label?: string;
+  htmlFor?: string;
+  children: ReactNode;
+  error?: string | null;
+  className?: string;
+  labelClassName?: string;
+  showOptionalText?: boolean;
 }
 
-export function FormField({ label, error, children, required, icon: Icon }: FormFieldProps) {
+export const FormField: React.FC<FormFieldProps> = ({
+  label,
+  htmlFor,
+  children,
+  error,
+  className = '',
+  labelClassName = '',
+  showOptionalText = false,
+}) => {
   return (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </label>
-      <div className="mt-1 relative">
-        {Icon && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Icon className="h-5 w-5 text-gray-400" />
-          </div>
-        )}
-        {children}
-      </div>
+    <div className={`mb-4 ${className}`}>
+      {label && (
+        <label
+          htmlFor={htmlFor}
+          className={`block text-sm font-medium text-text-secondary mb-1 ${labelClassName}`}
+        >
+          {label}
+          {showOptionalText && <span className="text-text-tertiary ml-1">(Optional)</span>}
+        </label>
+      )}
+      {children}
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p className="mt-1 text-xs text-destructive flex items-center">
+          <AlertTriangle className="h-4 w-4 mr-1" />
+          {error}
+        </p>
       )}
     </div>
   );
-}
+};
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: LucideIcon;
-  error?: string;
+  error?: string | null;
+  inputClassName?: string;
 }
 
-export function Input({ icon: Icon, error, className = '', ...props }: InputProps) {
-  return (
-    <input
-      {...props}
-      className={`
-        appearance-none block w-full px-3 py-2 border rounded-md shadow-sm 
-        placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm
-        ${Icon ? 'pl-10' : ''}
-        ${error ? 'border-red-300' : 'border-gray-300'}
-        dark:bg-dark-secondary dark:border-dark-DEFAULT dark:text-dark-primary
-        dark:placeholder-gray-500 dark:focus:ring-primary dark:focus:border-primary
-        ${className}
-      `}
-    />
-  );
-}
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ type = 'text', icon: Icon, error, className = '', inputClassName = '', ...props }, ref) => {
+    const hasError = !!error;
+    return (
+      <div className={`relative ${className}`}>
+        {Icon && (
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Icon className={`h-5 w-5 ${hasError ? 'text-destructive' : 'text-text-tertiary'}`} />
+          </div>
+        )}
+        <input
+          type={type}
+          ref={ref}
+          className={`form-input ${Icon ? 'pl-10' : ''} ${hasError ? 'border-destructive focus:ring-destructive focus:border-destructive' : 'border-primary focus:ring-primary focus:border-primary'} ${inputClassName}`}
+          {...props}
+        />
+      </div>
+    );
+  }
+);
+Input.displayName = 'Input';
 
-interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   icon?: LucideIcon;
-  error?: string;
-  options: Array<{ value: string; label: string }>;
+  error?: string | null;
+  containerClassName?: string;
 }
 
-export function Select({ icon: Icon, error, options, className = '', ...props }: SelectProps) {
-  return (
-    <select
-      {...props}
-      className={`
-        block w-full px-3 py-2 border rounded-md shadow-sm 
-        focus:outline-none focus:ring-primary focus:border-primary sm:text-sm
-        ${Icon ? 'pl-10' : ''}
-        ${error ? 'border-red-300' : 'border-gray-300'}
-        dark:bg-dark-secondary dark:border-dark-DEFAULT dark:text-dark-primary
-        ${className}
-      `}
-    >
-      {options.map(option => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
-  );
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(
+  ({ icon: Icon, error, children, className = '', containerClassName = '', ...props }, ref) => {
+    const hasError = !!error;
+    return (
+      <div className={`relative ${containerClassName}`}>
+        {Icon && (
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Icon className={`h-5 w-5 ${hasError ? 'text-destructive' : 'text-text-tertiary'}`} />
+          </div>
+        )}
+        <select
+          ref={ref}
+          className={`form-select appearance-none ${Icon ? 'pl-10' : 'pr-10'} ${hasError ? 'border-destructive focus:ring-destructive focus:border-destructive' : 'border-primary focus:ring-primary focus:border-primary'} ${className}`}
+          {...props}
+        >
+          {children}
+        </select>
+        <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+          <ChevronDown className={`h-5 w-5 ${hasError ? 'text-destructive' : 'text-text-tertiary'}`} />
+        </div>
+      </div>
+    );
+  }
+);
+Select.displayName = 'Select';
+
+interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  error?: string | null;
 }
 
-interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  error?: string;
-}
-
-export function Textarea({ error, className = '', ...props }: TextareaProps) {
-  return (
-    <textarea
-      {...props}
-      className={`
-        block w-full px-3 py-2 border rounded-md shadow-sm 
-        placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm
-        ${error ? 'border-red-300' : 'border-gray-300'}
-        dark:bg-dark-secondary dark:border-dark-DEFAULT dark:text-dark-primary
-        dark:placeholder-gray-500 dark:focus:ring-primary dark:focus:border-primary
-        resize-none
-        ${className}
-      `}
-    />
-  );
-}
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ error, className = '', ...props }, ref) => {
+    const hasError = !!error;
+    return (
+      <textarea
+        ref={ref}
+        className={`form-textarea ${hasError ? 'border-destructive focus:ring-destructive focus:border-destructive' : 'border-primary focus:ring-primary focus:border-primary'} ${className}`}
+        {...props}
+      />
+    );
+  }
+);
+Textarea.displayName = 'Textarea';

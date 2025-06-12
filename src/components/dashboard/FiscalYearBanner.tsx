@@ -21,13 +21,13 @@ export function FiscalYearBanner() {
         <div className="flex items-center space-x-3">
           <Calendar className="h-5 w-5 text-primary" />
           <div>
-            <h2 className="text-sm font-medium text-gray-900">
+            <h2 className="text-sm font-medium text-text-primary">
               {currentFiscalYear 
                 ? `Exercice en cours: ${currentFiscalYear.code}`
                 : "Aucun exercice sélectionné"}
             </h2>
             {currentFiscalYear && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-text-tertiary">
                 {formatPeriod(currentFiscalYear)}
               </p>
             )}

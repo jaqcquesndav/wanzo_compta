@@ -95,7 +95,7 @@ export function ReportsPage() {
     <div className="space-y-6">
       {/* En-tête de la page */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">États Financiers</h1>
+        <h1 className="text-2xl font-bold text-text-primary">États Financiers</h1>
         <div className="flex space-x-3">
           <Button 
             variant="secondary" 

@@ -11,18 +11,17 @@ export function CurrencyIndicator({ className = '' }: { className?: string }) {
   
   return (
     <div className={`flex items-center ${className}`}>
-      <span className="text-sm text-gray-600 mr-2">Devise:</span>
-      <Select
+      <span className="text-sm text-text-secondary mr-2">Devise:</span>      <Select
         value={currentCurrency}
         onChange={handleCurrencyChange}
-        options={Object.values(CURRENCIES).map(currency => ({
-          value: currency.code,
-          label: `${currency.symbol}`
-        }))}
         className="w-24"
-      />
+      >
+        {Object.values(CURRENCIES).map(currency => (
+          <option key={currency.code} value={currency.code}>{currency.symbol}</option>
+        ))}
+      </Select>
       {currentCurrency !== baseCurrency && (
-        <span className="text-xs text-gray-500 ml-2">
+        <span className="text-xs text-text-tertiary ml-2">
           (Conversion basée sur les taux configurés)
         </span>
       )}

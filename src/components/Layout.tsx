@@ -54,7 +54,8 @@ export function Layout({ children }: LayoutProps) {
   const showFloatingChat = isFloating && isOpen && location.pathname !== '/chat';
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-dark-primary">
+    // Updated to use semantic theme classes for the main background
+    <div className="min-h-screen bg-secondary dark:bg-primary">
       <Header onToggleSidebar={handleSidebarToggle} />
       
       <div className="flex pt-16">

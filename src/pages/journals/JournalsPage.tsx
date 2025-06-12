@@ -156,7 +156,7 @@ export function JournalsPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Journaux Comptables</h1>
+        <h1 className="text-2xl font-bold text-text-primary">Journaux Comptables</h1>
         <Button
           variant="primary"
           icon={Plus}
@@ -166,7 +166,7 @@ export function JournalsPage() {
         </Button>
       </div>
 
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="card p-6">
         <JournalFilters onFilterChange={(filterUpdates) => {
           setFilters(prev => ({ ...prev, ...filterUpdates }));
         }} />

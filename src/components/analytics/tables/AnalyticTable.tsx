@@ -86,14 +86,12 @@ export function AnalyticTable({ data, title }: AnalyticTableProps) {
           <Select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            options={[
-              { value: '', label: 'Toutes les catégories' },
-              ...categories.map(cat => ({
-                value: cat,
-                label: cat
-              }))
-            ]}
-          />
+          >
+            <option value="">Toutes les catégories</option>
+            {categories.map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </Select>
         </FormField>
       </div>
 

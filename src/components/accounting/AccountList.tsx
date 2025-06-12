@@ -1,5 +1,4 @@
-import React from 'react';
-import { Table } from '../ui/Table';
+import { Table, Column } from '../ui/Table';
 import { Button } from '../ui/Button';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 import type { Account } from '../../types/accounting';
@@ -8,7 +7,7 @@ interface AccountListProps {
   accounts: Account[];
   onAdd: () => void;
   onEdit: (account: Account) => void;
-  onDelete: (account: Account) => void;
+  onDelete: ((account: Account) => void) | undefined;
   onSelect?: (account: Account) => void;
   selectedAccount?: Account | null;
   loading?: boolean;
@@ -23,7 +22,7 @@ export function AccountList({
   selectedAccount,
   loading 
 }: AccountListProps) {
-  const columns = [
+  const columns: Column<Account>[] = [
     {
       header: 'Code',
       accessor: 'code',
@@ -64,7 +63,9 @@ export function AccountList({
             icon={Trash2}
             onClick={(e) => {
               e.stopPropagation();
-              onDelete(account);
+              if (onDelete) {
+                onDelete(account);
+              }
             }}
           >
             Supprimer
@@ -93,11 +94,10 @@ export function AccountList({
         loading={loading}
         emptyMessage="Aucun compte trouvé"
         onRowClick={onSelect ? (account) => onSelect(account as Account) : undefined}
-        selectedRow={selectedAccount?.id}
         rowClassName={(account) => 
           selectedAccount?.id === account.id 
             ? 'bg-primary/5 cursor-pointer' 
-            : 'hover:bg-gray-50 cursor-pointer'
+            : 'hover:bg-hover cursor-pointer'
         }
       />
     </div>

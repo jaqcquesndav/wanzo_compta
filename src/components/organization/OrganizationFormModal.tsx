@@ -63,7 +63,8 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
       <form onSubmit={handleSubmit} className="space-y-6">
         <h3 className="font-medium text-gray-700 border-b pb-2">Informations générales</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField label="Nom de l'entreprise" required>
+          <FormField label="Nom de l'entreprise" labelClassName="flex items-center">
+            <span className="text-destructive ml-1">*</span>
             <Input
               value={formData.name || ''}
               onChange={(e) => handleChangeInput('name', e.target.value)}
@@ -76,14 +77,13 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
             <Select
               value={formData.legalForm || ''}
               onChange={(e) => handleChangeInput('legalForm', e.target.value)}
-              options={[
-                { value: 'SARL', label: 'SARL' },
-                { value: 'SA', label: 'SA' },
-                { value: 'SAS', label: 'SAS' },
-                { value: 'EI', label: 'Entreprise Individuelle' },
-                { value: 'GIE', label: 'GIE' }
-              ]}
-            />
+            >
+              <option value="SARL">SARL</option>
+              <option value="SA">SA</option>
+              <option value="SAS">SAS</option>
+              <option value="EI">Entreprise Individuelle</option>
+              <option value="GIE">GIE</option>
+            </Select>
           </FormField>
 
           <FormField label="Capital social">
@@ -110,7 +110,8 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
 
         <h3 className="font-medium text-gray-700 border-b pb-2 mt-6">Direction de l'entreprise</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField label="Nom de l'entrepreneur" required>
+          <FormField label="Nom de l'entrepreneur" labelClassName="flex items-center">
+            <span className="text-destructive ml-1">*</span>
             <Input
               value={formData.entrepreneurName || ''}
               onChange={(e) => handleChangeInput('entrepreneurName', e.target.value)}
@@ -147,7 +148,8 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
 
         <h3 className="font-medium text-gray-700 border-b pb-2 mt-6">Immatriculation et identification</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FormField label="RCCM" required>
+          <FormField label="RCCM" labelClassName="flex items-center">
+            <span className="text-destructive ml-1">*</span>
             <Input
               value={formData.registrationNumber || ''}
               onChange={(e) => handleChangeInput('registrationNumber', e.target.value)}
@@ -157,7 +159,8 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
             />
           </FormField>
 
-          <FormField label="Numéro d'impôt" required>
+          <FormField label="Numéro d'impôt" labelClassName="flex items-center">
+            <span className="text-destructive ml-1">*</span>
             <Input
               value={formData.taxId || ''}
               onChange={(e) => handleChangeInput('taxId', e.target.value)}

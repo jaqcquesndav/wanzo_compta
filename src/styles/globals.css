@@ -4,19 +4,79 @@
 
 @layer base {
   :root {
-    --color-primary: #197ca8;
+    /* Primary Palette (Blue) */
+    --color-primary: #197ca8 ;
     --color-primary-hover: #1e90c3;
-    --color-primary-dark: #146690;
-    
+    --color-primary-dark: #156d93; /* Darker shade for specific states */
+    --color-interactive: var(--color-primary-hover);
+
+    /* Accent Colors */
     --color-success: #015730;
-    --color-success-hover: #014526;
-    
+    --color-success-hover: #026b3a;
     --color-warning: #ee872b;
-    --color-warning-hover: #e67816;
+    --color-warning-hover: #f09642;
+    --color-destructive: #d93025; /* Example Red */
+    --color-destructive-hover: #b02018;
+
+    /* Backgrounds - Light Theme */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f3f4f6; /* gray-100 */
+    --bg-tertiary: #e5e7eb; /* gray-200 */
+    --bg-hover: #e9edf1; /* Slightly off-white for hover */
+    --bg-sidebar-light: var(--color-primary); /* Use --color-primary for sidebar in light mode */
+
+    /* Text - Light Theme */
+    --text-primary: #111827; /* gray-900 */
+    --text-secondary: #4b5563; /* gray-600 */
+    --text-tertiary: #6b7280; /* gray-500 */
+    --text-interactive: var(--color-primary);
+    --text-on-primary: #ffffff; /* Text on primary-colored backgrounds */
+
+    /* Borders - Light Theme */
+    --border-primary: #e5e7eb; /* gray-200 */
+    --border-secondary: #d1d5db; /* gray-300 */
+  }
+
+  .dark {
+    /* Dark Theme Colors (Updated as per user specification) */
+    --color-primary: #2089b7;
+    --color-primary-rgb: 32, 137, 183;
+    --color-primary-light: #2596c7; /* Formerly --color-primary-hover */
+    --color-primary-dark: #1b7aa3;
+    --color-interactive: var(--color-primary-light);
+
+    /* Accent Colors - Dark Theme (Kept from previous, adjust if needed) */
+    --color-success: #34d399; /* Brighter green */
+    --color-success-hover: #6ee7b7;
+    --color-warning: #fBBF24; /* Brighter yellow/orange */
+    --color-warning-hover: #facc15;
+    --color-destructive: #f87171; /* Brighter red */
+    --color-destructive-hover: #ef4444;
+
+    /* Backgrounds - Dark Theme */
+    --bg-primary: #1a1b1e;
+    --bg-secondary: #2c2e33;
+    --bg-tertiary: #3b3d42;
+    --bg-hover: #2c3a50; /* Kept from previous, adjust if needed */
+
+    /* Text - Dark Theme */
+    --text-primary: #f3f4f6;
+    --text-secondary: #d1d5db; /* Updated */
+    --text-tertiary: #9ca3af;
+    --text-interactive: var(--color-primary); /* Kept, uses the main --color-primary */
+    --text-on-primary: #ffffff; /* Kept from previous, adjust if needed */
+
+    /* Borders - Dark Theme (Kept from previous, adjust if needed) */
+    --border-primary: #334155;
+    --border-secondary: #475569;
   }
 
   body {
-    @apply bg-gray-50 text-gray-900 dark:bg-dark-primary dark:text-gray-100;
+    /* Updated to use semantic theme variables */
+    @apply bg-primary text-text-primary; /* Corrected to text-text-primary */
+    font-family: 'Inter', sans-serif; /* Example: Adding a modern font stack */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* Scrollbar styles */
@@ -29,25 +89,25 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: rgba(156, 163, 175, 0.5);
+    background-color: var(--border-secondary); /* Use theme variable */
     border-radius: 20px;
   }
 
   .scrollbar-thin:hover::-webkit-scrollbar-thumb {
-    background-color: rgba(156, 163, 175, 0.8);
+    background-color: var(--border-primary); /* Use theme variable */
   }
 
   /* Responsive text sizes */
   h1 {
-    @apply text-xl md:text-2xl lg:text-3xl font-bold dark:text-white;
+    @apply text-xl md:text-2xl lg:text-3xl font-bold text-text-primary;
   }
 
   h2 {
-    @apply text-lg md:text-xl lg:text-2xl font-semibold dark:text-white;
+    @apply text-lg md:text-xl lg:text-2xl font-semibold text-text-primary;
   }
 
   h3 {
-    @apply text-base md:text-lg lg:text-xl font-medium dark:text-white;
+    @apply text-base md:text-lg lg:text-xl font-medium text-text-primary;
   }
 }
 
@@ -56,92 +116,95 @@
     @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-medium 
            transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 
            disabled:opacity-50 disabled:cursor-not-allowed
-           dark:focus:ring-offset-dark-primary;
+           /* Changed dark:focus:ring-offset-dark-primary to focus:ring-offset-primary */
+           /* The var(--bg-primary) used by ringOffsetColor.primary will handle dark mode */
+           focus:ring-offset-primary;
   }
 
   .btn-primary {
-    @apply btn bg-primary text-white hover:bg-primary-hover focus:ring-primary
-         dark:bg-primary dark:hover:bg-primary-hover dark:focus:ring-primary-dark;
+    /* Ensure these classes correctly use the 'colors' from tailwind.config.js which map to CSS vars */
+    @apply btn bg-primary text-on-primary hover:bg-primary-hover focus:ring-primary;
   }
   
   .btn-success {
-    @apply btn bg-success text-white hover:bg-success-hover focus:ring-success
-         dark:bg-success dark:hover:bg-success-hover;
+    @apply btn bg-success text-on-primary hover:bg-success-hover focus:ring-success;
   }
   
   .btn-warning {
-    @apply btn bg-warning text-white hover:bg-warning-hover focus:ring-warning
-         dark:bg-warning dark:hover:bg-warning-hover;
+    @apply btn bg-warning text-on-primary hover:bg-warning-hover focus:ring-warning;
+  }
+
+  .btn-destructive {
+    @apply btn bg-destructive text-on-primary hover:bg-destructive-hover focus:ring-destructive;
   }
 
   .btn-secondary {
-    @apply btn bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 focus:ring-primary
-         dark:bg-dark-secondary dark:hover:bg-dark-hover dark:text-gray-300 dark:border-dark-DEFAULT;
+    /* Secondary button uses different bg/text/border that should also come from theme vars */
+    @apply btn bg-secondary text-text-primary border border-primary hover:bg-tertiary focus:ring-primary; /* Corrected to text-text-primary */
+  }
+
+  .btn-tertiary {
+    @apply btn text-interactive hover:bg-hover focus:ring-primary;
+  }
+
+  .btn-outline {
+    @apply btn bg-transparent text-interactive border border-interactive hover:bg-interactive hover:text-on-primary focus:ring-interactive;
   }
 
   /* Cards */
   .card {
-    @apply bg-white dark:bg-dark-secondary rounded-lg shadow-sm overflow-hidden
-         dark:border dark:border-dark-DEFAULT;
+    @apply bg-secondary rounded-lg shadow-sm overflow-hidden border border-primary;
   }
 
   .card-header {
-    @apply px-4 sm:px-6 py-4 border-b border-gray-200
-         dark:border-dark-DEFAULT dark:text-white;
+    @apply px-4 sm:px-6 py-4 border-b border-primary text-text-primary; /* Corrected to text-text-primary */
   }
 
   .card-body {
-    @apply p-4 sm:p-6 dark:text-gray-300;
+    @apply p-4 sm:p-6 text-text-secondary; /* Corrected to text-text-secondary */
   }
 
   /* Form elements */
-  .form-input {
-    @apply bg-white border border-gray-300 rounded-md shadow-sm 
-           focus:ring-primary focus:border-primary
-           dark:bg-dark-secondary dark:border-dark-DEFAULT dark:text-gray-300
-           dark:focus:ring-primary dark:focus:border-primary
-           dark:placeholder-gray-500;
+  .form-input, .form-select, .form-textarea { /* Combined for similar base styles */
+    @apply block w-full px-3 py-2 
+           bg-primary border border-primary rounded-md shadow-sm 
+           text-text-primary placeholder-primary /* Corrected to text-text-primary */
+           focus:outline-none focus:ring-primary focus:border-primary 
+           sm:text-sm;
+  }
+  
+  .form-input::placeholder, .form-textarea::placeholder {
+    @apply text-text-tertiary; /* Corrected to text-text-tertiary */
   }
 
-  .form-select {
-    @apply bg-white border border-gray-300 rounded-md shadow-sm 
-           focus:ring-primary focus:border-primary
-           dark:bg-dark-secondary dark:border-dark-DEFAULT dark:text-gray-300;
-  }
 
   /* Tables */
   .table {
-    @apply min-w-full divide-y divide-gray-200
-         dark:divide-dark-DEFAULT;
+    @apply min-w-full divide-y divide-secondary; /* Corrected from divide-border-secondary */
   }
 
   .table th {
-    @apply px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider
-         dark:bg-dark-secondary dark:text-gray-400;
+    @apply px-6 py-3 bg-secondary text-left text-xs font-medium text-text-secondary uppercase tracking-wider; /* Corrected to text-text-secondary */
   }
 
   .table td {
-    @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900
-         dark:text-gray-300;
+    @apply px-6 py-4 whitespace-nowrap text-sm text-text-primary; /* Corrected to text-text-primary */
   }
 
   .table tr {
-    @apply hover:bg-gray-50
-         dark:hover:bg-dark-hover;
+    @apply hover:bg-hover;
   }
 
   /* Modal */
   .modal {
-    @apply bg-white rounded-lg shadow-xl
-         dark:bg-dark-secondary dark:border dark:border-dark-DEFAULT;
+    @apply bg-secondary rounded-lg shadow-xl border border-primary;
   }
 
   .modal-header {
-    @apply px-4 py-3 border-b border-gray-200
-         dark:border-dark-DEFAULT dark:text-white;
+    @apply px-4 py-3 border-b border-primary text-text-primary; /* Corrected to text-text-primary */
   }
 
   .modal-body {
-    @apply p-6 dark:text-gray-300;
+    @apply p-6 text-text-secondary; /* Corrected to text-text-secondary */
   }
 }

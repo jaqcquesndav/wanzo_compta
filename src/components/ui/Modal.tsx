@@ -35,22 +35,26 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', container
 
   return (
     <div className="fixed inset-0 z-50">
-      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
+      {/* Overlay can remain as is, or you can define a semantic class if needed */}
+      <div className="fixed inset-0 bg-black/50" onClick={onClose} /> 
       
       <div className="fixed inset-0 overflow-hidden">
         <div className="flex min-h-full items-center justify-center p-4">
-          <div className={`relative ${sizeClasses} w-full bg-white rounded-lg shadow-xl ${containerClassName || ''}`}>
-            <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+          {/* Use .modal from globals.css for base styling */}
+          <div className={`relative ${sizeClasses} w-full modal ${containerClassName || ''}`}>
+            {/* Use .modal-header for styling */}
+            <div className="modal-header flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-text-primary">{title}</h2> {/* text-text-primary will adapt */}
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-500"
+                className="text-text-tertiary hover:text-text-secondary" /* Theme-aware text colors */
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             
-            <div className={noPadding ? '' : 'p-6'}>
+            {/* Use .modal-body for styling, conditional padding remains */}
+            <div className={noPadding ? '' : 'modal-body'}> 
               {children}
             </div>
           </div>

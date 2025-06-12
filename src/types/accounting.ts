@@ -29,6 +29,7 @@ export interface Account {
   code: string;
   name: string;
   type: 'asset' | 'liability' | 'equity' | 'revenue' | 'expense';
+  standard?: 'SYSCOHADA' | 'IFRS';
   isAnalytic?: boolean;
 }
 

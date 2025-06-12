@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from '../ui/Card';
 import { Star, TrendingUp, Leaf } from 'lucide-react';
 
@@ -21,8 +20,8 @@ export function FinancialMetricsCard({
             <Star className="h-5 w-5 mr-2" />
             <h3 className="text-sm font-medium">Cote de Crédit</h3>
           </div>
-          <p className="text-2xl font-bold">{creditScore}/100</p>
-          <p className="text-sm text-gray-500">Excellente solvabilité</p>
+          <p className="text-2xl font-bold text-text-primary">{creditScore}/100</p>
+          <p className="text-sm text-text-tertiary">Excellente solvabilité</p>
         </div>
 
         <div className="space-y-2">
@@ -30,8 +29,8 @@ export function FinancialMetricsCard({
             <TrendingUp className="h-5 w-5 mr-2" />
             <h3 className="text-sm font-medium">Note Financière</h3>
           </div>
-          <p className="text-2xl font-bold">{financialRating}</p>
-          <p className="text-sm text-gray-500">Perspective stable</p>
+          <p className="text-2xl font-bold text-text-primary">{financialRating}</p>
+          <p className="text-sm text-text-tertiary">Perspective stable</p>
         </div>
 
         <div className="space-y-2">
@@ -39,8 +38,8 @@ export function FinancialMetricsCard({
             <Leaf className="h-5 w-5 mr-2" />
             <h3 className="text-sm font-medium">Empreinte Carbone</h3>
           </div>
-          <p className="text-2xl font-bold">{carbonFootprint}t</p>
-          <p className="text-sm text-gray-500">CO₂ émis en 2024</p>
+          <p className="text-2xl font-bold text-text-primary">{carbonFootprint}t</p>
+          <p className="text-sm text-text-tertiary">CO₂ émis en 2024</p>
         </div>
       </div>
     </Card>
