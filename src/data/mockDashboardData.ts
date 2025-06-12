@@ -5,16 +5,25 @@ export const mockDashboardData: DashboardData = {
     totalAssets: 25000000,
     revenue: 15000000,
     netIncome: 5000000,
+    cashOnHand: 7500000, // Ajout de la trésorerie nette
     trends: {
       assets: { value: 15, isPositive: true },
       revenue: { value: 8, isPositive: true },
-      netIncome: { value: 12, isPositive: true }
+      netIncome: { value: 12, isPositive: true },
+      cashOnHand: { value: 5, isPositive: true } // Tendance pour la trésorerie
     }
   },
-  metrics: {
-    creditScore: 85,
-    financialRating: 'A+',
-    carbonFootprint: 12.5
+  financialRatios: { // Remplacement de 'metrics' par 'financialRatios'
+    grossProfitMargin: 65, // Marge Brute en %
+    breakEvenPoint: 7000000, // Seuil de Rentabilité en devise
+    daysSalesOutstanding: 45, // DSO en jours
+    daysPayableOutstanding: 30, // DPO en jours
+    workingCapital: 3000000, // BFR en devise
+    currentRatio: 1.8 // Ratio de Liquidité Générale
+  },
+  keyPerformanceIndicators: { // Ajout de la nouvelle section
+    creditScore: 750, // Exemple de cote de crédit (e.g., sur 850 ou 1000)
+    financialRating: 'AA-', // Exemple de note financière
   },
   revenueData: [
     { date: '2024-01', revenue: 12000000 },

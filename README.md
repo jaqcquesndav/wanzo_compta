@@ -1444,6 +1444,147 @@ Pour toute question ou clarification, n'hésitez pas à contacter l'équipe de d
 }
 ```
 
+### Tableau de bord
+
+**Endpoint**: `/dashboard`  
+**Méthode**: GET  
+**Paramètres**: 
+- `period`: Période pour les données (`day`, `week`, `month`, `quarter`, `year`), par défaut `month`
+- `fiscalYearId`: ID de l'exercice fiscal pour lequel récupérer les données
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": {
+    "quickStats": {
+      "totalAssets": 50000000.00,
+      "revenue": 8500000.00,
+      "netIncome": 1200000.00,
+      "cashOnHand": 3500000.00,
+      "trends": {
+        "assets": { "value": 5, "isPositive": true },
+        "revenue": { "value": 12, "isPositive": true },
+        "netIncome": { "value": 8, "isPositive": true },
+        "cashOnHand": { "value": 4, "isPositive": true }
+      }
+    },
+    "financialRatios": {
+      "grossProfitMargin": 32.5,
+      "breakEvenPoint": 6500000.00,
+      "daysSalesOutstanding": 45,
+      "daysPayableOutstanding": 30,
+      "workingCapital": 2500000.00,
+      "currentRatio": 1.8
+    },
+    "keyPerformanceIndicators": {
+      "creditScore": 725,
+      "financialRating": "A-"
+    },
+    "revenueData": [
+      { "date": "2023-01", "revenue": 7200000.00 },
+      { "date": "2023-02", "revenue": 7800000.00 },
+      { "date": "2023-03", "revenue": 8100000.00 },
+      { "date": "2023-04", "revenue": 7900000.00 },
+      { "date": "2023-05", "revenue": 8300000.00 },
+      { "date": "2023-06", "revenue": 8500000.00 }
+    ],
+    "expensesData": [
+      { "name": "Achats", "value": 4500000.00, "color": "#4f46e5" },
+      { "name": "Salaires", "value": 2200000.00, "color": "#06b6d4" },
+      { "name": "Loyer", "value": 800000.00, "color": "#f59e0b" },
+      { "name": "Services", "value": 650000.00, "color": "#10b981" },
+      { "name": "Autres", "value": 350000.00, "color": "#8b5cf6" }
+    ],
+    "recentTransactions": [
+      {
+        "id": "trans-uuid-1",
+        "date": "2023-06-10",
+        "description": "Paiement client ABC",
+        "amount": 250000.00,
+        "type": "credit"
+      },
+      {
+        "id": "trans-uuid-2",
+        "date": "2023-06-09",
+        "description": "Paiement fournisseur XYZ",
+        "amount": 180000.00,
+        "type": "debit"
+      }
+    ],
+    "alerts": [
+      {
+        "id": "alert-uuid-1",
+        "type": "warning",
+        "message": "Déclaration TVA à déposer avant le 15 juin"
+      },
+      {
+        "id": "alert-uuid-2",
+        "type": "success",
+        "message": "Objectif de chiffre d'affaires du mois atteint"
+      }
+    ]
+  }
+}
+```
+
+**Endpoint**: `/dashboard/quick-stats`  
+**Méthode**: GET  
+**Paramètres**: `?fiscalYearId=fiscal-year-uuid`  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": {
+    "totalAssets": 50000000.00,
+    "revenue": 8500000.00,
+    "netIncome": 1200000.00,
+    "cashOnHand": 3500000.00,
+    "trends": {
+      "assets": { "value": 5, "isPositive": true },
+      "revenue": { "value": 12, "isPositive": true },
+      "netIncome": { "value": 8, "isPositive": true },
+      "cashOnHand": { "value": 4, "isPositive": true }
+    }
+  }
+}
+```
+
+**Endpoint**: `/dashboard/financial-ratios`  
+**Méthode**: GET  
+**Paramètres**: `?fiscalYearId=fiscal-year-uuid`  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": {
+    "grossProfitMargin": 32.5,
+    "breakEvenPoint": 6500000.00,
+    "daysSalesOutstanding": 45,
+    "daysPayableOutstanding": 30,
+    "workingCapital": 2500000.00,
+    "currentRatio": 1.8
+  }
+}
+```
+
+**Endpoint**: `/dashboard/key-performance-indicators`  
+**Méthode**: GET  
+**Paramètres**: `?fiscalYearId=fiscal-year-uuid`  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": {
+    "creditScore": 725,
+    "financialRating": "A-"
+  }
+}
+```
+
 ## Types et constantes
 
 ### Types de systèmes comptables

@@ -1,8 +1,9 @@
 import React from 'react';
-import { BarChart2, TrendingUp, DollarSign, RefreshCw } from 'lucide-react';
+import { BarChart2, TrendingUp, DollarSign, RefreshCw, Briefcase as BriefcaseIcon } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { FiscalYearBanner } from '../../components/dashboard/FiscalYearBanner';
 import { FinancialMetricsCard } from '../../components/dashboard/FinancialMetricsCard';
+import { KeyPerformanceIndicatorsCard } from '../../components/dashboard/KeyPerformanceIndicatorsCard';
 import { RevenueChart } from '../../components/charts/RevenueChart';
 import { ExpensesPieChart } from '../../components/charts/ExpensesPieChart';
 import { useCurrency } from '../../hooks/useCurrency';
@@ -17,7 +18,8 @@ export function DashboardPage() {
 
   const {
     quickStats,
-    metrics,
+    financialRatios,
+    keyPerformanceIndicators,
     revenueData,
     expensesData,
     recentTransactions,
@@ -73,7 +75,7 @@ export function DashboardPage() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card title="Total Actif" icon={DollarSign}>
               <div className="space-y-2">
                 <p className="text-2xl font-bold text-primary">
@@ -86,7 +88,7 @@ export function DashboardPage() {
               </div>
             </Card>
             
-            <Card title="Chiffre d'Affaires" icon={BarChart2}>
+            <Card title="Chiffre d'Affaires (Mois)" icon={BarChart2}>
               <div className="space-y-2">
                 <p className="text-2xl font-bold text-primary">
                   {format(quickStats.revenue)}
@@ -98,7 +100,7 @@ export function DashboardPage() {
               </div>
             </Card>
             
-            <Card title="Résultat Net" icon={TrendingUp}>
+            <Card title="Résultat Net (Mois)" icon={TrendingUp}>
               <div className="space-y-2">
                 <p className="text-2xl font-bold text-primary">
                   {format(quickStats.netIncome)}
@@ -109,9 +111,30 @@ export function DashboardPage() {
                 </p>
               </div>
             </Card>
+
+            {/* KPI: Trésorerie Nette Actuelle */}
+            <Card title="Trésorerie Nette" icon={BriefcaseIcon}>
+              <div className="space-y-2">
+                <p className="text-2xl font-bold text-primary">
+                  {format(quickStats.cashOnHand)}
+                </p>
+                <p className={`text-sm flex items-center ${quickStats.trends.cashOnHand.isPositive ? 'text-success' : 'text-red-600'}`}>
+                  <TrendingUp className="h-4 w-4 mr-1" />
+                  {quickStats.trends.cashOnHand.isPositive ? '+' : '-'}{quickStats.trends.cashOnHand.value}% vs mois dernier
+                </p>
+              </div>
+            </Card>
           </div>
 
-          <FinancialMetricsCard {...metrics} />
+          {financialRatios && <FinancialMetricsCard {...financialRatios} />}
+
+          {/* Added KeyPerformanceIndicatorsCard */}
+          {keyPerformanceIndicators && (
+            <KeyPerformanceIndicatorsCard
+              creditScore={keyPerformanceIndicators.creditScore}
+              financialRating={keyPerformanceIndicators.financialRating}
+            />
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card title="Évolution du chiffre d'affaires">

@@ -13,6 +13,14 @@ export const dashboardApi = {
   getQuickStats: (fiscalYearId?: string) => 
     ApiService.get<DashboardData['quickStats']>('/dashboard/quick-stats', { fiscalYearId }),
 
+  // Récupérer les ratios financiers
+  getFinancialRatios: (fiscalYearId?: string) => 
+    ApiService.get<DashboardData['financialRatios']>('/dashboard/financial-ratios', { fiscalYearId }),
+    
+  // Récupérer les indicateurs de performance clés (cote crédit, note financière)
+  getKeyPerformanceIndicators: (fiscalYearId?: string) => 
+    ApiService.get<DashboardData['keyPerformanceIndicators']>('/dashboard/key-performance-indicators', { fiscalYearId }),
+
   // Récupérer les données de revenus pour le graphique
   getRevenueData: (params?: { 
     startDate?: string;
