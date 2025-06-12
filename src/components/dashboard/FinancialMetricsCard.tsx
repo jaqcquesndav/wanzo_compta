@@ -19,7 +19,7 @@ export function FinancialMetricsCard({
   workingCapital,
   currentRatio
 }: FinancialRatiosCardProps) {
-  const { format } = useCurrency();
+  const { formatConverted, baseCurrency } = useCurrency();
 
   return (
     <Card title="Ratios Financiers Clés">
@@ -30,8 +30,8 @@ export function FinancialMetricsCard({
             <Percent className="h-5 w-5 mr-2" />
             <h3 className="text-sm font-medium">Marge Brute</h3>
           </div>
-          <p className="text-2xl font-bold text-text-primary">{grossProfitMargin}%</p>
-          <p className="text-xs text-text-tertiary">Rentabilité sur ventes</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{grossProfitMargin}%</p>
+          <p className="text-xs text-gray-500">Rentabilité sur ventes</p>
         </div>
 
         {/* Seuil de Rentabilité */}
@@ -40,8 +40,8 @@ export function FinancialMetricsCard({
             <Scale className="h-5 w-5 mr-2" />
             <h3 className="text-sm font-medium">Seuil de Rentabilité</h3>
           </div>
-          <p className="text-2xl font-bold text-text-primary">{format(breakEvenPoint)}</p>
-          <p className="text-xs text-text-tertiary">Niveau d'activité minimum</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatConverted(breakEvenPoint, baseCurrency)}</p>
+          <p className="text-xs text-gray-500">Niveau d'activité minimum</p>
         </div>
 
         {/* DSO */}
@@ -50,8 +50,8 @@ export function FinancialMetricsCard({
             <Clock className="h-5 w-5 mr-2" />
             <h3 className="text-sm font-medium">Délai Moyen Clients (DSO)</h3>
           </div>
-          <p className="text-2xl font-bold text-text-primary">{daysSalesOutstanding} jours</p>
-          <p className="text-xs text-text-tertiary">Rotation des créances</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{daysSalesOutstanding} jours</p>
+          <p className="text-xs text-gray-500">Rotation des créances</p>
         </div>
 
         {/* DPO */}
@@ -60,8 +60,8 @@ export function FinancialMetricsCard({
             <Users className="h-5 w-5 mr-2" />
             <h3 className="text-sm font-medium">Délai Moyen Fournisseurs (DPO)</h3>
           </div>
-          <p className="text-2xl font-bold text-text-primary">{daysPayableOutstanding} jours</p>
-          <p className="text-xs text-text-tertiary">Rotation des dettes</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{daysPayableOutstanding} jours</p>
+          <p className="text-xs text-gray-500">Rotation des dettes</p>
         </div>
 
         {/* Besoin en Fonds de Roulement (BFR) */}
@@ -70,8 +70,8 @@ export function FinancialMetricsCard({
             <Briefcase className="h-5 w-5 mr-2" />
             <h3 className="text-sm font-medium">Besoin en Fonds de Roulement</h3>
           </div>
-          <p className="text-2xl font-bold text-text-primary">{format(workingCapital)}</p>
-          <p className="text-xs text-text-tertiary">Financement du cycle d'exploitation</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatConverted(workingCapital, baseCurrency)}</p>
+          <p className="text-xs text-gray-500">Financement du cycle d'exploitation</p>
         </div>
 
         {/* Ratio de Liquidité Générale */}
@@ -80,8 +80,8 @@ export function FinancialMetricsCard({
             <Activity className="h-5 w-5 mr-2" />
             <h3 className="text-sm font-medium">Ratio de Liquidité Générale</h3>
           </div>
-          <p className="text-2xl font-bold text-text-primary">{currentRatio}</p>
-          <p className="text-xs text-text-tertiary">Capacité à couvrir les dettes CT</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{currentRatio}</p>
+          <p className="text-xs text-gray-500">Capacité à couvrir les dettes CT</p>
         </div>
       </div>
     </Card>

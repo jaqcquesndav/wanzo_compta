@@ -1478,7 +1478,7 @@ Pour toute question ou clarification, n'hésitez pas à contacter l'équipe de d
       "currentRatio": 1.8
     },
     "keyPerformanceIndicators": {
-      "creditScore": 725,
+      "creditScore": 72,
       "financialRating": "A-"
     },
     "revenueData": [

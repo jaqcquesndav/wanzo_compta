@@ -13,7 +13,7 @@ import { useNotifications } from '../../hooks/useNotifications';
 
 export function DashboardPage() {
   const { dashboardData, loading, refreshDashboard } = useDashboard();
-  const { format } = useCurrency();
+  const { formatConverted, baseCurrency } = useCurrency();
   const { addNotification } = useNotifications();
 
   const {
@@ -75,11 +75,10 @@ export function DashboardPage() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card title="Total Actif" icon={DollarSign}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">            <Card title="Total Actif" icon={DollarSign}>
               <div className="space-y-2">
                 <p className="text-2xl font-bold text-primary">
-                  {format(quickStats.totalAssets)}
+                  {formatConverted(quickStats.totalAssets, baseCurrency)}
                 </p>
                 <p className="text-sm text-success flex items-center">
                   <TrendingUp className="h-4 w-4 mr-1" />
@@ -91,7 +90,7 @@ export function DashboardPage() {
             <Card title="Chiffre d'Affaires (Mois)" icon={BarChart2}>
               <div className="space-y-2">
                 <p className="text-2xl font-bold text-primary">
-                  {format(quickStats.revenue)}
+                  {formatConverted(quickStats.revenue, baseCurrency)}
                 </p>
                 <p className="text-sm text-success flex items-center">
                   <TrendingUp className="h-4 w-4 mr-1" />
@@ -99,11 +98,10 @@ export function DashboardPage() {
                 </p>
               </div>
             </Card>
-            
-            <Card title="Résultat Net (Mois)" icon={TrendingUp}>
+              <Card title="Résultat Net (Mois)" icon={TrendingUp}>
               <div className="space-y-2">
                 <p className="text-2xl font-bold text-primary">
-                  {format(quickStats.netIncome)}
+                  {formatConverted(quickStats.netIncome, baseCurrency)}
                 </p>
                 <p className="text-sm text-success flex items-center">
                   <TrendingUp className="h-4 w-4 mr-1" />
@@ -116,7 +114,7 @@ export function DashboardPage() {
             <Card title="Trésorerie Nette" icon={BriefcaseIcon}>
               <div className="space-y-2">
                 <p className="text-2xl font-bold text-primary">
-                  {format(quickStats.cashOnHand)}
+                  {formatConverted(quickStats.cashOnHand, baseCurrency)}
                 </p>
                 <p className={`text-sm flex items-center ${quickStats.trends.cashOnHand.isPositive ? 'text-success' : 'text-red-600'}`}>
                   <TrendingUp className="h-4 w-4 mr-1" />
@@ -157,12 +155,11 @@ export function DashboardPage() {
                     <p className="text-xs text-gray-500">
                       {new Date(transaction.date).toLocaleDateString('fr-FR')}
                     </p>
-                  </div>
-                  <span className={`text-sm font-medium ${
+                  </div>                  <span className={`text-sm font-medium ${
                     transaction.type === 'credit' ? 'text-success' : 'text-red-600'
                   }`}>
                     {transaction.type === 'credit' ? '+' : '-'}
-                    {format(transaction.amount)}
+                    {formatConverted(transaction.amount, baseCurrency)}
                   </span>
                 </div>
               ))}

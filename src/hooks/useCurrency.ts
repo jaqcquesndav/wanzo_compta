@@ -31,10 +31,6 @@ export function useCurrency() {
   
   // Fonction pour formater un montant après conversion
   const formatConverted = (amount: number, fromCurrency: CurrencyCode = baseCurrency): string => {
-    if (fromCurrency === displayCurrency) {
-      return format(amount);
-    }
-    
     const convertedAmount = convertAmount(amount, fromCurrency, displayCurrency);
     return format(convertedAmount);
   };
