@@ -40,65 +40,110 @@ L'application utilise IndexedDB pour la persistance locale des données et le fo
 2. **Gérant les conflits**: Stratégie de résolution des conflits lorsque les mêmes données sont modifiées localement et sur le serveur.
 3. **Supportant les opérations en bloc**: Permettre l'envoi de plusieurs opérations en une seule requête pour optimiser la synchronisation.
 
-Le schéma de synchronisation suit ce format:
+### Implémentation de la synchronisation
 
+Le frontend utilise une file d'attente de synchronisation qui stocke les opérations à effectuer lorsque l'application est en ligne. Chaque opération est de type CREATE, UPDATE ou DELETE sur une entité spécifique.
+
+```typescript
+interface SyncItem {
+  id: string;
+  type: 'CREATE' | 'UPDATE' | 'DELETE';
+  entity: string;
+  data: any;
+  timestamp: string;
+  retries: number;
+  status: 'pending' | 'processing' | 'failed';
+  error?: string;
+}
+```
+
+### Gestion des conflits
+
+Le backend doit implémenter une stratégie de résolution des conflits, avec les priorités suivantes:
+
+1. **Modifications serveur prioritaires**: En cas de conflit entre une modification locale et une modification sur le serveur, la modification serveur est prioritaire.
+2. **Notifications de conflits**: L'utilisateur doit être informé des conflits détectés.
+3. **Réconciliation manuelle**: Pour les conflits complexes, permettre à l'utilisateur de choisir la version à conserver.
+
+### API de synchronisation
+
+**Endpoint**: `/sync`  
+**Méthode**: POST  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Requête**:
 ```json
-// Requête de synchronisation
 {
   "operations": [
     {
-      "type": "create",
+      "type": "CREATE",
       "entity": "journalEntry",
-      "data": { /* données de l'entité */ },
-      "localId": "temp-id-123",
-      "timestamp": "2023-06-11T14:22:35.000Z"
+      "data": { /* données de l'entrée */ },
+      "clientId": "temp-id-123"
     },
     {
-      "type": "update",
+      "type": "UPDATE",
       "entity": "account",
-      "id": "existing-id-456",
-      "data": { /* données modifiées */ },
-      "timestamp": "2023-06-11T14:25:12.000Z"
+      "data": { 
+        "id": "account-uuid-1",
+        "name": "Nouveau nom de compte" 
+      }
     },
     {
-      "type": "delete",
-      "entity": "attachment",
-      "id": "attachment-id-789",
-      "timestamp": "2023-06-11T14:26:08.000Z"
+      "type": "DELETE",
+      "entity": "journalEntry",
+      "data": { "id": "journal-entry-uuid-1" }
     }
   ],
-  "lastSyncTimestamp": "2023-06-10T18:30:45.000Z"
+  "lastSyncTimestamp": "2023-06-10T14:30:45Z"
 }
-
-// Réponse de synchronisation
+```
+**Réponse**:
+```json
 {
   "success": true,
-  "results": [
-    {
-      "localId": "temp-id-123",
-      "serverId": "actual-server-id-123",
-      "status": "created"
-    },
-    {
-      "id": "existing-id-456",
-      "status": "updated"
-    },
-    {
-      "id": "attachment-id-789",
-      "status": "deleted"
-    }
-  ],
-  "serverChanges": [
-    {
-      "type": "update",
-      "entity": "organization",
-      "id": "org-id-001",
-      "data": { /* données modifiées */ },
-      "timestamp": "2023-06-11T12:15:30.000Z"
-    }
-  ],
-  "currentServerTime": "2023-06-11T14:30:00.000Z",
-  "conflicts": []
+  "data": {
+    "timestamp": "2023-06-11T08:15:20Z",
+    "results": [
+      {
+        "success": true,
+        "clientId": "temp-id-123",
+        "serverId": "new-journal-entry-uuid",
+        "entity": "journalEntry"
+      },
+      {
+        "success": true,
+        "serverId": "account-uuid-1",
+        "entity": "account"
+      },
+      {
+        "success": false,
+        "error": "Cette écriture a déjà été validée et ne peut plus être supprimée",
+        "serverId": "journal-entry-uuid-1",
+        "entity": "journalEntry"
+      }
+    ],
+    "changes": [
+      {
+        "type": "UPDATE",
+        "entity": "organization",
+        "data": { /* données de l'organisation mises à jour */ }
+      },
+      {
+        "type": "CREATE",
+        "entity": "agentEntry",
+        "data": { /* données de la nouvelle entrée proposée par l'agent */ }
+      }
+    ],
+    "conflicts": [
+      {
+        "entity": "account",
+        "id": "account-uuid-2",
+        "serverData": { /* version du serveur */ },
+        "clientData": { /* version du client */ },
+        "resolution": "server_wins"
+      }
+    ]
+  }
 }
 ```
 
@@ -470,7 +515,7 @@ Le schéma de synchronisation suit ce format:
             "debit": 1000.00,
             "credit": 0.00,
             "description": "Achat de marchandises",
-            "vatCode": "TVA-18",
+            "vatCode": "N18",
             "vatAmount": 180.00
           },
           {
@@ -481,7 +526,7 @@ Le schéma de synchronisation suit ce format:
             "debit": 180.00,
             "credit": 0.00,
             "description": "TVA sur achat",
-            "vatCode": "TVA-18",
+            "vatCode": "N18",
             "vatAmount": 0.00
           },
           {
@@ -539,7 +584,7 @@ Le schéma de synchronisation suit ce format:
         "debit": 1000.00,
         "credit": 0.00,
         "description": "Achat de marchandises",
-        "vatCode": "TVA-18",
+        "vatCode": "N18",
         "vatAmount": 180.00
       },
       {
@@ -550,7 +595,7 @@ Le schéma de synchronisation suit ce format:
         "debit": 180.00,
         "credit": 0.00,
         "description": "TVA sur achat",
-        "vatCode": "TVA-18",
+        "vatCode": "N18",
         "vatAmount": 0.00
       },
       {
@@ -593,8 +638,10 @@ Le schéma de synchronisation suit ce format:
   "totalCredit": 590.00,
   "totalVat": 90.00,
   "status": "draft",
+  "source": "manual",
   "lines": [
     {
+      "id": "new-journal-line-uuid-1",
       "accountId": "account-uuid-4",
       "accountCode": "411000",
       "accountName": "Clients",
@@ -603,28 +650,31 @@ Le schéma de synchronisation suit ce format:
       "description": "Facture client XYZ"
     },
     {
+      "id": "new-journal-line-uuid-2",
       "accountId": "account-uuid-5",
       "accountCode": "707000",
       "accountName": "Ventes de marchandises",
       "debit": 0.00,
       "credit": 500.00,
       "description": "Vente de marchandises",
-      "vatCode": "TVA-18",
+      "vatCode": "N18",
       "vatAmount": 90.00
     },
     {
+      "id": "new-journal-line-uuid-3",
       "accountId": "account-uuid-6",
       "accountCode": "445710",
       "accountName": "TVA collectée",
       "debit": 0.00,
       "credit": 90.00,
       "description": "TVA sur vente",
-      "vatCode": "TVA-18",
+      "vatCode": "N18",
       "vatAmount": 0.00
     }
   ],
   "attachments": [
     {
+      "id": "attachment-uuid-1",
       "name": "facture-xyz.pdf",
       "url": "https://storage.example.com/attachments/facture-xyz.pdf",
       "status": "uploaded"
@@ -647,6 +697,7 @@ Le schéma de synchronisation suit ce format:
     "totalCredit": 590.00,
     "totalVat": 90.00,
     "status": "draft",
+    "source": "manual",
     "lines": [
       {
         "id": "new-journal-line-uuid-1",
@@ -659,12 +710,13 @@ Le schéma de synchronisation suit ce format:
       },
       {
         "id": "new-journal-line-uuid-2",
+        "accountId": "account-uuid-5",
         "accountCode": "707000",
         "accountName": "Ventes de marchandises",
         "debit": 0.00,
         "credit": 500.00,
         "description": "Vente de marchandises",
-        "vatCode": "TVA-18",
+        "vatCode": "N18",
         "vatAmount": 90.00
       },
       {
@@ -674,7 +726,7 @@ Le schéma de synchronisation suit ce format:
         "debit": 0.00,
         "credit": 90.00,
         "description": "TVA sur vente",
-        "vatCode": "TVA-18",
+        "vatCode": "N18",
         "vatAmount": 0.00
       }
     ],
@@ -1268,6 +1320,130 @@ Pour toute question ou clarification, n'hésitez pas à contacter l'équipe de d
 }
 ```
 
+### Partage de données
+
+**Endpoint**: `/settings/data-sharing`  
+**Méthode**: GET  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": {
+    "enabled": true,
+    "providers": [
+      {
+        "name": "Banque XYZ",
+        "type": "bank",
+        "status": "connected",
+        "lastSync": "2023-06-10T14:30:45Z"
+      },
+      {
+        "name": "Fournisseur ABC",
+        "type": "supplier",
+        "status": "pending",
+        "lastSync": null
+      }
+    ]
+  }
+}
+```
+
+**Endpoint**: `/settings/data-sharing`  
+**Méthode**: PUT  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Requête**:
+```json
+{
+  "enabled": false,
+  "providers": [
+    {
+      "name": "Banque XYZ",
+      "type": "bank",
+      "status": "disconnected"
+    }
+  ]
+}
+```
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": {
+    "enabled": false,
+    "providers": [
+      {
+        "name": "Banque XYZ",
+        "type": "bank",
+        "status": "disconnected"
+      }
+    ]
+  }
+}
+```
+
+### Sources de données
+
+**Endpoint**: `/settings/data-sources`  
+**Méthode**: GET  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": {
+    "sources": [
+      {
+        "id": "source-uuid-1",
+        "name": "Données internes",
+        "type": "internal",
+        "status": "active",
+        "lastUpdated": "2023-06-10T14:30:45Z"
+      },
+      {
+        "id": "source-uuid-2",
+        "name": "Données externes",
+        "type": "external",
+        "status": "inactive",
+        "lastUpdated": null
+      }
+    ]
+  }
+}
+```
+
+**Endpoint**: `/settings/data-sources`  
+**Méthode**: PUT  
+**Headers**: `Authorization: Bearer jwt-token-here`  
+**Requête**:
+```json
+{
+  "sources": [
+    {
+      "id": "source-uuid-1",
+      "status": "inactive"
+    }
+  ]
+}
+```
+**Réponse**:
+```json
+{
+  "success": true,
+  "data": {
+    "sources": [
+      {
+        "id": "source-uuid-1",
+        "name": "Données internes",
+        "type": "internal",
+        "status": "inactive",
+        "lastUpdated": "2023-06-10T14:30:45Z"
+      }
+    ]
+  }
+}
+```
+
 ## Types et constantes
 
 ### Types de systèmes comptables
@@ -1276,25 +1452,179 @@ Pour toute question ou clarification, n'hésitez pas à contacter l'équipe de d
 type AccountingMode = 'SYSCOHADA' | 'IFRS';
 ```
 
-### Devises supportées
+### Types de déclarations fiscales
 
 ```typescript
-export const CURRENCIES = {
-  CDF: {
-    code: 'CDF',
-    name: 'Franc Congolais',
-    symbol: 'FC',
-    default: true
+// Types de déclarations supportées
+export type DeclarationType = 'IPR' | 'IB' | 'TVA' | 'CNSS' | 'TPI' | 'TE';
+export type DeclarationPeriodicity = 'monthly' | 'quarterly' | 'annual';
+export type DeclarationStatus = 'draft' | 'pending' | 'submitted';
+
+// Configuration des types de déclarations
+export const DECLARATION_TYPES = {
+  IPR: {
+    label: 'Impôt sur le Revenu Professionnel',
+    periodicity: 'monthly',
+    dueDate: 15 // Jour du mois suivant
   },
-  USD: {
-    code: 'USD',
-    name: 'Dollar américain',
-    symbol: '$',
-    default: false
+  IB: {
+    label: 'Impôt sur les Bénéfices',
+    periodicity: 'annual',
+    dueDate: 31 // Mars de l'année suivante
+  },
+  TVA: {
+    label: 'Taxe sur la Valeur Ajoutée',
+    periodicity: 'monthly',
+    dueDate: 15 // Jour du mois suivant
+  },
+  CNSS: {
+    label: 'Cotisations CNSS',
+    periodicity: 'monthly',
+    dueDate: 10 // Jour du mois suivant
+  },
+  TPI: {
+    label: 'Taxe de Promotion de l\'Industrie',
+    periodicity: 'monthly',
+    dueDate: 15 // Jour du mois suivant
+  },
+  TE: {
+    label: 'Taxe Environnementale',
+    periodicity: 'quarterly',
+    dueDate: 15 // Jour du premier mois du trimestre suivant
   }
 };
 
-export type CurrencyCode = keyof typeof CURRENCIES;
+// Interface Declaration
+export interface Declaration {
+  id: string;
+  type: DeclarationType;
+  period: string;
+  periodicity: DeclarationPeriodicity;
+  dueDate: string;
+  status: DeclarationStatus;
+  amount: number;
+  submittedAt?: string;
+  submittedBy?: string;
+  reference?: string;
+  attachments?: string[];
+}
+```
+
+### Types des écritures comptables
+
+```typescript
+// Interface JournalEntry
+export interface JournalEntry {
+  id: string;
+  date: string;
+  journalType: 'sales' | 'purchases' | 'bank' | 'cash' | 'general';
+  description: string;
+  reference: string;
+  totalDebit: number;
+  totalCredit: number;
+  totalVat: number;
+  status: 'draft' | 'pending' | 'approved' | 'posted';
+  source?: 'manual' | 'agent';
+  agentId?: string;  // ID de l'agent comptable qui a généré cette entrée
+  validationStatus?: 'pending' | 'validated' | 'rejected';
+  validatedBy?: string;
+  validatedAt?: string;
+  lines: JournalLine[];
+  attachments?: {
+    id: string;
+    name: string;
+    url?: string;
+    localUrl?: string;
+    status: 'pending' | 'uploading' | 'uploaded' | 'error';
+  }[];
+}
+
+// Interface JournalLine
+export interface JournalLine {
+  id: string;
+  accountId: string;
+  accountCode: string;
+  accountName: string;
+  debit: number;
+  credit: number;
+  description: string;
+  vatCode?: string;
+  vatAmount?: number;
+  analyticCode?: string;
+}
+```
+
+### Types de trésorerie
+
+```typescript
+// Interface TreasuryAccount
+export interface TreasuryAccount {
+  id: string;
+  type: 'bank' | 'microfinance' | 'cooperative' | 'vsla';
+  provider: string;
+  bankName: string;
+  accountNumber: string;
+  balance: number;
+  currency: CurrencyCode;
+  status: 'active' | 'inactive' | 'pending';
+  lastReconciliation?: string;
+}
+
+// Interface Transaction
+export interface Transaction {
+  id: string;
+  date: string;
+  description: string;
+  amount: number;
+  type: 'credit' | 'debit';
+  reference?: string;
+  status?: 'pending' | 'completed' | 'reconciled';
+}
+```
+
+### Structure des années fiscales
+
+```typescript
+// Interface FiscalYear
+export interface FiscalYear {
+  id: string;
+  startDate: string;
+  endDate: string;
+  status: 'open' | 'closed';
+  code: string;
+  auditStatus?: {
+    isAudited: boolean;
+    auditor: {
+      name: string;
+      registrationNumber: string;
+    };
+    auditedAt: string;
+  };
+}
+
+// Interface de validation d'audit
+export interface AuditorCredentials {
+  name: string;
+  registrationNumber: string;
+  token?: string;
+}
+
+export interface AuditValidation {
+  success: boolean;
+  message: string;
+  errors?: string[];
+}
+```
+
+### Codes TVA
+
+```typescript
+// Codes TVA supportés
+export const VAT_CODES = {
+  'N18': { rate: 18, account: '445710', description: 'TVA 18%' },
+  'N16': { rate: 16, account: '445660', description: 'TVA 16%' },
+  'EXO': { rate: 0, account: null, description: 'Exonéré de TVA' }
+} as const;
 ```
 
 ### Formatage des devises

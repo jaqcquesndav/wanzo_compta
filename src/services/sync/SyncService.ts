@@ -144,10 +144,15 @@ export class SyncService {
 
     const lastSync = await IndexedDBService.get(this.STATUS_STORE, 'lastSync');
 
+    let lastSyncTimestamp: string | undefined = undefined;
+    if (typeof lastSync === 'object' && lastSync !== null && 'timestamp' in lastSync && typeof (lastSync as any).timestamp === 'string') {
+      lastSyncTimestamp = (lastSync as any).timestamp;
+    }
+
     return {
       pendingCount: pending.length,
       failedCount: failed.length,
-      lastSync: lastSync?.timestamp
+      lastSync: lastSyncTimestamp
     };
   }
 }

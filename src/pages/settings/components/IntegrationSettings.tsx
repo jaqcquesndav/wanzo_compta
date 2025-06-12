@@ -1,16 +1,11 @@
-import React from 'react';
-import { BankIntegration } from './integrations/BankIntegration';
-import { EInvoiceIntegration } from './integrations/EInvoiceIntegration';
-import { TaxIntegration } from './integrations/TaxIntegration';
-import { PortfolioIntegration } from './integrations/PortfolioIntegration';
+import { DataSharingSettings } from './integrations/DataSharingSettings';
+import { DataSourceSettings } from './integrations/DataSourceSettings';
 
 export function IntegrationSettings() {
   return (
     <div className="space-y-6">
-      <BankIntegration />
-      <EInvoiceIntegration />
-      <TaxIntegration />
-      <PortfolioIntegration />
+      <DataSharingSettings />
+      <DataSourceSettings />
     </div>
   );
 }

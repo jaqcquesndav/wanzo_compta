@@ -5,6 +5,7 @@ import { LedgerPage } from './pages/ledger/LedgerPage';
 import { ReportsPage } from './pages/reports/ReportsPage';
 import { DeclarationsPage } from './pages/declarations/DeclarationsPage';
 import { SettingsPage } from './pages/settings/SettingsPage';
+import { DataSharingBenefitsPage } from './pages/settings/DataSharingBenefitsPage';
 import { FiscalYearsPage } from './pages/fiscal-years/FiscalYearsPage';
 import { UsersPage } from './pages/users/UsersPage';
 import { OrganizationPage } from './pages/organization/OrganizationPage';
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
       {
         path: '/settings',
         element: <SettingsPage />
+      },
+      {
+        path: '/settings/data-sharing-benefits',
+        element: <DataSharingBenefitsPage />
       },
       {
         path: '/fiscal-years',

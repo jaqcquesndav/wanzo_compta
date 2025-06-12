@@ -1,11 +1,13 @@
 import React from 'react';
 import { type LucideIcon } from 'lucide-react';
+import { Slot } from '@radix-ui/react-slot';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'tertiary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'tertiary' | 'outline' | 'ghost' | 'link';
   size?: 'sm' | 'md' | 'lg';
   icon?: LucideIcon;
   isLoading?: boolean;
+  asChild?: boolean;
 }
 
 export function Button({
@@ -14,9 +16,11 @@ export function Button({
   size = 'md',
   icon: Icon,
   isLoading,
+  asChild = false,
   className = '',
   ...props
 }: ButtonProps) {
+  const Comp = asChild ? Slot : 'button';
   const sizeStyles = {
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-4 py-2 text-sm',
@@ -24,7 +28,7 @@ export function Button({
   }[size];
 
   return (
-    <button
+    <Comp
       className={`btn-${variant} ${sizeStyles} ${className}`}
       disabled={isLoading || props.disabled}
       {...props}
@@ -38,6 +42,6 @@ export function Button({
         <Icon className="h-5 w-5 mr-2" />
       ) : null}
       {children}
-    </button>
+    </Comp>
   );
 }
