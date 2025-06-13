@@ -1,4 +1,3 @@
-import React from 'react';
 import { MessageSquare, Trash2, Plus } from 'lucide-react';
 import type { Conversation } from '../../types/chat';
 
@@ -22,7 +21,7 @@ export function ConversationList({
       <div className="p-4 border-b">
         <button
           onClick={onNew}
-          className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover"
+          className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-[#197ca8] text-white rounded-lg hover:bg-[#1e90c3]"
         >
           <Plus className="h-4 w-4" />
           <span>Nouvelle conversation</span>

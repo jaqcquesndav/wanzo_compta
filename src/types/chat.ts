@@ -13,6 +13,13 @@ export interface Message {
   };
 }
 
+export interface Contact {
+  id: string;
+  name: string;
+  avatar?: string;
+  role?: string;
+}
+
 export interface Conversation {
   id: string;
   title: string;

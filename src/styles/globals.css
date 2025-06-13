@@ -36,13 +36,12 @@
     --border-primary: #e5e7eb; /* gray-200 */
     --border-secondary: #d1d5db; /* gray-300 */
   }
-
   .dark {
     /* Dark Theme Colors (Updated as per user specification) */
-    --color-primary: #2089b7;
-    --color-primary-rgb: 32, 137, 183;
-    --color-primary-light: #2596c7; /* Formerly --color-primary-hover */
-    --color-primary-dark: #1b7aa3;
+    --color-primary: #197ca8; /* Using the same primary color as light theme for consistency */
+    --color-primary-rgb: 25, 124, 168;
+    --color-primary-light: #1e90c3; /* Formerly --color-primary-hover */
+    --color-primary-dark: #156d93;
     --color-interactive: var(--color-primary-light);
 
     /* Accent Colors - Dark Theme (Kept from previous, adjust if needed) */

@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Message, Contact } from '../../types/chat';
 
 interface ChatMessageProps {
@@ -14,7 +13,7 @@ export function ChatMessage({ message, contacts }: ChatMessageProps) {
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
       <div className={`
         max-w-[80%] rounded-lg p-3
-        ${isUser ? 'bg-primary text-white' : 'bg-gray-100 text-gray-900'}
+        ${isUser ? 'bg-[#197ca8] text-white' : 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-100'}
       `}>
         {!isUser && (
           <div className="flex items-center space-x-2 mb-1">

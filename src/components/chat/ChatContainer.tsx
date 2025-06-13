@@ -145,8 +145,8 @@ export function ChatContainer({ mode, onClose, onModeChange }: ChatContainerProp
                 <div className={`
                   max-w-[80%] rounded-lg p-3 space-y-2
                   ${message.sender === 'user' 
-                    ? 'bg-primary text-white' 
-                    : 'bg-gray-100 text-gray-900'
+                    ? 'bg-[#197ca8] text-white' 
+                    : 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-100'
                   }
                 `}>
                   <MessageContent 
@@ -217,53 +217,60 @@ export function ChatContainer({ mode, onClose, onModeChange }: ChatContainerProp
 
           {/* Input */}
           <div className="p-4 border-t">
-            <div className="relative">
+            <div className="flex flex-col space-y-2">
               <textarea
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Écrivez votre message..."
-                className="w-full pl-4 pr-20 py-2 border rounded-lg focus:ring-1 focus:ring-primary resize-none"
+                className="w-full pl-4 pr-4 py-2 border rounded-lg focus:ring-1 focus:ring-primary resize-none"
                 rows={2}
               />
-              <div className="absolute bottom-2 right-2 flex items-center space-x-2">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  className="hidden"
-                  onChange={handleFileUpload}
-                />
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <Paperclip className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <Smile className="h-5 w-5" />
-                </button>
-                <button
-                  onMouseDown={() => setRecording(true)}
-                  onMouseUp={() => setRecording(false)}
-                  className={`text-gray-500 hover:text-gray-700 ${isRecording ? 'text-red-500' : ''}`}
-                >
-                  <Mic className="h-5 w-5" />
-                </button>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center space-x-2">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileUpload}
+                  />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white"
+                    title="Joindre un fichier"
+                  >
+                    <Paperclip className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    className="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white"
+                    title="Ajouter un emoji"
+                  >
+                    <Smile className="h-5 w-5" />
+                  </button>
+                  <button
+                    onMouseDown={() => setRecording(true)}
+                    onMouseUp={() => setRecording(false)}
+                    className={`p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white ${isRecording ? '!bg-red-100 !text-red-500 dark:!bg-red-900 dark:!text-red-400' : ''}`}
+                    title="Enregistrer un message vocal"
+                  >
+                    <Mic className="h-5 w-5" />
+                  </button>
+                </div>
                 <button
                   onClick={handleSend}
                   disabled={!newMessage.trim()}
-                  className="text-primary hover:text-primary-hover disabled:opacity-50"
+                  className="px-4 py-1.5 rounded-full bg-[#197ca8] hover:bg-[#1e90c3] text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1"
+                  title="Envoyer le message"
                 >
-                  <Send className="h-5 w-5" />
+                  <span>Envoyer</span>
+                  <Send className="h-4 w-4" />
                 </button>
               </div>
             </div>
             
             {showEmojiPicker && (
-              <div className="absolute bottom-full right-0 mb-2">
+              <div className="absolute bottom-24 right-4 z-10 shadow-lg rounded-lg">
                 <EmojiPicker
                   onSelect={(emoji) => {
                     setNewMessage(prev => prev + emoji);
