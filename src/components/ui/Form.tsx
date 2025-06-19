@@ -9,6 +9,7 @@ interface FormFieldProps {
   className?: string;
   labelClassName?: string;
   showOptionalText?: boolean;
+  required?: boolean;
 }
 
 export const FormField: React.FC<FormFieldProps> = ({
@@ -19,6 +20,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   className = '',
   labelClassName = '',
   showOptionalText = false,
+  required = false,
 }) => {
   return (
     <div className={`mb-4 ${className}`}>
@@ -28,6 +30,7 @@ export const FormField: React.FC<FormFieldProps> = ({
           className={`block text-sm font-medium text-text-secondary mb-1 ${labelClassName}`}
         >
           {label}
+          {required && <span className="text-destructive ml-1">*</span>}
           {showOptionalText && <span className="text-text-tertiary ml-1">(Optional)</span>}
         </label>
       )}
@@ -74,10 +77,11 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   icon?: LucideIcon;
   error?: string | null;
   containerClassName?: string;
+  options?: { value: string; label: string }[];
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ icon: Icon, error, children, className = '', containerClassName = '', ...props }, ref) => {
+  ({ icon: Icon, error, children, className = '', containerClassName = '', options, ...props }, ref) => {
     const hasError = !!error;
     return (
       <div className={`relative ${containerClassName}`}>
@@ -91,7 +95,18 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           className={`form-select appearance-none ${Icon ? 'pl-10' : 'pr-10'} ${hasError ? 'border-destructive focus:ring-destructive focus:border-destructive' : 'border-primary focus:ring-primary focus:border-primary'} ${className}`}
           {...props}
         >
-          {children}
+          {options ? (
+            <>
+              <option value="">Sélectionner...</option>
+              {options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </>
+          ) : (
+            children
+          )}
         </select>
         <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
           <ChevronDown className={`h-5 w-5 ${hasError ? 'text-destructive' : 'text-text-tertiary'}`} />

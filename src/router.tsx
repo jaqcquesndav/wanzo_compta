@@ -12,11 +12,16 @@ import { OrganizationPage } from './pages/organization/OrganizationPage';
 import { ChatPage } from './pages/chat/ChatPage';
 import { LoginPage } from './pages/auth/LoginPage';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { AuthCallbackPage } from './pages/auth/AuthCallbackPage';
 
 export const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />
+  },
+  {
+    path: '/callback',
+    element: <AuthCallbackPage />
   },
   {
     path: '/',
@@ -68,4 +73,6 @@ export const router = createBrowserRouter([
       }
     ]
   }
-]);
+], {
+  basename: "/accounting"
+});

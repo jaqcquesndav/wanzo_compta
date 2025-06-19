@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth0 } from '@auth0/auth0-react';
 import { ChatWindow } from '../chat/ChatWindow';
 import { useCalculatorStore } from '../../hooks/useCalculatorStore';
 import { HeaderActions } from './HeaderActions';
@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 
 export function Header({ onToggleSidebar }: HeaderProps) {
-  const { user } = useAuth();
+  const { user } = useAuth0();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const toggleCalculator = useCalculatorStore(state => state.toggle);

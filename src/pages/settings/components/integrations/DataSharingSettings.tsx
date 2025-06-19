@@ -6,7 +6,7 @@ import { Switch } from '../../../../components/ui/Switch';
 import { ConsentModal } from '../../../../components/ui/ConsentModal';
 import { Info, Share2, Loader2, AlertTriangle } from 'lucide-react';
 import { ApiService } from '../../../../services/api/ApiService';
-import { useAuth } from '../../../../hooks/useAuth';
+import { useAuth0 } from '@auth0/auth0-react';
 
 // Define the structure for sharing options
 interface SharingOptions {
@@ -23,8 +23,9 @@ interface SharingSettingsResponse extends SharingOptions {
 }
 
 export function DataSharingSettings() {
-  const { user } = useAuth();
-  const isAdmin = user?.role === 'admin'; // Derive isAdmin from user role
+  const { user } = useAuth0();
+  const roles = user?.[`${import.meta.env.VITE_AUTH0_AUDIENCE}/roles`] as string[] | undefined;
+  const isAdmin = roles?.includes('admin'); // Derive isAdmin from user role
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [consentGiven, setConsentGiven] = useState(false);

@@ -1,23 +1,37 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { Outlet } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 import { Layout } from '../Layout';
+import { useEffect } from 'react';
+import { setAuthTokenProvider } from '../../services/api/ApiService';
 
 export function ProtectedRoute() {
-  const { user, loading } = useAuth();
+  const { isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently } = useAuth0();
 
-  console.log('ProtectedRoute:', { user, loading });
+  useEffect(() => {
+    setAuthTokenProvider(async () => {
+      try {
+        if (isAuthenticated) {
+          const token = await getAccessTokenSilently();
+          return token;
+        }
+        return null;
+      } catch (error) {
+        console.error('Error getting access token', error);
+        return null;
+      }
+    });
+  }, [getAccessTokenSilently, isAuthenticated]);
 
-  if (loading) {
-    console.log('Auth loading...');
-    return <div>Chargement...</div>;
+  if (isLoading) {
+    return <div>Chargement...</div>; // Ou un composant de chargement plus sophistiqué
   }
 
-  if (!user) {
-    console.log('No user found, redirecting to login page...');
-    return <Navigate to="/login" replace />;
+  if (!isAuthenticated) {
+    // Redirige vers la page de connexion Auth0 si l'utilisateur n'est pas authentifié
+    loginWithRedirect();
+    return null; // La redirection est en cours
   }
 
-  console.log('User authenticated, rendering protected content');
   return (
     <Layout>
       <Outlet />

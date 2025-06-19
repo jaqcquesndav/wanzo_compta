@@ -4,8 +4,9 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  base: '/accounting/',
   server: {
-    port: 3030,
+    port: 5175,
     open: true,
     host: true
   },

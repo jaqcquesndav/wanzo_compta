@@ -1,14 +1,15 @@
 import { useEffect, useRef } from 'react';
 import { Settings, LogOut } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
+import { authService } from '../../services/auth/authService';
 
 interface UserMenuProps {
   onClose: () => void;
 }
 
 export function UserMenu({ onClose }: UserMenuProps) {
-  const { logout } = useAuth();
+  const { logout } = useAuth0();
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -23,8 +24,13 @@ export function UserMenu({ onClose }: UserMenuProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [onClose]);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error('Error invalidating backend session', error);
+    }
+    logout({ logoutParams: { returnTo: import.meta.env.VITE_AUTH0_LOGOUT_URI } });
   };
 
   return (

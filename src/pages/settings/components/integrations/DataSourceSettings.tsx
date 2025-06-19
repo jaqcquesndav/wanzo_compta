@@ -3,7 +3,7 @@ import { Card } from '../../../../components/ui/Card';
 import { Button } from '../../../../components/ui/Button';
 import { Switch } from '../../../../components/ui/Switch';
 import { Database, Smartphone, LinkIcon, AlertTriangle, Loader2, type LucideIcon } from 'lucide-react'; // Import LucideIcon type
-import { useAuth } from '../../../../hooks/useAuth';
+import { useAuth0 } from '@auth0/auth0-react';
 import { ApiService } from '../../../../services/api/ApiService';
 import type { ApiResponse } from '../../../../services/api/types';
 
@@ -54,8 +54,9 @@ export function DataSourceSettings() {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
-  const { user } = useAuth();
-  const isAdmin = user?.role === 'admin';
+  const { user } = useAuth0();
+  const roles = user?.[`${import.meta.env.VITE_AUTH0_AUDIENCE}/roles`] as string[] | undefined;
+  const isAdmin = roles?.includes('admin');
 
   // Fetch initial settings
   useEffect(() => {

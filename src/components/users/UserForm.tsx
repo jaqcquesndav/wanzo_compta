@@ -1,8 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { FormField, Input, Select } from '../ui/Form';
 import { Button } from '../ui/Button';
 import { Mail, Building, Shield, Lock, Eye, EyeOff, Upload, X } from 'lucide-react';
 import type { UserWithDetails } from '../../hooks/useUsers';
+import { AVAILABLE_ROLES, AVAILABLE_DEPARTMENTS } from '../../config/organization';
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface UserFormProps {
   user?: UserWithDetails;
@@ -11,9 +13,11 @@ interface UserFormProps {
 }
 
 export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
+  const { user: currentUser } = useAuth0();
+  const roles = currentUser?.[`${import.meta.env.VITE_AUTH0_AUDIENCE}/roles`] as string[] | undefined;
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [avatar, setAvatar] = useState<string | null>(user?.avatar || null);
+  const [avatar, setAvatar] = useState<string | undefined>(user?.avatar);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -23,6 +27,16 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
     password: '',
     confirmPassword: ''
   });
+
+  const filteredRoles = useMemo(() => {
+    if (roles?.includes('superadmin')) {
+      return AVAILABLE_ROLES.filter(r => r.value !== 'superadmin');
+    }
+    if (roles?.includes('admin')) {
+        return AVAILABLE_ROLES.filter(r => r.value !== 'superadmin' && r.value !== 'admin');
+    }
+    return [];
+  }, [roles]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -72,7 +86,7 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
         ...formData,
         avatar,
         // N'inclure le mot de passe que s'il est défini
-        ...(formData.password ? { password: formData.password } : {})
+        ...(formData.password ? { password: formData.password } : {}),
       });
     } finally {
       setLoading(false);
@@ -93,7 +107,7 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
               />
               <button
                 type="button"
-                onClick={() => setAvatar(null)}
+                onClick={() => setAvatar(undefined)}
                 className="absolute -top-2 -right-2 p-1 bg-red-100 rounded-full text-red-600 hover:bg-red-200"
               >
                 <X className="h-4 w-4" />
@@ -187,11 +201,7 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
           <Select
             value={formData.department}
             onChange={(e) => setFormData(prev => ({ ...prev, department: e.target.value }))}
-            options={[
-              { value: 'accounting', label: 'Comptabilité' },
-              { value: 'finance', label: 'Finance' },
-              { value: 'management', label: 'Direction' }
-            ]}
+            options={AVAILABLE_DEPARTMENTS}
             icon={Building}
           />
         </FormField>
@@ -199,13 +209,11 @@ export function UserForm({ user, onSubmit, onCancel }: UserFormProps) {
         <FormField label="Rôle" required>
           <Select
             value={formData.role}
-            onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value as UserWithDetails['role'] }))}
-            options={[
-              { value: 'admin', label: 'Administrateur' },
-              { value: 'user', label: 'Utilisateur' }
-            ]}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, role: e.target.value as any }))
+            }
+            options={filteredRoles}
             icon={Shield}
-            disabled={user?.role === 'super_admin'}
           />
         </FormField>
       </div>

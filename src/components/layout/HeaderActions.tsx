@@ -1,15 +1,15 @@
-import { User, MessageSquare, Calculator } from 'lucide-react';
+import { User as UserIcon, MessageSquare, Calculator } from 'lucide-react';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import { NotificationCenter } from '../notifications/NotificationCenter';
 import { UserMenu } from '../ui/UserMenu';
 import { CurrencyIndicator } from '../ui/CurrencyIndicator';
-import type { User as UserType } from '../../types/auth';
+import type { User } from '@auth0/auth0-react';
 
 interface HeaderActionsProps {
   onToggleCalculator: () => void;
   onToggleChat: () => void;
   onToggleUserMenu: () => void;
-  user: UserType | null;
+  user: User | undefined;
   showUserMenu: boolean;
   onCloseUserMenu: () => void;
 }
@@ -50,7 +50,7 @@ export function HeaderActions({
           className="flex items-center gap-2 text-text-secondary hover:text-text-primary"
         >
           <div className="h-8 w-8 rounded-full bg-primary text-on-primary flex items-center justify-center">
-            <User className="h-5 w-5" />
+            <UserIcon className="h-5 w-5" />
           </div>
           <span className="hidden md:block">{user?.name}</span>
         </button>

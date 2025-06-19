@@ -10,6 +10,7 @@ interface FiscalYearListProps {
   onAudit?: (fiscalYear: FiscalYear) => void;
   selectedFiscalYear?: FiscalYear | null;
   loading?: boolean;
+  isAuditor?: boolean;
 }
 
 export function FiscalYearList({ 
@@ -18,7 +19,8 @@ export function FiscalYearList({
   onReopen,
   onAudit,
   selectedFiscalYear,
-  loading 
+  loading,
+  isAuditor
 }: FiscalYearListProps) {
   const columns: Column<FiscalYear>[] = [
     {
@@ -94,7 +96,7 @@ export function FiscalYearList({
               Réouvrir
             </Button>
           )}
-          {onAudit && !fiscalYear.auditStatus?.isAudited && (
+          {onAudit && !fiscalYear.auditStatus?.isAudited && isAuditor && (
             <Button
               variant="primary"
               size="sm"

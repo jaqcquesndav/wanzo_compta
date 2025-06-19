@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Calendar, Plus } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -8,10 +8,11 @@ import { CloseFiscalYearModal } from '../../components/fiscal-years/CloseFiscalY
 import { ReopenFiscalYearModal } from '../../components/fiscal-years/ReopenFiscalYearModal';
 import { AuditFiscalYearModal } from '../../components/fiscal-years/AuditFiscalYearModal';
 import { Modal } from '../../components/ui/Modal';
-import { useFiscalYear, type FiscalYear } from '../../hooks/useFiscalYear';
+import { useFiscalYear } from '../../hooks/useFiscalYear';
+import type { FiscalYear } from '../../types/fiscal-year';
 import { useFiscalYearStore } from '../../stores/fiscalYearStore';
 import { useFiscalYearAudit } from '../../hooks/useFiscalYearAudit';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export function FiscalYearsPage() {
   const [showNewPeriodModal, setShowNewPeriodModal] = useState(false);
@@ -20,10 +21,10 @@ export function FiscalYearsPage() {
   const [showReopenModal, setShowReopenModal] = useState(false);
   const [showAuditModal, setShowAuditModal] = useState(false);
   
-  const { currentFiscalYear, loading, reopenFiscalYear } = useFiscalYear();
+  const { currentFiscalYear, reopenFiscalYear } = useFiscalYear();
   const { setCurrentFiscalYear } = useFiscalYearStore();
   const { validateAudit } = useFiscalYearAudit();
-  const { user } = useAuth();
+  const { user } = useAuth0();
 
   const handleClose = (fiscalYear: FiscalYear) => {
     setSelectedFiscalYear(fiscalYear);
@@ -68,7 +69,8 @@ export function FiscalYearsPage() {
     }
   };
 
-  const isAuditor = user?.role === 'auditor';
+  const roles = user?.[`${import.meta.env.VITE_AUTH0_AUDIENCE}/roles`] as string[] | undefined;
+  const isAuditor = roles?.includes('auditor');
 
   return (
     <div className="space-y-6">
@@ -85,49 +87,23 @@ export function FiscalYearsPage() {
 
       <Card title="Liste des exercices" icon={Calendar}>
         <FiscalYearList
-          fiscalYears={[
-            {
-              id: '1',
-              startDate: '2024-01-01',
-              endDate: '2024-12-31',
-              status: 'open',
-              code: 'EX2024'
-            },
-            {
-              id: '2',
-              startDate: '2023-01-01',
-              endDate: '2023-12-31',
-              status: 'closed',
-              code: 'EX2023',
-              auditStatus: {
-                isAudited: true,
-                auditor: {
-                  name: 'John Doe',
-                  registrationNumber: 'AUD-2024-001'
-                },
-                auditedAt: '2024-03-01T10:00:00Z'
-              }
-            }
-          ]}
+          fiscalYears={[]}
           onClose={handleClose}
           onReopen={handleReopen}
-          onAudit={isAuditor ? handleAudit : undefined}
+          onAudit={handleAudit}
           selectedFiscalYear={currentFiscalYear}
-          loading={loading}
+          isAuditor={isAuditor}
         />
       </Card>
 
-      <Modal
-        isOpen={showNewPeriodModal}
-        onClose={() => setShowNewPeriodModal(false)}
-        title="Nouvel Exercice Comptable"
-      >
+      <Modal title="Nouvel Exercice Comptable" isOpen={showNewPeriodModal} onClose={() => setShowNewPeriodModal(false)}>
         <NewFiscalYearForm
           onSubmit={async (data) => {
-            console.log('New fiscal year:', data);
+            console.log(data);
             setShowNewPeriodModal(false);
           }}
           onCancel={() => setShowNewPeriodModal(false)}
+          onImport={async () => console.log('Importing data...')}
         />
       </Modal>
 

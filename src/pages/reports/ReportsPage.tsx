@@ -7,7 +7,7 @@ import { DocumentPreview } from '../../components/reports/preview/DocumentPrevie
 import { ReportHeader } from '../../components/reports/ReportHeader';
 import { useReports } from '../../hooks/useReports';
 import { useFinancialExport } from '../../hooks/useFinancialExport';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth0 } from '@auth0/auth0-react';
 import type { FinancialStatementType } from '../../types/reports';
 
 const STATEMENT_TYPES: Record<FinancialStatementType, string> = {
@@ -23,7 +23,7 @@ const STATEMENT_TYPES: Record<FinancialStatementType, string> = {
 };
 
 export function ReportsPage() {
-  const { user } = useAuth();
+  const { user } = useAuth0();
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [currentConfig, setCurrentConfig] = useState<{
     type: FinancialStatementType;
@@ -78,7 +78,7 @@ export function ReportsPage() {
         data,
         title: STATEMENT_TYPES[currentConfig.type],
         organization,
-        generatedBy: user.name || user.email,
+        generatedBy: user.name || user.email || 'N/A',
         isAudited: true,
         currency: currentConfig.currency
       });
@@ -137,10 +137,10 @@ export function ReportsPage() {
           {/* En-tête du rapport */}
           {data && user && (
             <ReportHeader
-              organization={organization}
               title={STATEMENT_TYPES[currentConfig.type]}
+              organization={organization}
+              generatedBy={user.name || user.email || 'N/A'}
               isAudited={true}
-              generatedBy={user.name || user.email}
               currency={currentConfig.currency}
             />
           )}
@@ -176,7 +176,7 @@ export function ReportsPage() {
             organization={organization}
             title={STATEMENT_TYPES[currentConfig.type]}
             isAudited={true}
-            generatedBy={user.name || user.email}
+            generatedBy={user.name || user.email || 'N/A'}
             currency={currentConfig.currency}
           />
         )}
