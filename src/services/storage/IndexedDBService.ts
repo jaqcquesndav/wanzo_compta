@@ -1,6 +1,6 @@
 export class IndexedDBService {
   private static DB_NAME = 'wanzo_accounting';
-  private static DB_VERSION = 4;
+  private static DB_VERSION = 5; // Augmenté de 4 à 5 pour la mise à jour du schéma
   private static db: IDBDatabase | null = null;
 
   static async initDB(): Promise<void> {
@@ -81,6 +81,12 @@ export class IndexedDBService {
         if (!db.objectStoreNames.contains('dashboard_data')) {
           const dashboardStore = db.createObjectStore('dashboard_data', { keyPath: 'id' });
           dashboardStore.createIndex('timestamp', 'timestamp');
+        }
+        
+        // Nouveau store pour les données de l'organisation
+        if (!db.objectStoreNames.contains('organization')) {
+          const organizationStore = db.createObjectStore('organization', { keyPath: 'id' });
+          organizationStore.createIndex('updatedAt', 'updatedAt');
         }
       };
     });

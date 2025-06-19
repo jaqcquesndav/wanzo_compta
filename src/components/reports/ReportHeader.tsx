@@ -1,4 +1,3 @@
-import React from 'react';
 import { Building2, Star, Award, CheckCircle, AlertCircle } from 'lucide-react';
 
 interface ReportHeaderProps {
@@ -10,6 +9,7 @@ interface ReportHeaderProps {
     creditScore?: number;
     esgScore?: string;
     financialRating?: string;
+    logo?: string;
   };
   title: string;
   isAudited: boolean;
@@ -25,18 +25,25 @@ export function ReportHeader({
   currency
 }: ReportHeaderProps) {
   return (
-    <div className="space-y-6 border-b pb-6 mb-6">
-      {/* En-tête de l'entreprise */}
+    <div className="space-y-6 border-b pb-6 mb-6">      {/* En-tête de l'entreprise */}
       <div className="flex justify-between">
-        <div className="space-y-1">
-          <div className="flex items-center space-x-2">
-            <Building2 className="h-5 w-5 text-primary" />
+        <div className="space-y-1 flex items-start">          {organization.logo ? (
+            <img 
+              src={organization.logo} 
+              alt={`${organization.name} Logo`} 
+              className="h-10 w-auto mr-3 object-contain"
+              style={{ maxWidth: '50px' }}
+            />
+          ) : (
+            <Building2 className="h-10 w-10 text-primary mr-3" />
+          )}
+          <div>
             <h2 className="text-xl font-bold">{organization.name}</h2>
+            <p className="text-sm text-gray-600">{organization.address}</p>
+            <p className="text-sm text-gray-600">
+              RCCM: {organization.registrationNumber} - NINEA: {organization.taxId}
+            </p>
           </div>
-          <p className="text-sm text-gray-600">{organization.address}</p>
-          <p className="text-sm text-gray-600">
-            RCCM: {organization.registrationNumber} - NINEA: {organization.taxId}
-          </p>
         </div>
         
         <div className="text-right space-y-1">

@@ -14,14 +14,13 @@ export function Header({ onToggleSidebar }: HeaderProps) {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const toggleCalculator = useCalculatorStore(state => state.toggle);
-
   return (
-    <header className="fixed top-0 left-0 right-0 bg-primary border-b border-secondary z-30">
+    <header className="fixed top-0 left-0 right-0 bg-background border-b border-border z-30">
       <div className="h-16 px-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
             onClick={onToggleSidebar}
-            className="text-text-secondary hover:text-text-primary focus:outline-none lg:hidden"
+            className="text-muted-foreground hover:text-foreground focus:outline-none lg:hidden"
           >
             <Menu className="h-6 w-6" />
           </button>

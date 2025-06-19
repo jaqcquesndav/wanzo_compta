@@ -8,33 +8,33 @@ interface FinancialStatementPreviewProps {
   currency?: CurrencyCode;
 }
 
-export function FinancialStatementPreview({ type, data, currency = 'CDF' }: FinancialStatementPreviewProps) {
-  const { formatConverted, currentCurrency } = useCurrency();
+export function FinancialStatementPreview({ type, data, currency }: FinancialStatementPreviewProps) {
+  const { format } = useCurrency();
   
-  const formatAmount = (amount: number | undefined, fromCurrency?: CurrencyCode): string => {
+  const formatAmount = (amount: number | undefined): string => {
     if (amount === undefined) return '-';
-    return formatConverted(amount, fromCurrency || currency || currentCurrency);
+    return format(amount, currency);
   };
 
   if (!data) return null;
 
   const renderBalanceSheet = () => {
-    const { fixedAssets, currentAssets, equity } = data;
+    const { fixedAssets, currentAssets, equity, grandTotal } = data;
 
     return (
       <div className="space-y-8">
         {/* Actif */}
         <div>
-          <h3 className="text-lg font-bold mb-4">ACTIF</h3>
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead>
+          <h3 className="text-lg font-bold mb-4 print:text-black">ACTIF</h3>
+          <table className="min-w-full divide-y divide-gray-200 border border-gray-200 print:border-gray-300">
+            <thead className="bg-muted print:bg-gray-100">
               <tr>
-                <th className="px-4 py-2 text-left">Code</th>
-                <th className="px-4 py-2 text-left">Libellé</th>
-                <th className="px-4 py-2 text-right">Brut</th>
-                <th className="px-4 py-2 text-right">Amort/Prov</th>
-                <th className="px-4 py-2 text-right">Net</th>
-                <th className="px-4 py-2 text-right">Net N-1</th>
+                <th className="px-4 py-2 text-left border-b border-gray-200 print:border-gray-300">Code</th>
+                <th className="px-4 py-2 text-left border-b border-gray-200 print:border-gray-300">Libellé</th>
+                <th className="px-4 py-2 text-right border-b border-gray-200 print:border-gray-300">Brut</th>
+                <th className="px-4 py-2 text-right border-b border-gray-200 print:border-gray-300">Amort/Prov</th>
+                <th className="px-4 py-2 text-right border-b border-gray-200 print:border-gray-300">Net</th>
+                <th className="px-4 py-2 text-right border-b border-gray-200 print:border-gray-300">Net N-1</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -46,28 +46,28 @@ export function FinancialStatementPreview({ type, data, currency = 'CDF' }: Fina
                 <tr key={item.code}>
                   <td className="px-4 py-2">{item.code}</td>
                   <td className="px-4 py-2">{item.label}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.brut, currency)}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.amort, currency)}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.net, currency)}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.netN1, currency)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.brut)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.amort)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.net)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.netN1)}</td>
                 </tr>
               ))}
               {fixedAssets.tangibleAssets.map((item: any) => (
                 <tr key={item.code}>
                   <td className="px-4 py-2">{item.code}</td>
                   <td className="px-4 py-2">{item.label}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.brut, currency)}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.amort, currency)}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.net, currency)}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.netN1, currency)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.brut)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.amort)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.net)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.netN1)}</td>
                 </tr>
               ))}
               <tr className="bg-gray-100 font-medium">
                 <td colSpan={2} className="px-4 py-2">Total Actif immobilisé</td>
-                <td className="px-4 py-2 text-right">{formatAmount(fixedAssets.total.brut, currency)}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(fixedAssets.total.amort, currency)}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(fixedAssets.total.net, currency)}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(fixedAssets.total.netN1, currency)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(fixedAssets.total.brut)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(fixedAssets.total.amort)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(fixedAssets.total.net)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(fixedAssets.total.netN1)}</td>
               </tr>
 
               {/* Actif circulant */}
@@ -78,27 +78,25 @@ export function FinancialStatementPreview({ type, data, currency = 'CDF' }: Fina
                 <tr key={item.code}>
                   <td className="px-4 py-2">{item.code}</td>
                   <td className="px-4 py-2">{item.label}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.brut, currency)}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.amort, currency)}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.net, currency)}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.netN1, currency)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.brut)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.amort)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.net)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.netN1)}</td>
                 </tr>
               ))}
               <tr className="bg-gray-100 font-medium">
                 <td colSpan={2} className="px-4 py-2">Total Actif circulant</td>
-                <td className="px-4 py-2 text-right">{formatAmount(currentAssets.total.brut, currency)}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(currentAssets.total.amort, currency)}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(currentAssets.total.net, currency)}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(currentAssets.total.netN1, currency)}</td>
-              </tr>
-
-              {/* Total Actif */}
-              <tr className="bg-primary text-white font-bold">
+                <td className="px-4 py-2 text-right">{formatAmount(currentAssets.total.brut)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(currentAssets.total.amort)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(currentAssets.total.net)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(currentAssets.total.netN1)}</td>
+              </tr>              {/* Total Actif */}
+              <tr className="bg-primary print:bg-gray-700 text-white print:text-white font-bold">
                 <td colSpan={2} className="px-4 py-2">TOTAL ACTIF</td>
-                <td className="px-4 py-2 text-right">{formatAmount(data.grandTotal.brut, currency)}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(data.grandTotal.amort, currency)}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(data.grandTotal.net, currency)}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(data.grandTotal.netN1, currency)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(grandTotal.brut)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(grandTotal.amort)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(grandTotal.net)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(grandTotal.netN1)}</td>
               </tr>
             </tbody>
           </table>
@@ -125,21 +123,21 @@ export function FinancialStatementPreview({ type, data, currency = 'CDF' }: Fina
                 <tr key={item.code}>
                   <td className="px-4 py-2">{item.code}</td>
                   <td className="px-4 py-2">{item.label}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.net, currency)}</td>
-                  <td className="px-4 py-2 text-right">{formatAmount(item.netN1, currency)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.net)}</td>
+                  <td className="px-4 py-2 text-right">{formatAmount(item.netN1)}</td>
                 </tr>
               ))}
               <tr className="bg-gray-100 font-medium">
                 <td colSpan={2} className="px-4 py-2">Total Capitaux propres</td>
-                <td className="px-4 py-2 text-right">{formatAmount(equity.total.net, currency)}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(equity.total.netN1, currency)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(equity.total.net)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(equity.total.netN1)}</td>
               </tr>
 
               {/* Total Passif */}
               <tr className="bg-primary text-white font-bold">
                 <td colSpan={2} className="px-4 py-2">TOTAL PASSIF</td>
-                <td className="px-4 py-2 text-right">{formatAmount(data.grandTotal.net, currency)}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(data.grandTotal.netN1, currency)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(grandTotal.net)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(grandTotal.netN1)}</td>
               </tr>
             </tbody>
           </table>
@@ -170,23 +168,21 @@ export function FinancialStatementPreview({ type, data, currency = 'CDF' }: Fina
               <tr key={item.code}>
                 <td className="px-4 py-2">{item.code}</td>
                 <td className="px-4 py-2">{item.label}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(item.current, currency)}</td>
-                <td className="px-4 py-2 text-right">{formatAmount(item.previous, currency)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(item.current)}</td>
+                <td className="px-4 py-2 text-right">{formatAmount(item.previous)}</td>
                 <td className="px-4 py-2 text-right">{item.variation}%</td>
               </tr>
             ))}
             <tr className="bg-gray-100 font-medium">
               <td colSpan={2} className="px-4 py-2">Total Produits d'exploitation</td>
-              <td className="px-4 py-2 text-right">{formatAmount(data.operatingIncome.total.current, currency)}</td>
-              <td className="px-4 py-2 text-right">{formatAmount(data.operatingIncome.total.previous, currency)}</td>
+              <td className="px-4 py-2 text-right">{formatAmount(data.operatingIncome.total.current)}</td>
+              <td className="px-4 py-2 text-right">{formatAmount(data.operatingIncome.total.previous)}</td>
               <td className="px-4 py-2 text-right">{data.operatingIncome.total.variation}%</td>
-            </tr>
-
-            {/* Résultat net */}
-            <tr className="bg-primary text-white font-bold">
+            </tr>            {/* Résultat net */}
+            <tr className="bg-primary print:bg-gray-700 text-white print:text-white font-bold">
               <td colSpan={2} className="px-4 py-2">RÉSULTAT NET</td>
-              <td className="px-4 py-2 text-right">{formatAmount(data.netResult.current, currency)}</td>
-              <td className="px-4 py-2 text-right">{formatAmount(data.netResult.previous, currency)}</td>
+              <td className="px-4 py-2 text-right">{formatAmount(data.netResult.current)}</td>
+              <td className="px-4 py-2 text-right">{formatAmount(data.netResult.previous)}</td>
               <td className="px-4 py-2 text-right">{data.netResult.variation}%</td>
             </tr>
           </tbody>
@@ -215,15 +211,15 @@ export function FinancialStatementPreview({ type, data, currency = 'CDF' }: Fina
             <tr>
               <td className="px-4 py-2">{data.operatingActivities.netResult.code}</td>
               <td className="px-4 py-2">{data.operatingActivities.netResult.label}</td>
-              <td className="px-4 py-2 text-right">{formatAmount(data.operatingActivities.netResult.current, currency)}</td>
-              <td className="px-4 py-2 text-right">{formatAmount(data.operatingActivities.netResult.previous, currency)}</td>
+              <td className="px-4 py-2 text-right">{formatAmount(data.operatingActivities.netResult.current)}</td>
+              <td className="px-4 py-2 text-right">{formatAmount(data.operatingActivities.netResult.previous)}</td>
             </tr>
 
             {/* Variation de trésorerie */}
             <tr className="bg-primary text-white font-bold">
               <td colSpan={2} className="px-4 py-2">VARIATION DE TRÉSORERIE</td>
-              <td className="px-4 py-2 text-right">{formatAmount(data.netCashChange.current, currency)}</td>
-              <td className="px-4 py-2 text-right">{formatAmount(data.netCashChange.previous, currency)}</td>
+              <td className="px-4 py-2 text-right">{formatAmount(data.netCashChange.current)}</td>
+              <td className="px-4 py-2 text-right">{formatAmount(data.netCashChange.previous)}</td>
             </tr>
           </tbody>
         </table>

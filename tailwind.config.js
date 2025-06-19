@@ -1,58 +1,49 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: ['class'],
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: 'var(--color-primary)',
-          hover: 'var(--color-primary-hover)', // Fixed: Added closing parenthesis
-          dark: 'var(--color-primary-dark)',
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
         },
-        interactive: 'var(--color-interactive)',
-        success: {
-          DEFAULT: 'var(--color-success)',
-          hover: 'var(--color-success-hover)',
-        },
-        warning: {
-          DEFAULT: 'var(--color-warning)',
-          hover: 'var(--color-warning-hover)',
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
         },
         destructive: {
-          DEFAULT: 'var(--color-destructive)',
-          hover: 'var(--color-destructive-hover)',
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
         },
-        "text-primary": 'var(--text-primary)',
-        "text-secondary": 'var(--text-secondary)',
-        "text-tertiary": 'var(--text-tertiary)',
-        "text-interactive": 'var(--text-interactive)',
-        "text-on-primary": 'var(--text-on-primary)',
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
       },
-      backgroundColor: {
-        primary: 'var(--bg-primary)',
-        secondary: 'var(--bg-secondary)',
-        tertiary: 'var(--bg-tertiary)',
-        hover: 'var(--bg-hover)',
-        'sidebar-light': 'var(--bg-sidebar-light)', // Added for light mode sidebar
+      borderRadius: {
+        lg: `var(--radius)`,
+        md: `calc(var(--radius) - 2px)`,
+        sm: 'calc(var(--radius) - 4px)',
       },
-      borderColor: {
-        primary: 'var(--border-primary)',
-        secondary: 'var(--border-secondary)',
-      },
-      ringColor: {
-        primary: 'var(--color-primary)',
-        success: 'var(--color-success)',
-        warning: 'var(--color-warning)',
-        destructive: 'var(--color-destructive)',
-      },
-      ringOffsetColor: {
-        primary: 'var(--bg-primary)',
-        secondary: 'var(--bg-secondary)',
-      },
-      placeholderColor: {
-        primary: 'var(--text-tertiary)',
-      }
     },
   },
   plugins: [],

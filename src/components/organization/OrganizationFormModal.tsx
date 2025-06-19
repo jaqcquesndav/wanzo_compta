@@ -61,7 +61,7 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
       size="xl"
     >
       <form onSubmit={handleSubmit} className="space-y-6">
-        <h3 className="font-medium text-gray-700 border-b pb-2">Informations générales</h3>
+        <h3 className="font-medium text-foreground border-b pb-2">Informations générales</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField label="Nom de l'entreprise" labelClassName="flex items-center">
             <span className="text-destructive ml-1">*</span>
@@ -93,7 +93,7 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
                 onChange={(e) => handleChangeInput('capital', e.target.value)}
                 type="number"
               />
-              <span className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
+              <span className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground">
                 {formData.currency}
               </span>
             </div>
@@ -108,7 +108,7 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
           </FormField>
         </div>
 
-        <h3 className="font-medium text-gray-700 border-b pb-2 mt-6">Direction de l'entreprise</h3>
+        <h3 className="font-medium text-foreground border-b pb-2 mt-6">Direction de l'entreprise</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField label="Nom de l'entrepreneur" labelClassName="flex items-center">
             <span className="text-destructive ml-1">*</span>
@@ -146,7 +146,7 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
           </FormField>
         </div>
 
-        <h3 className="font-medium text-gray-700 border-b pb-2 mt-6">Immatriculation et identification</h3>
+        <h3 className="font-medium text-foreground border-b pb-2 mt-6">Immatriculation et identification</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <FormField label="RCCM" labelClassName="flex items-center">
             <span className="text-destructive ml-1">*</span>
@@ -191,7 +191,7 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
         </div>
 
         {/* Description de l'entreprise */}
-        <h3 className="font-medium text-gray-700 border-b pb-2 mt-6">Description</h3>
+        <h3 className="font-medium text-foreground border-b pb-2 mt-6">Description</h3>
         <FormField label="Description de l'entreprise">
           <Textarea
             value={formData.description || ''}
@@ -202,7 +202,7 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
         </FormField>
 
         {/* Coordonnées */}
-        <h3 className="font-medium text-gray-700 border-b pb-2 mt-6">Coordonnées de l'entreprise</h3>
+        <h3 className="font-medium text-foreground border-b pb-2 mt-6">Coordonnées de l'entreprise</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField label="Adresse">
             <Input
@@ -252,7 +252,7 @@ export function OrganizationFormModal({ isOpen, onClose, organization, onSubmit 
           </FormField>
         </div>
 
-        <div className="flex justify-end space-x-3">
+        <div className="flex justify-end space-x-3 pt-4 mt-4 border-t border-border">
           <Button 
             type="button" 
             variant="secondary"

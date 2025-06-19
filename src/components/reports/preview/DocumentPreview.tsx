@@ -1,4 +1,3 @@
-import React from 'react';
 import { FileText, FileSpreadsheet, AlertCircle } from 'lucide-react';
 import { FinancialStatementPreview } from './FinancialStatementPreview';
 import type { FinancialStatementType } from '../../../types/reports';

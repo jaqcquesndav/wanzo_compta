@@ -4,206 +4,211 @@
 
 @layer base {
   :root {
-    /* Primary Palette (Blue) */
-    --color-primary: #197ca8 ;
-    --color-primary-hover: #1e90c3;
-    --color-primary-dark: #156d93; /* Darker shade for specific states */
-    --color-interactive: var(--color-primary-hover);
-
-    /* Accent Colors */
-    --color-success: #015730;
-    --color-success-hover: #026b3a;
-    --color-warning: #ee872b;
-    --color-warning-hover: #f09642;
-    --color-destructive: #d93025; /* Example Red */
-    --color-destructive-hover: #b02018;
-
-    /* Backgrounds - Light Theme */
-    --bg-primary: #ffffff;
-    --bg-secondary: #f3f4f6; /* gray-100 */
-    --bg-tertiary: #e5e7eb; /* gray-200 */
-    --bg-hover: #e9edf1; /* Slightly off-white for hover */
-    --bg-sidebar-light: var(--color-primary); /* Use --color-primary for sidebar in light mode */
-
-    /* Text - Light Theme */
-    --text-primary: #111827; /* gray-900 */
-    --text-secondary: #4b5563; /* gray-600 */
-    --text-tertiary: #6b7280; /* gray-500 */
-    --text-interactive: var(--color-primary);
-    --text-on-primary: #ffffff; /* Text on primary-colored backgrounds */
-
-    /* Borders - Light Theme */
-    --border-primary: #e5e7eb; /* gray-200 */
-    --border-secondary: #d1d5db; /* gray-300 */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 200.4 83.7% 40.2%; /* #197ca8 */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 200.4 83.7% 40.2%;
+    --radius: 0.5rem;
   }
+
   .dark {
-    /* Dark Theme Colors (Updated as per user specification) */
-    --color-primary: #197ca8; /* Using the same primary color as light theme for consistency */
-    --color-primary-rgb: 25, 124, 168;
-    --color-primary-light: #1e90c3; /* Formerly --color-primary-hover */
-    --color-primary-dark: #156d93;
-    --color-interactive: var(--color-primary-light);
-
-    /* Accent Colors - Dark Theme (Kept from previous, adjust if needed) */
-    --color-success: #34d399; /* Brighter green */
-    --color-success-hover: #6ee7b7;
-    --color-warning: #fBBF24; /* Brighter yellow/orange */
-    --color-warning-hover: #facc15;
-    --color-destructive: #f87171; /* Brighter red */
-    --color-destructive-hover: #ef4444;
-
-    /* Backgrounds - Dark Theme */
-    --bg-primary: #1a1b1e;
-    --bg-secondary: #2c2e33;
-    --bg-tertiary: #3b3d42;
-    --bg-hover: #2c3a50; /* Kept from previous, adjust if needed */
-
-    /* Text - Dark Theme */
-    --text-primary: #f3f4f6;
-    --text-secondary: #d1d5db; /* Updated */
-    --text-tertiary: #9ca3af;
-    --text-interactive: var(--color-primary); /* Kept, uses the main --color-primary */
-    --text-on-primary: #ffffff; /* Kept from previous, adjust if needed */
-
-    /* Borders - Dark Theme (Kept from previous, adjust if needed) */
-    --border-primary: #334155;
-    --border-secondary: #475569;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 200.4 83.7% 40.2%; /* #197ca8 */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 200.4 83.7% 40.2%;
   }
+}
 
+@layer base {
+  * {
+    @apply border-border;
+  }
   body {
-    /* Updated to use semantic theme variables */
-    @apply bg-primary text-text-primary; /* Corrected to text-text-primary */
-    font-family: 'Inter', sans-serif; /* Example: Adding a modern font stack */
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Scrollbar styles */
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .scrollbar-thin::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: var(--border-secondary); /* Use theme variable */
-    border-radius: 20px;
-  }
-
-  .scrollbar-thin:hover::-webkit-scrollbar-thumb {
-    background-color: var(--border-primary); /* Use theme variable */
-  }
-
-  /* Responsive text sizes */
-  h1 {
-    @apply text-xl md:text-2xl lg:text-3xl font-bold text-text-primary;
-  }
-
-  h2 {
-    @apply text-lg md:text-xl lg:text-2xl font-semibold text-text-primary;
-  }
-
-  h3 {
-    @apply text-base md:text-lg lg:text-xl font-medium text-text-primary;
   }
 }
 
 @layer components {
+  /* Buttons */
   .btn {
-    @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-medium 
-           transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 
-           disabled:opacity-50 disabled:cursor-not-allowed
-           /* Changed dark:focus:ring-offset-dark-primary to focus:ring-offset-primary */
-           /* The var(--bg-primary) used by ringOffsetColor.primary will handle dark mode */
-           focus:ring-offset-primary;
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
   }
 
   .btn-primary {
-    /* Ensure these classes correctly use the 'colors' from tailwind.config.js which map to CSS vars */
-    @apply btn bg-primary text-on-primary hover:bg-primary-hover focus:ring-primary;
-  }
-  
-  .btn-success {
-    @apply btn bg-success text-on-primary hover:bg-success-hover focus:ring-success;
-  }
-  
-  .btn-warning {
-    @apply btn bg-warning text-on-primary hover:bg-warning-hover focus:ring-warning;
+    @apply btn bg-primary text-primary-foreground hover:bg-primary/90;
   }
 
   .btn-destructive {
-    @apply btn bg-destructive text-on-primary hover:bg-destructive-hover focus:ring-destructive;
+    @apply btn bg-destructive text-destructive-foreground hover:bg-destructive/90;
   }
 
   .btn-secondary {
-    /* Secondary button uses different bg/text/border that should also come from theme vars */
-    @apply btn bg-secondary text-text-primary border border-primary hover:bg-tertiary focus:ring-primary; /* Corrected to text-text-primary */
+    @apply btn bg-secondary text-secondary-foreground hover:bg-secondary/80;
   }
-
-  .btn-tertiary {
-    @apply btn text-interactive hover:bg-hover focus:ring-primary;
-  }
-
-  .btn-outline {
-    @apply btn bg-transparent text-interactive border border-interactive hover:bg-interactive hover:text-on-primary focus:ring-interactive;
-  }
-
-  /* Cards */
+    /* Cards */
   .card {
-    @apply bg-secondary rounded-lg shadow-sm overflow-hidden border border-primary;
+    @apply rounded-lg border bg-card text-card-foreground shadow-sm;
   }
 
   .card-header {
-    @apply px-4 sm:px-6 py-4 border-b border-primary text-text-primary; /* Corrected to text-text-primary */
+    @apply flex flex-col space-y-1.5 p-6;
   }
 
   .card-body {
-    @apply p-4 sm:p-6 text-text-secondary; /* Corrected to text-text-secondary */
+    @apply p-6 pt-0;
   }
-
-  /* Form elements */
-  .form-input, .form-select, .form-textarea { /* Combined for similar base styles */
-    @apply block w-full px-3 py-2 
-           bg-primary border border-primary rounded-md shadow-sm 
-           text-text-primary placeholder-primary /* Corrected to text-text-primary */
-           focus:outline-none focus:ring-primary focus:border-primary 
-           sm:text-sm;
-  }
-  
-  .form-input::placeholder, .form-textarea::placeholder {
-    @apply text-text-tertiary; /* Corrected to text-text-tertiary */
-  }
-
 
   /* Tables */
   .table {
-    @apply min-w-full divide-y divide-secondary; /* Corrected from divide-border-secondary */
+    @apply min-w-full divide-y divide-border border border-border;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .table thead {
+    @apply bg-muted sticky top-0;
+    z-index: 10;
   }
 
   .table th {
-    @apply px-6 py-3 bg-secondary text-left text-xs font-medium text-text-secondary uppercase tracking-wider; /* Corrected to text-text-secondary */
+    @apply px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider;
   }
 
   .table td {
-    @apply px-6 py-4 whitespace-nowrap text-sm text-text-primary; /* Corrected to text-text-primary */
+    @apply px-6 py-4 text-sm text-foreground border-t border-border;
   }
 
   .table tr {
-    @apply hover:bg-hover;
+    @apply hover:bg-muted/50;
+  }
+
+  /* Pour les tableaux à large contenu avec scroll horizontal */
+  .table-container {
+    @apply w-full overflow-x-auto border border-border rounded-md;
+  }
+
+  /* Pour les cellules qui ont besoin de wrapping */
+  .table-cell-wrap {
+    @apply whitespace-normal;
+  }
+
+  /* Pour les cellules qui ne doivent pas wrapper */
+  .table-cell-nowrap {
+    @apply whitespace-nowrap;
   }
 
   /* Modal */
   .modal {
-    @apply bg-secondary rounded-lg shadow-xl border border-primary;
+    @apply bg-card text-card-foreground rounded-lg shadow-xl border border-border;
+    max-height: calc(100vh - 2rem);
+    display: flex;
+    flex-direction: column;
   }
 
   .modal-header {
-    @apply px-4 py-3 border-b border-primary text-text-primary; /* Corrected to text-text-primary */
+    @apply px-4 py-3 border-b border-border text-foreground;
+    flex-shrink: 0;
+  }
+  .modal-body {
+    @apply p-6 text-foreground;
+    overflow-y: auto;
+  }
+  
+  /* Form elements */
+  .form-input, .form-select, .form-textarea {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
-  .modal-body {
-    @apply p-6 text-text-secondary; /* Corrected to text-text-secondary */
+  /* Styles d'impression spécifiques */
+  @media print {
+    body {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      background-color: white !important;
+    }
+    
+    /* Masquer tous les éléments de l'interface sauf le contenu à imprimer */
+    .no-print, .no-print * {
+      display: none !important;
+    }
+    
+    /* Assurer que le contenu imprimable prend toute la page */
+    .printable-report {
+      display: block !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 20px !important;
+      page-break-inside: avoid;
+    }
+    
+    /* Styles pour les tableaux dans les rapports imprimés */
+    .printable-report table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+      margin-bottom: 20px !important;
+    }
+    
+    .printable-report th,
+    .printable-report td {
+      border: 1px solid #ddd !important;
+      padding: 8px !important;
+      page-break-inside: avoid !important;
+    }
+    
+    .printable-report th {
+      background-color: #f8f9fa !important;
+      color: #333 !important;
+      font-weight: bold !important;
+    }
+    
+    .printable-report .bg-gray-700 {
+      background-color: #374151 !important;
+      color: white !important;
+    }
+    
+    /* Pour éviter les sauts de page à l'intérieur des tableaux */
+    .printable-report table {
+      page-break-inside: avoid;
+    }
+    
+    /* Pour les en-têtes de section */
+    .printable-report h3 {
+      margin-top: 20px !important;
+      margin-bottom: 10px !important;
+      color: #111827 !important;
+    }
   }
 }

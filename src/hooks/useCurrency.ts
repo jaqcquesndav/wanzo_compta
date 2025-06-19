@@ -12,9 +12,14 @@ export function useCurrency() {
 
   const format = (amount: number, currency?: CurrencyCode): string => {
     const currencyToUse = currency || displayCurrency;
-    return new Intl.NumberFormat('fr-CD', {
+    // Définir le locale en fonction de la devise pour un formatage correct
+    const locale = currencyToUse === 'USD' ? 'en-US' : 'fr-CD';
+
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
-      currency: currencyToUse
+      currency: currencyToUse,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     }).format(amount);
   };
 

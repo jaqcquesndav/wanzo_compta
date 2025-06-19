@@ -7,20 +7,19 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
-export function Sidebar({ isOpen, onClose }: SidebarProps) {
-  return (
+export function Sidebar({ isOpen, onClose }: SidebarProps) {  return (
     <aside className={`
-      fixed inset-y-0 left-0 z-20 w-64 bg-sidebar-light dark:bg-secondary transform 
+      fixed inset-y-0 left-0 z-20 w-64 bg-primary transform 
       ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static
-      pt-16 flex flex-col h-screen border-r border-primary dark:border-secondary
+      pt-16 flex flex-col h-screen border-r border-border
     `}>
       <div className="flex items-center justify-between px-4 py-2 lg:hidden">
-        <span className="text-white dark:text-text-primary font-medium">Menu</span>
+        <span className="text-primary-foreground font-medium">Menu</span>
         {onClose && (
           <button 
             onClick={onClose} 
-            className="text-white/80 hover:text-white dark:text-text-tertiary dark:hover:text-text-primary"
+            className="text-primary-foreground/80 hover:text-primary-foreground"
           >
             <X className="h-5 w-5" />
           </button>
@@ -31,8 +30,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="px-3 py-4">
           {/* Main Navigation */}
           <div className="space-y-1">
-            {navigation.map((item) => (
-              <NavLink
+            {navigation.map((item) => (              <NavLink
                 key={item.path}
                 to={item.path}
                 onClick={onClose}
@@ -40,8 +38,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md
                   transition-colors duration-200
                   ${isActive 
-                    ? 'bg-white/10 dark:bg-tertiary text-white dark:text-text-primary' 
-                    : 'text-white/80 dark:text-text-tertiary hover:bg-white/5 dark:hover:bg-tertiary hover:text-white dark:hover:text-text-primary'}\
+                    ? 'bg-primary-foreground/10 text-primary-foreground' 
+                    : 'text-primary-foreground/80 hover:bg-primary-foreground/5 hover:text-primary-foreground'}\
                 `}
               >
                 <div className="flex items-center">
@@ -57,9 +55,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             ))}
           </div>
 
-          {/* Secondary Navigation */}
-          <div className="mt-8">
-            <h3 className="px-3 text-xs font-semibold text-white/60 dark:text-text-tertiary uppercase tracking-wider">
+          {/* Secondary Navigation */}          <div className="mt-8">
+            <h3 className="px-3 text-xs font-semibold text-primary-foreground/60 uppercase tracking-wider">
               Administration
             </h3>
             <div className="mt-2 space-y-1">
@@ -72,8 +69,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     flex items-center px-3 py-2 text-sm font-medium rounded-md
                     transition-colors duration-200
                     ${isActive 
-                      ? 'bg-white/10 dark:bg-tertiary text-white dark:text-text-primary' 
-                      : 'text-white/80 dark:text-text-tertiary hover:bg-white/5 dark:hover:bg-tertiary hover:text-white dark:hover:text-text-primary'}\
+                      ? 'bg-primary-foreground/10 text-primary-foreground' 
+                      : 'text-primary-foreground/80 hover:bg-primary-foreground/5 hover:text-primary-foreground'}\
                   `}
                 >
                   <item.icon className="mr-3 h-5 w-5" />
@@ -83,17 +80,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </div>
           </div>
 
-          {/* Help Section */}
-          <div className="mt-8 px-3">
-            <div className="p-4 bg-white/5 dark:bg-tertiary rounded-lg">
+          {/* Help Section */}          <div className="mt-8 px-3">
+            <div className="p-4 bg-primary-foreground/5 rounded-lg">
               <div className="flex items-center">
-                <HelpCircle className="h-6 w-6 text-white/80 dark:text-text-tertiary" />
-                <h3 className="ml-2 text-sm font-medium text-white dark:text-text-secondary">Besoin d\'aide ?</h3>
+                <HelpCircle className="h-6 w-6 text-primary-foreground/80" />
+                <h3 className="ml-2 text-sm font-medium text-primary-foreground">Besoin d\'aide ?</h3>
               </div>
-              <p className="mt-2 text-xs text-white/60 dark:text-text-tertiary">
+              <p className="mt-2 text-xs text-primary-foreground/60">
                 Consultez notre documentation ou contactez le support.
               </p>
-              <button className="mt-3 text-sm text-white hover:text-white/90 dark:text-text-secondary dark:hover:text-text-primary font-medium">
+              <button className="mt-3 text-sm text-primary-foreground hover:text-primary-foreground/90 font-medium">
                 Voir la documentation
               </button>
             </div>
