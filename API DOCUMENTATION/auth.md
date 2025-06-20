@@ -1,40 +1,45 @@
-# Auth API Documentation
+# Documentation de l'API d'Authentification
 
-This document describes the Authentication API endpoints for the Wanzo Compta application.
+Ce document décrit les points de terminaison de l'API d'authentification pour l'application Wanzo Compta, qui s'appuie sur **Auth0** pour la gestion des identités et une **API Gateway** pour le routage des requêtes.
+
+## Flux d'Authentification Général
+
+1.  **Connexion Côté Client** : L'utilisateur est redirigé vers la page de connexion hébergée par Auth0.
+2.  **Émission du Jeton** : Après une authentification réussie, Auth0 émet un jeton JWT à l'application cliente.
+3.  **Appel à l'API Gateway** : L'application cliente envoie ce jeton JWT à l'API Gateway, qui route la requête vers le microservice d'authentification.
+4.  **Vérification du Jeton** : Le backend valide le jeton JWT avec Auth0 et autorise l'accès aux ressources protégées.
 
 ## Base URL
 
-```
-http://localhost:3000/api/v1
-```
+Toutes les requêtes doivent passer par l'API Gateway.
 
-## Authentication
-
-Most endpoints require authentication with a Bearer token.
-
-**Headers:**
 ```
-Authorization: Bearer <token>
+http://localhost:8000/accounting
 ```
 
-## Endpoints
+## Authentification
 
-### Verify Token
+Toutes les requêtes vers les points de terminaison protégés doivent inclure le jeton JWT émis par Auth0 dans l'en-tête `Authorization` et un en-tête client personnalisé.
 
-Verifies if the current authentication token is valid.
-
-**URL:** `/auth/verify`
-
-**Method:** `GET`
-
-**Authentication Required:** Yes
-
-**Headers:**
+**En-têtes :**
 ```
-Authorization: Bearer <token>
+Authorization: Bearer <auth0_jwt_token>
+X-Accounting-Client: Wanzo-Accounting-UI/1.0.0
 ```
 
-**Response:**
+## Points de terminaison
+
+### Vérifier le Jeton et Récupérer l'Utilisateur
+
+Ce point de terminaison est appelé après que le client a obtenu un jeton d'Auth0. Il vérifie la validité du jeton et, en cas de succès, renvoie les informations de l'utilisateur correspondant dans la base de données de l'application. Si l'utilisateur n'existe pas, il peut être créé à la volée (JIT Provisioning).
+
+**URL :** `/auth/verify`
+
+**Méthode :** `GET`
+
+**Authentification Requise :** Oui (Jeton Bearer Auth0)
+
+**Réponse :**
 
 ```json
 {
@@ -45,66 +50,28 @@ Authorization: Bearer <token>
       "email": "user@example.com",
       "name": "John Doe",
       "role": "comptable",
-      "registrationNumber": "12345" // Only for auditors
+      "registrationNumber": "12345" // Seulement pour les auditeurs
     }
   }
 }
 ```
 
-### Login with SSO
+### Déconnexion
 
-Authenticates a user using Single Sign-On (KS Auth).
+Invalide la session de l'utilisateur côté backend. La déconnexion côté client (suppression du jeton local et déconnexion d'Auth0) est gérée par le SDK Auth0.
 
-**URL:** `/auth/sso`
+**URL :** `/auth/logout`
 
-**Method:** `POST`
+**Méthode :** `POST`
 
-**Authentication Required:** No
+**Authentification Requise :** Oui
 
-**Request Body:**
+**Corps de la requête :**
 ```json
 {}
 ```
 
-**Response:**
-
-```json
-{
-  "success": true,
-  "data": {
-    "user": {
-      "id": "user-123",
-      "email": "user@example.com",
-      "name": "John Doe",
-      "role": "comptable",
-      "registrationNumber": "12345" // Only for auditors
-    },
-    "token": "jwt-token-here"
-  }
-}
-```
-
-### Logout
-
-Logs out the currently authenticated user.
-
-**URL:** `/auth/logout`
-
-**Method:** `POST`
-
-**Authentication Required:** Yes
-
-**Headers:**
-```
-Authorization: Bearer <token>
-```
-
-**Request Body:**
-```json
-{}
-```
-
-**Response:**
+**Réponse :**
 
 ```json
 {
@@ -112,37 +79,69 @@ Authorization: Bearer <token>
 }
 ```
 
-## Error Responses
+### Connexion avec KS Auth (SSO)
 
-**Unauthorized (401):**
+Ce point de terminaison initie une connexion via le système SSO interne (KS Auth). Il est conçu pour les employés internes et ne nécessite pas de redirection vers Auth0.
+
+**URL :** `/auth/sso`
+
+**Méthode :** `POST`
+
+**Authentification Requise :** Non (généralement basé sur des cookies de session ou d'autres mécanismes internes)
+
+**Corps de la requête :**
+```json
+{}
+```
+
+**Réponse :**
+
 ```json
 {
-  "success": false,
-  "error": "Session expirée"
+  "success": true,
+  "data": {
+    "user": {
+      "id": "user-sso-456",
+      "email": "employee@wanzo.com",
+      "name": "Jane Doe",
+      "role": "admin"
+    },
+    "token": "<jwt_token_pour_session>"
+  }
 }
 ```
 
-**Other Errors:**
+## Erreurs
+
+**Jeton invalide (401):**
 ```json
 {
   "success": false,
-  "error": "Error message description"
+  "error": "Jeton invalide ou expiré"
 }
 ```
 
-## User Management
+**Autres Erreurs:**
+```json
+{
+  "success": false,
+  "error": "Description de l'erreur"
+}
+```
 
-### Get All Users
+## Gestion des Utilisateurs
 
-Retrieves a list of all users for the organization.
+### Récupérer Tous les Utilisateurs
 
-**URL:** `/users`
+Récupère la liste de tous les utilisateurs de l'organisation.
 
-**Method:** `GET`
+**URL :** `/users`
 
-**Authentication Required:** Yes (Admin role required)
+**Méthode :** `GET`
 
-**Response:** `200 OK`
+**Authentification Requise :** Oui (Rôle Admin requis)
+
+**Réponse :** `200 OK`
 ```json
 {
   "success": true,
@@ -171,17 +170,17 @@ Retrieves a list of all users for the organization.
 }
 ```
 
-### Create User
+### Créer un Utilisateur
 
-Creates a new user in the organization.
+Crée un nouvel utilisateur dans l'organisation.
 
-**URL:** `/users`
+**URL :** `/users`
 
-**Method:** `POST`
+**Méthode :** `POST`
 
-**Authentication Required:** Yes (Admin role required)
+**Authentification Requise :** Oui (Rôle Admin requis)
 
-**Request Body**:
+**Corps de la requête**:
 ```json
 {
   "email": "new.user@example.com",
@@ -191,20 +190,20 @@ Creates a new user in the organization.
 }
 ```
 
-**Response:** `201 Created`
+**Réponse :** `201 Created`
 
 
-### Update User
+### Mettre à Jour un Utilisateur
 
-Updates an existing user's information.
+Met à jour les informations d'un utilisateur existant.
 
-**URL:** `/users/{id}`
+**URL :** `/users/{id}`
 
-**Method:** `PUT`
+**Méthode :** `PUT`
 
-**Authentication Required:** Yes (Admin role required)
+**Authentification Requise :** Oui (Rôle Admin requis)
 
-**Request Body**:
+**Corps de la requête**:
 ```json
 {
   "name": "Jane Smith",
@@ -213,42 +212,42 @@ Updates an existing user's information.
 }
 ```
 
-**Response:** `200 OK`
+**Réponse :** `200 OK`
 
-### Delete User
+### Supprimer un Utilisateur
 
-Deletes a user account.
+Supprime un compte utilisateur.
 
-**URL:** `/users/{id}`
+**URL :** `/users/{id}`
 
-**Method:** `DELETE`
+**Méthode :** `DELETE`
 
-**Authentication Required:** Yes (Admin role required)
+**Authentification Requise :** Oui (Rôle Admin requis)
 
-**Response:** `204 No Content`
+**Réponse :** `204 No Content`
 
-### Toggle User Status
+### Activer/Désactiver un Utilisateur
 
-Activates or deactivates a user account.
+Active ou désactive un compte utilisateur.
 
-**URL:** `/users/{id}/status`
+**URL :** `/users/{id}/status`
 
-**Method:** `PATCH`
+**Méthode :** `PATCH`
 
-**Authentication Required:** Yes (Admin role required)
+**Authentification Requise :** Oui (Rôle Admin requis)
 
-**Request Body**:
+**Corps de la requête**:
 ```json
 {
   "active": false
 }
 ```
 
-**Response:** `200 OK`
+**Réponse :** `200 OK`
 
-## Data Structures
+## Structures de Données
 
-### User
+### Utilisateur
 
 ```typescript
 interface User {
@@ -256,7 +255,7 @@ interface User {
   email: string;
   name?: string;
   role: 'superadmin' | 'admin' | 'user' | 'auditor' | 'comptable' | 'gérant' | 'portfoliomanager';
-  registrationNumber?: string; // For auditors
+  registrationNumber?: string; // Pour les auditeurs
   department?: string;
   lastLogin?: string;
   status?: 'active' | 'inactive';

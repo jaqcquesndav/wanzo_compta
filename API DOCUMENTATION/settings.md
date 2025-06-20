@@ -6,6 +6,14 @@ This documentation outlines the endpoints available for managing application set
 
 The Settings API provides endpoints for retrieving and updating various application settings, which are organized into categories corresponding to the tabs in the user interface.
 
+## Base URL
+
+Toutes les requêtes doivent passer par l'API Gateway.
+
+```
+http://localhost:8000/accounting
+```
+
 ## Authentication
 
 All API requests require authentication with a valid JWT token.
@@ -13,6 +21,7 @@ All API requests require authentication with a valid JWT token.
 **Headers**:
 ```
 Authorization: Bearer {token}
+X-Accounting-Client: Wanzo-Accounting-UI/1.0.0
 ```
 
 ## API Endpoints

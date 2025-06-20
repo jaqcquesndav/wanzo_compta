@@ -2,6 +2,24 @@
 
 This module describes the process for importing large sets of data into Wanzo Compta, such as importing an entire fiscal year from a file.
 
+## Base URL
+
+Toutes les requêtes doivent passer par l'API Gateway.
+
+```
+http://localhost:8000/accounting
+```
+
+## Authentication
+
+All API requests require authentication with a valid JWT token.
+
+**Headers**:
+```
+Authorization: Bearer <token>
+X-Accounting-Client: Wanzo-Accounting-UI/1.0.0
+```
+
 ## Fiscal Year Import
 
 This feature allows importing a full fiscal year, including all its journal entries, from a single file (XLSX or CSV).

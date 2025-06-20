@@ -4,8 +4,10 @@ Ce document décrit les endpoints API pour la gestion de l'organisation (entrepr
 
 ## URL de Base
 
+Toutes les requêtes doivent passer par l'API Gateway.
+
 ```
-http://localhost:3000/api/v1
+http://localhost:8000/accounting
 ```
 
 ## Authentification
@@ -15,6 +17,7 @@ Tous les endpoints nécessitent une authentification avec un token Bearer.
 **Headers:**
 ```
 Authorization: Bearer <token>
+X-Accounting-Client: Wanzo-Accounting-UI/1.0.0
 ```
 
 ## Endpoints

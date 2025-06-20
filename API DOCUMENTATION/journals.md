@@ -4,8 +4,10 @@ This document describes the Journal Entries API endpoints for the Wanzo Compta a
 
 ## Base URL
 
+Toutes les requêtes doivent passer par l'API Gateway.
+
 ```
-http://localhost:3000/api/v1
+http://localhost:8000/accounting
 ```
 
 ## Authentication
@@ -15,6 +17,7 @@ All endpoints require authentication with a Bearer token.
 **Headers:**
 ```
 Authorization: Bearer <token>
+X-Accounting-Client: Wanzo-Accounting-UI/1.0.0
 ```
 
 ## Endpoints

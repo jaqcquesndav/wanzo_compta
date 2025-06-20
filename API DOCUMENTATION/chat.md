@@ -4,8 +4,10 @@ This document describes the Chat API endpoints for the Wanzo Compta application.
 
 ## Base URL
 
+Toutes les requêtes doivent passer par l'API Gateway.
+
 ```
-http://localhost:3000/api/v1
+http://localhost:8000/accounting
 ```
 
 ## Authentication
@@ -15,6 +17,7 @@ All endpoints require authentication with a Bearer token.
 **Headers:**
 ```
 Authorization: Bearer <token>
+X-Accounting-Client: Wanzo-Accounting-UI/1.0.0
 ```
 
 ## Endpoints
@@ -198,6 +201,108 @@ Retrieves all available AI models for chat.
       "contextLength": 16384
     }
   ]
+}
+```
+
+## Mode d'Écriture ADHA
+
+En plus des fonctionnalités de chat standard, l'API prend en charge un mode spécial "Écriture ADHA" qui permet de transformer les messages et leurs pièces jointes en écritures comptables automatiques.
+
+### Activation du Mode d'Écriture
+
+Lors de l'envoi d'un message au chat, le client peut spécifier si la conversation doit être traitée en mode chat standard ou en mode d'écriture comptable.
+
+**Paramètre supplémentaire dans le corps de la requête :**
+```json
+{
+  "conversationId": "conv-123", 
+  "message": {
+    "content": "Facture de téléphone Orange pour 120€ dont 20€ de TVA",
+    "attachment": {
+      "name": "facture-orange.pdf",
+      "type": "application/pdf",
+      "content": "base64-encoded-content"
+    }
+  },
+  "modelId": "adha-1",
+  "context": ["fiscal-year-2024"],
+  "writeMode": true // Active le mode d'écriture comptable ADHA
+}
+```
+
+### Réponse en Mode d'Écriture
+
+Lorsque le mode d'écriture est activé, le bot génère une proposition d'écriture comptable basée sur le message de l'utilisateur et/ou les pièces jointes. La réponse inclut des champs supplémentaires liés à l'écriture comptable proposée.
+
+**Exemple de réponse en mode d'écriture :**
+```json
+{
+  "id": "msg-7",
+  "sender": "bot",
+  "content": "J'ai analysé votre facture de téléphone et je propose l'écriture comptable suivante :",
+  "timestamp": "2024-06-20T15:45:30Z",
+  "conversationId": "conv-123",
+  "journalEntry": {
+    "entryId": "agent-123",
+    "date": "2024-06-20",
+    "journalCode": "ACH",
+    "reference": "FACTURE-ORANGE-06-2024",
+    "description": "Facture téléphone Orange",
+    "lines": [
+      {
+        "accountCode": "626100",
+        "accountName": "Frais de télécommunication",
+        "debit": 100.00,
+        "credit": 0
+      },
+      {
+        "accountCode": "445660",
+        "accountName": "TVA déductible sur autres biens et services",
+        "debit": 20.00,
+        "credit": 0
+      },
+      {
+        "accountCode": "401100",
+        "accountName": "Fournisseurs - achats de biens ou prestations de services",
+        "debit": 0,
+        "credit": 120.00
+      }
+    ],
+    "status": "pending",
+    "attachmentId": "attach-123"
+  }
+}
+```
+
+### Validation d'une Écriture Proposée
+
+Après avoir reçu une proposition d'écriture, le client peut la valider ou la modifier via l'API des entrées d'agent (`/agent-entries`).
+
+**URL pour la validation :** `/agent-entries/{entryId}/validate`
+
+**Méthode :** `PUT`
+
+**Corps de la requête (optionnel pour les modifications) :**
+```json
+{
+  "lines": [
+    {
+      "accountCode": "626100",
+      "debit": 100.00,
+      "credit": 0
+    },
+    {
+      "accountCode": "445660",
+      "debit": 20.00,
+      "credit": 0
+    },
+    {
+      "accountCode": "401100",
+      "debit": 0,
+      "credit": 120.00
+    }
+  ],
+  "description": "Facture téléphone Orange - Juin 2024"
 }
 ```
 

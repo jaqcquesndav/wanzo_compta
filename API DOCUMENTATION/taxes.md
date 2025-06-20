@@ -12,6 +12,14 @@ The Taxes API (implemented through the Declarations system) provides endpoints f
 - TPI (Taxe de Promotion de l'Industrie)
 - TE (Taxe Environnementale)
 
+## Base URL
+
+Toutes les requêtes doivent passer par l'API Gateway.
+
+```
+http://localhost:8000/accounting
+```
+
 ## Authentication
 
 All API requests require authentication with a valid JWT token.
@@ -19,6 +27,7 @@ All API requests require authentication with a valid JWT token.
 **Headers**:
 ```
 Authorization: Bearer {token}
+X-Accounting-Client: Wanzo-Accounting-UI/1.0.0
 ```
 
 ## API Endpoints

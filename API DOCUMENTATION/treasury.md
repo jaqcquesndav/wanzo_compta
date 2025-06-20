@@ -2,6 +2,24 @@
 
 This module manages the organization's treasury, including bank accounts, microfinance accounts, and cash flow.
 
+## Base URL
+
+Toutes les requêtes doivent passer par l'API Gateway.
+
+```
+http://localhost:8000/accounting
+```
+
+## Authentication
+
+All API requests require authentication with a valid JWT token.
+
+**Headers**:
+```
+Authorization: Bearer {token}
+X-Accounting-Client: Wanzo-Accounting-UI/1.0.0
+```
+
 ## Endpoints
 
 ### 1. List Treasury Accounts

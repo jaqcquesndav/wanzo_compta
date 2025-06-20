@@ -11,11 +11,12 @@ export const setAuthTokenProvider = (provider: () => Promise<string | null>) => 
 };
 
 export class ApiService {
-  private static baseUrl = API_CONFIG.baseUrl;
+  private static baseUrl = 'http://localhost:8000/accounting';
 
   private static async getHeaders(): Promise<HeadersInit> {
     const headers: HeadersInit = {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-Accounting-Client': 'Wanzo-Accounting-UI/1.0.0'
     };
 
     const token = await getAccessToken();
